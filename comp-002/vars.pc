@@ -1,0 +1,12 @@
+
+//debug 13
+
+	u16 var3 = 300; 
+	u32 var2 = 200;
+	integer var4 = 220;
+	double var5 = 230;
+
+	u32 var1 ;
+
+	//u32 var1 ;
+

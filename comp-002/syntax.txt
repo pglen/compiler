@@ -1,0 +1,64 @@
+						Syntax of pcomp file.
+
+ Overall structure:
+
+	One or more of the following:
+		debug statement(s)
+        comment(s)
+        assinment declaration(s)
+        variable declaration(s)
+        function declaration(s)
+         
+ Comments:
+	
+		lines with # as the first non space
+		from // to end of line
+		between	/* */	
+
+ Line continuation:
+
+	//backslash at end
+
+ Data declareations:
+
+	u8; u16; u32; u64;			; unsigned integers
+	s8; s16; s32; s64;			; signed integers
+
+	single,	double				; Floating point types
+	
+ Data initialization:
+
+	type = val;
+	
+ Strings:
+
+  Between " and ";
+
+  Escape characters:
+
+	\r \n \" \\ \0xNN \0NN
+
+  Address of:
+
+		&
+
+  Dereference:
+
+		*
+
+  Aggregate:
+
+	struct	{
+		element1 type1;
+		elementN typeN;
+	}
+
+  Functions:
+
+	function funcname { funcbody }
+
+	function funcname (declarelist) { funcbody }
+
+	
+
+

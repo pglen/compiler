@@ -1,0 +1,13 @@
+
+	u32 aaa; u32 ddd;
+	u32 ccc =  aaa + ddd;
+
+function declfunc()
+
+{
+	u32 aa; u32 dd;
+	aa = bb + cc;
+	dd = ee + ff;
+}
+
+

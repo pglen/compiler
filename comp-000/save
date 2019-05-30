@@ -1,0 +1,7 @@
+CDIR=/home/samba`pwd`
+echo $CDIR
+if [ ! -d $CDIR ]
+then
+mkdir -p $CDIR
+fi
+cp -fR * $CDIR

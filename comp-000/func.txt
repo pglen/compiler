@@ -1,0 +1,10 @@
+
+debug 13
+
+function hell
+
+{
+	heaven - hell
+}
+
+

@@ -1,0 +1,11 @@
+
+ debug 12
+
+function xx
+
+{
+  aa + bb
+  cc + dd
+  ee + ff
+}
+

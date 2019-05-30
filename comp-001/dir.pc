@@ -1,0 +1,15 @@
+
+## comment2
+
+#/* comment3 */
+
+// comment 4
+//// comment 5
+
+debug 10
+
+<dir>  hell
+	hello hello2, hello3
+<rid>
+
+

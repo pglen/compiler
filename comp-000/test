@@ -1,0 +1,7 @@
+echo -n 'BISON '
+bison -p conf config.y
+echo -n 'LEX '
+flex -Pconf -oconfig.c config.f
+echo -n 'GCC '
+gcc -D TEST config.c -o config 
+echo

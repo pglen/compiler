@@ -1,0 +1,20 @@
+Virtual FTPD
+
+This ftpd is generated in an attempt to simplify FTP server process.
+
+Ftp configuration:
+
+With no configuration file present this FTP server will:
+
+Serve every user's home directory
+Serve a shared directory (/ftp/pub)
+
+Configurable:
+
+Logging on a per user basis
+Visibility of directories on a per user basis
+Access to directories on a per user basis
+Power user enabler.
+Debug level
+Log level
+Bandwith limitation on a per user basis

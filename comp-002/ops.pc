@@ -1,0 +1,11 @@
+// Test operators
+
+//debug 10
+function zz() 
+{ 
+  //xx = aa + bb;
+  ee * ff;
+ //gg * hh;
+ // yy = cc + dd + ee * qq;
+
+}

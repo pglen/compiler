@@ -1,0 +1,9 @@
+
+//debug 13
+
+function emptyfunc
+
+{
+	return qq;
+}
+

@@ -1,0 +1,13 @@
+// if
+
+function iii(int rr)
+{
+	if (aa == bb)
+		{
+		bb = cc + dd;
+	    ee = ff + gg;		
+		}
+}
+
+
+

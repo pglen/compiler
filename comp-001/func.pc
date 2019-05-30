@@ -1,0 +1,37 @@
+
+//debug 13
+
+function heaven2(u32 var)
+{
+	cc+dd
+}
+
+function heaven3(u32 var, u16 var2)
+{
+	ee+ff
+}
+
+function heaven3a(u32 var, u16 var2)
+{
+	ee+ff
+	return ww
+}
+
+u32 aa;
+
+function hell
+
+{
+	aa - bb
+	cc + dd 	
+	ee( qq )
+}
+
+function hell2
+
+{
+}
+
+
+// hello
+

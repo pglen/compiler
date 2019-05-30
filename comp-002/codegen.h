@@ -1,0 +1,3 @@
+
+int	gen_code();
+

@@ -1,0 +1,44 @@
+
+//debug 13
+
+function emptyfunc
+{
+}
+
+//function exprfunc
+//{
+//	// comment in func
+//	 vv = ee + ff;
+//	 vv = ee + ff;
+//}
+
+function declfuncarg()
+{
+	aa = bb + cc;
+}
+
+//function declfunc(u32 var)
+//{
+//	aa = bb + cc;
+//}
+
+function declfunc2(u32 var, u16 var2, u8 var3)  
+
+{
+	u32 aa = 100;
+	vv = ee + ff;
+	xx = callfunc(gg, hh, ii);
+	return qq + vv;
+}
+
+//	u32 aaa;
+
+//function heaven3a(u32 var, u16 var2)
+//{
+//	cc = ee + ff;
+//}
+
+	//aa = aa - bb;
+	//vv = cc + dd;
+
+

@@ -1,0 +1,2162 @@
+Terminals unused in grammar
+
+   SP
+   NL
+   SEP
+   DIR
+   RID
+   LOG
+   DENY
+   YNED
+   BEG
+   END
+   NUMBER
+   NOT
+   VAR
+   BUILTIN
+   IBUILTIN
+   UNDEF
+   STR
+   ROR
+   ROL
+   TO
+   FROM
+   STORE
+   RESTORE
+   STRVAR
+
+
+State 72 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: all1 $end
+
+    1 all1: /* empty */
+    2     | all1 debug1
+    3     | all1 comments
+    4     | all1 decl1
+    5     | all1 func1
+    6     | all1 if1
+    7     | all1 assn2
+
+    8 comments: COMMENT
+    9         | COMMENT2
+
+   10 debug1: DBG val1
+
+   11 decl1: ID ID '=' expr2 ';'
+   12      | ID ID ';'
+
+   13 funcbody2: assn1 ';'
+   14          | comments
+   15          | expr1
+   16          | decl1
+   17          | ret1
+   18          | if1
+
+   19 funcbody: funcbody2
+   20         | funcbody funcbody2
+
+   21 assn2: assn1 ';'
+
+   22 assn1: ID '=' expr2
+   23      | ID '=' condexpr ';'
+   24      | ID '=' assn1 ';'
+
+   25 exprlist: expr2
+   26         | exprlist ',' expr2
+
+   27 condexpr: /* empty */
+   28         | expr2 '<' expr2
+   29         | expr2 '>' expr2
+   30         | expr2 EQEQ expr2
+   31         | expr2 NEQ expr2
+   32         | expr2 GEQ expr2
+   33         | expr2 SEQ expr2
+
+   34 expr1: expr2 ';'
+
+   35 expr2: expr2a
+   36      | expr2 OR expr2a
+   37      | expr2 AND expr2a
+   38      | expr2 XOR expr2a
+   39      | expr2 '|' expr2a
+   40      | expr2 '&' expr2a
+   41      | expr2 '^' expr2a
+
+   42 expr2a: expr3
+   43       | expr2a '+' expr3
+   44       | expr2a '-' expr3
+
+   45 expr3: expr4
+   46      | expr3 '*' expr4
+   47      | expr3 '/' expr4
+   48      | expr3 '%' expr4
+
+   49 expr4: val1
+   50      | '(' expr2 ')'
+   51      | ID '(' ')'
+   52      | ID '(' exprlist ')'
+   53      | '!' expr4
+   54      | LNOT expr4
+   55      | '-' expr4
+   56      | '^' expr4
+   57      | '*' expr4
+   58      | '&' expr4
+   59      | '(' ID ')' expr4
+
+   60 elsedecl1: ELSE
+
+   61 ifdecl1: IF '(' condexpr ')'
+
+   62 if1: ifdecl1 '{' funcbody '}'
+   63    | ifdecl1 '{' funcbody '}' elsedecl1 '{' funcbody '}'
+
+   64 val1: NUM
+   65     | ID
+
+   66 fdecl1: ID ID
+
+   67 fdecl2: fdecl1
+   68       | fdecl2 ',' fdecl1
+
+   69 fdecl3: '(' ')'
+   70       | '(' fdecl2 ')'
+
+   71 funcdecl: FUNC ID
+
+   72 func1: funcdecl fdecl3 '{' '}'
+   73      | funcdecl fdecl3 '{' funcbody '}'
+
+   74 ret1: RET ';'
+   75     | RET expr2 ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 53
+'%' (37) 48
+'&' (38) 40 58
+'(' (40) 50 51 52 59 61 69 70
+')' (41) 50 51 52 59 61 69 70
+'*' (42) 46 57
+'+' (43) 43
+',' (44) 26 68
+'-' (45) 44 55
+'/' (47) 47
+';' (59) 11 12 13 21 23 24 34 74 75
+'<' (60) 28
+'=' (61) 11 22 23 24
+'>' (62) 29
+'^' (94) 41 56
+'{' (123) 62 63 72 73
+'|' (124) 39
+'}' (125) 62 63 72 73
+error (256)
+SP (258)
+NL (259)
+NUM (260) 64
+ID (261) 11 12 22 23 24 51 52 59 65 66 71
+SEP (262)
+DIR (263)
+RID (264)
+DBG (265) 10
+LOG (266)
+DENY (267)
+YNED (268)
+FUNC (269) 71
+BEG (270)
+END (271)
+RET (272) 74 75
+EQEQ (273) 30
+LNOT (274) 54
+NUMBER (275)
+OR (276) 36
+AND (277) 37
+XOR (278) 38
+IF (279) 61
+ELSE (280) 60
+NOT (281)
+NEQ (282) 31
+GEQ (283) 32
+SEQ (284) 33
+VAR (285)
+BUILTIN (286)
+IBUILTIN (287)
+UNDEF (288)
+STR (289)
+ROR (290)
+ROL (291)
+TO (292)
+FROM (293)
+STORE (294)
+RESTORE (295)
+STRVAR (296)
+COMMENT (297) 8
+COMMENT2 (298) 9
+
+
+Nonterminals, with rules where they appear
+
+$accept (62)
+    on left: 0
+all1 (63)
+    on left: 1 2 3 4 5 6 7, on right: 0 2 3 4 5 6 7
+comments (64)
+    on left: 8 9, on right: 3 14
+debug1 (65)
+    on left: 10, on right: 2
+decl1 (66)
+    on left: 11 12, on right: 4 16
+funcbody2 (67)
+    on left: 13 14 15 16 17 18, on right: 19 20
+funcbody (68)
+    on left: 19 20, on right: 20 62 63 73
+assn2 (69)
+    on left: 21, on right: 7
+assn1 (70)
+    on left: 22 23 24, on right: 13 21 24
+exprlist (71)
+    on left: 25 26, on right: 26 52
+condexpr (72)
+    on left: 27 28 29 30 31 32 33, on right: 23 61
+expr1 (73)
+    on left: 34, on right: 15
+expr2 (74)
+    on left: 35 36 37 38 39 40 41, on right: 11 22 25 26 28 29 30 31
+    32 33 34 36 37 38 39 40 41 50 75
+expr2a (75)
+    on left: 42 43 44, on right: 35 36 37 38 39 40 41 43 44
+expr3 (76)
+    on left: 45 46 47 48, on right: 42 43 44 46 47 48
+expr4 (77)
+    on left: 49 50 51 52 53 54 55 56 57 58 59, on right: 45 46 47 48
+    53 54 55 56 57 58 59
+elsedecl1 (78)
+    on left: 60, on right: 63
+ifdecl1 (79)
+    on left: 61, on right: 62 63
+if1 (80)
+    on left: 62 63, on right: 6 18
+val1 (81)
+    on left: 64 65, on right: 10 49
+fdecl1 (82)
+    on left: 66, on right: 67 68
+fdecl2 (83)
+    on left: 67 68, on right: 68 70
+fdecl3 (84)
+    on left: 69 70, on right: 72 73
+funcdecl (85)
+    on left: 71, on right: 72 73
+func1 (86)
+    on left: 72 73, on right: 5
+ret1 (87)
+    on left: 74 75, on right: 17
+
+
+state 0
+
+    0 $accept: . all1 $end
+
+    $default  reduce using rule 1 (all1)
+
+    all1  go to state 1
+
+
+state 1
+
+    0 $accept: all1 . $end
+    2 all1: all1 . debug1
+    3     | all1 . comments
+    4     | all1 . decl1
+    5     | all1 . func1
+    6     | all1 . if1
+    7     | all1 . assn2
+
+    $end      shift, and go to state 2
+    ID        shift, and go to state 3
+    DBG       shift, and go to state 4
+    FUNC      shift, and go to state 5
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+
+    comments  go to state 9
+    debug1    go to state 10
+    decl1     go to state 11
+    assn2     go to state 12
+    assn1     go to state 13
+    ifdecl1   go to state 14
+    if1       go to state 15
+    funcdecl  go to state 16
+    func1     go to state 17
+
+
+state 2
+
+    0 $accept: all1 $end .
+
+    $default  accept
+
+
+state 3
+
+   11 decl1: ID . ID '=' expr2 ';'
+   12      | ID . ID ';'
+   22 assn1: ID . '=' expr2
+   23      | ID . '=' condexpr ';'
+   24      | ID . '=' assn1 ';'
+
+    ID   shift, and go to state 18
+    '='  shift, and go to state 19
+
+
+state 4
+
+   10 debug1: DBG . val1
+
+    NUM  shift, and go to state 20
+    ID   shift, and go to state 21
+
+    val1  go to state 22
+
+
+state 5
+
+   71 funcdecl: FUNC . ID
+
+    ID  shift, and go to state 23
+
+
+state 6
+
+   61 ifdecl1: IF . '(' condexpr ')'
+
+    '('  shift, and go to state 24
+
+
+state 7
+
+    8 comments: COMMENT .
+
+    $default  reduce using rule 8 (comments)
+
+
+state 8
+
+    9 comments: COMMENT2 .
+
+    $default  reduce using rule 9 (comments)
+
+
+state 9
+
+    3 all1: all1 comments .
+
+    $default  reduce using rule 3 (all1)
+
+
+state 10
+
+    2 all1: all1 debug1 .
+
+    $default  reduce using rule 2 (all1)
+
+
+state 11
+
+    4 all1: all1 decl1 .
+
+    $default  reduce using rule 4 (all1)
+
+
+state 12
+
+    7 all1: all1 assn2 .
+
+    $default  reduce using rule 7 (all1)
+
+
+state 13
+
+   21 assn2: assn1 . ';'
+
+    ';'  shift, and go to state 25
+
+
+state 14
+
+   62 if1: ifdecl1 . '{' funcbody '}'
+   63    | ifdecl1 . '{' funcbody '}' elsedecl1 '{' funcbody '}'
+
+    '{'  shift, and go to state 26
+
+
+state 15
+
+    6 all1: all1 if1 .
+
+    $default  reduce using rule 6 (all1)
+
+
+state 16
+
+   72 func1: funcdecl . fdecl3 '{' '}'
+   73      | funcdecl . fdecl3 '{' funcbody '}'
+
+    '('  shift, and go to state 27
+
+    fdecl3  go to state 28
+
+
+state 17
+
+    5 all1: all1 func1 .
+
+    $default  reduce using rule 5 (all1)
+
+
+state 18
+
+   11 decl1: ID ID . '=' expr2 ';'
+   12      | ID ID . ';'
+
+    '='  shift, and go to state 29
+    ';'  shift, and go to state 30
+
+
+state 19
+
+   22 assn1: ID '=' . expr2
+   23      | ID '=' . condexpr ';'
+   24      | ID '=' . assn1 ';'
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 31
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    $default  reduce using rule 27 (condexpr)
+
+    assn1     go to state 39
+    condexpr  go to state 40
+    expr2     go to state 41
+    expr2a    go to state 42
+    expr3     go to state 43
+    expr4     go to state 44
+    val1      go to state 45
+
+
+state 20
+
+   64 val1: NUM .
+
+    $default  reduce using rule 64 (val1)
+
+
+state 21
+
+   65 val1: ID .
+
+    $default  reduce using rule 65 (val1)
+
+
+state 22
+
+   10 debug1: DBG val1 .
+
+    $default  reduce using rule 10 (debug1)
+
+
+state 23
+
+   71 funcdecl: FUNC ID .
+
+    $default  reduce using rule 71 (funcdecl)
+
+
+state 24
+
+   61 ifdecl1: IF '(' . condexpr ')'
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    $default  reduce using rule 27 (condexpr)
+
+    condexpr  go to state 47
+    expr2     go to state 48
+    expr2a    go to state 42
+    expr3     go to state 43
+    expr4     go to state 44
+    val1      go to state 45
+
+
+state 25
+
+   21 assn2: assn1 ';' .
+
+    $default  reduce using rule 21 (assn2)
+
+
+state 26
+
+   62 if1: ifdecl1 '{' . funcbody '}'
+   63    | ifdecl1 '{' . funcbody '}' elsedecl1 '{' funcbody '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 53
+    funcbody   go to state 54
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 27
+
+   69 fdecl3: '(' . ')'
+   70       | '(' . fdecl2 ')'
+
+    ID   shift, and go to state 60
+    ')'  shift, and go to state 61
+
+    fdecl1  go to state 62
+    fdecl2  go to state 63
+
+
+state 28
+
+   72 func1: funcdecl fdecl3 . '{' '}'
+   73      | funcdecl fdecl3 . '{' funcbody '}'
+
+    '{'  shift, and go to state 64
+
+
+state 29
+
+   11 decl1: ID ID '=' . expr2 ';'
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 65
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 30
+
+   12 decl1: ID ID ';' .
+
+    $default  reduce using rule 12 (decl1)
+
+
+state 31
+
+   22 assn1: ID . '=' expr2
+   23      | ID . '=' condexpr ';'
+   24      | ID . '=' assn1 ';'
+   51 expr4: ID . '(' ')'
+   52      | ID . '(' exprlist ')'
+   65 val1: ID .
+
+    '='  shift, and go to state 19
+    '('  shift, and go to state 66
+
+    $default  reduce using rule 65 (val1)
+
+
+state 32
+
+   54 expr4: LNOT . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 67
+    val1   go to state 45
+
+
+state 33
+
+   58 expr4: '&' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 68
+    val1   go to state 45
+
+
+state 34
+
+   56 expr4: '^' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 69
+    val1   go to state 45
+
+
+state 35
+
+   55 expr4: '-' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 70
+    val1   go to state 45
+
+
+state 36
+
+   57 expr4: '*' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 71
+    val1   go to state 45
+
+
+state 37
+
+   50 expr4: '(' . expr2 ')'
+   59      | '(' . ID ')' expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 72
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 73
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 38
+
+   53 expr4: '!' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 74
+    val1   go to state 45
+
+
+state 39
+
+   24 assn1: ID '=' assn1 . ';'
+
+    ';'  shift, and go to state 75
+
+
+state 40
+
+   23 assn1: ID '=' condexpr . ';'
+
+    ';'  shift, and go to state 76
+
+
+state 41
+
+   22 assn1: ID '=' expr2 .
+   28 condexpr: expr2 . '<' expr2
+   29         | expr2 . '>' expr2
+   30         | expr2 . EQEQ expr2
+   31         | expr2 . NEQ expr2
+   32         | expr2 . GEQ expr2
+   33         | expr2 . SEQ expr2
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    EQEQ  shift, and go to state 77
+    OR    shift, and go to state 78
+    AND   shift, and go to state 79
+    XOR   shift, and go to state 80
+    NEQ   shift, and go to state 81
+    GEQ   shift, and go to state 82
+    SEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+    '|'   shift, and go to state 86
+    '&'   shift, and go to state 87
+    '^'   shift, and go to state 88
+
+    $default  reduce using rule 22 (assn1)
+
+
+state 42
+
+   35 expr2: expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 35 (expr2)
+
+
+state 43
+
+   42 expr2a: expr3 .
+   46 expr3: expr3 . '*' expr4
+   47      | expr3 . '/' expr4
+   48      | expr3 . '%' expr4
+
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 42 (expr2a)
+
+
+state 44
+
+   45 expr3: expr4 .
+
+    $default  reduce using rule 45 (expr3)
+
+
+state 45
+
+   49 expr4: val1 .
+
+    $default  reduce using rule 49 (expr4)
+
+
+state 46
+
+   51 expr4: ID . '(' ')'
+   52      | ID . '(' exprlist ')'
+   65 val1: ID .
+
+    '('  shift, and go to state 66
+
+    $default  reduce using rule 65 (val1)
+
+
+state 47
+
+   61 ifdecl1: IF '(' condexpr . ')'
+
+    ')'  shift, and go to state 94
+
+
+state 48
+
+   28 condexpr: expr2 . '<' expr2
+   29         | expr2 . '>' expr2
+   30         | expr2 . EQEQ expr2
+   31         | expr2 . NEQ expr2
+   32         | expr2 . GEQ expr2
+   33         | expr2 . SEQ expr2
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    EQEQ  shift, and go to state 77
+    OR    shift, and go to state 78
+    AND   shift, and go to state 79
+    XOR   shift, and go to state 80
+    NEQ   shift, and go to state 81
+    GEQ   shift, and go to state 82
+    SEQ   shift, and go to state 83
+    '<'   shift, and go to state 84
+    '>'   shift, and go to state 85
+    '|'   shift, and go to state 86
+    '&'   shift, and go to state 87
+    '^'   shift, and go to state 88
+
+
+state 49
+
+   11 decl1: ID . ID '=' expr2 ';'
+   12      | ID . ID ';'
+   22 assn1: ID . '=' expr2
+   23      | ID . '=' condexpr ';'
+   24      | ID . '=' assn1 ';'
+   51 expr4: ID . '(' ')'
+   52      | ID . '(' exprlist ')'
+   65 val1: ID .
+
+    ID   shift, and go to state 18
+    '='  shift, and go to state 19
+    '('  shift, and go to state 66
+
+    $default  reduce using rule 65 (val1)
+
+
+state 50
+
+   74 ret1: RET . ';'
+   75     | RET . expr2 ';'
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    ';'   shift, and go to state 95
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 96
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 51
+
+   14 funcbody2: comments .
+
+    $default  reduce using rule 14 (funcbody2)
+
+
+state 52
+
+   16 funcbody2: decl1 .
+
+    $default  reduce using rule 16 (funcbody2)
+
+
+state 53
+
+   19 funcbody: funcbody2 .
+
+    $default  reduce using rule 19 (funcbody)
+
+
+state 54
+
+   20 funcbody: funcbody . funcbody2
+   62 if1: ifdecl1 '{' funcbody . '}'
+   63    | ifdecl1 '{' funcbody . '}' elsedecl1 '{' funcbody '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+    '}'       shift, and go to state 97
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 98
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 55
+
+   13 funcbody2: assn1 . ';'
+
+    ';'  shift, and go to state 99
+
+
+state 56
+
+   15 funcbody2: expr1 .
+
+    $default  reduce using rule 15 (funcbody2)
+
+
+state 57
+
+   34 expr1: expr2 . ';'
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    ';'  shift, and go to state 100
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+
+state 58
+
+   18 funcbody2: if1 .
+
+    $default  reduce using rule 18 (funcbody2)
+
+
+state 59
+
+   17 funcbody2: ret1 .
+
+    $default  reduce using rule 17 (funcbody2)
+
+
+state 60
+
+   66 fdecl1: ID . ID
+
+    ID  shift, and go to state 101
+
+
+state 61
+
+   69 fdecl3: '(' ')' .
+
+    $default  reduce using rule 69 (fdecl3)
+
+
+state 62
+
+   67 fdecl2: fdecl1 .
+
+    $default  reduce using rule 67 (fdecl2)
+
+
+state 63
+
+   68 fdecl2: fdecl2 . ',' fdecl1
+   70 fdecl3: '(' fdecl2 . ')'
+
+    ','  shift, and go to state 102
+    ')'  shift, and go to state 103
+
+
+state 64
+
+   72 func1: funcdecl fdecl3 '{' . '}'
+   73      | funcdecl fdecl3 '{' . funcbody '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+    '}'       shift, and go to state 104
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 53
+    funcbody   go to state 105
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 65
+
+   11 decl1: ID ID '=' expr2 . ';'
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    ';'  shift, and go to state 106
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+
+state 66
+
+   51 expr4: ID '(' . ')'
+   52      | ID '(' . exprlist ')'
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    ')'   shift, and go to state 107
+    '!'   shift, and go to state 38
+
+    exprlist  go to state 108
+    expr2     go to state 109
+    expr2a    go to state 42
+    expr3     go to state 43
+    expr4     go to state 44
+    val1      go to state 45
+
+
+state 67
+
+   54 expr4: LNOT expr4 .
+
+    $default  reduce using rule 54 (expr4)
+
+
+state 68
+
+   58 expr4: '&' expr4 .
+
+    $default  reduce using rule 58 (expr4)
+
+
+state 69
+
+   56 expr4: '^' expr4 .
+
+    $default  reduce using rule 56 (expr4)
+
+
+state 70
+
+   55 expr4: '-' expr4 .
+
+    $default  reduce using rule 55 (expr4)
+
+
+state 71
+
+   57 expr4: '*' expr4 .
+
+    $default  reduce using rule 57 (expr4)
+
+
+state 72
+
+   51 expr4: ID . '(' ')'
+   52      | ID . '(' exprlist ')'
+   59      | '(' ID . ')' expr4
+   65 val1: ID .
+
+    '('  shift, and go to state 66
+    ')'  shift, and go to state 110
+
+    ')'       [reduce using rule 65 (val1)]
+    $default  reduce using rule 65 (val1)
+
+
+state 73
+
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+   50 expr4: '(' expr2 . ')'
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+    ')'  shift, and go to state 111
+
+
+state 74
+
+   53 expr4: '!' expr4 .
+
+    $default  reduce using rule 53 (expr4)
+
+
+state 75
+
+   24 assn1: ID '=' assn1 ';' .
+
+    $default  reduce using rule 24 (assn1)
+
+
+state 76
+
+   23 assn1: ID '=' condexpr ';' .
+
+    $default  reduce using rule 23 (assn1)
+
+
+state 77
+
+   30 condexpr: expr2 EQEQ . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 112
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 78
+
+   36 expr2: expr2 OR . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 113
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 79
+
+   37 expr2: expr2 AND . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 114
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 80
+
+   38 expr2: expr2 XOR . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 115
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 81
+
+   31 condexpr: expr2 NEQ . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 116
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 82
+
+   32 condexpr: expr2 GEQ . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 117
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 83
+
+   33 condexpr: expr2 SEQ . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 118
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 84
+
+   28 condexpr: expr2 '<' . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 119
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 85
+
+   29 condexpr: expr2 '>' . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 120
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 86
+
+   39 expr2: expr2 '|' . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 121
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 87
+
+   40 expr2: expr2 '&' . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 122
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 88
+
+   41 expr2: expr2 '^' . expr2a
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2a  go to state 123
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 89
+
+   43 expr2a: expr2a '+' . expr3
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr3  go to state 124
+    expr4  go to state 44
+    val1   go to state 45
+
+
+state 90
+
+   44 expr2a: expr2a '-' . expr3
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr3  go to state 125
+    expr4  go to state 44
+    val1   go to state 45
+
+
+state 91
+
+   46 expr3: expr3 '*' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 126
+    val1   go to state 45
+
+
+state 92
+
+   47 expr3: expr3 '/' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 127
+    val1   go to state 45
+
+
+state 93
+
+   48 expr3: expr3 '%' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 128
+    val1   go to state 45
+
+
+state 94
+
+   61 ifdecl1: IF '(' condexpr ')' .
+
+    $default  reduce using rule 61 (ifdecl1)
+
+
+state 95
+
+   74 ret1: RET ';' .
+
+    $default  reduce using rule 74 (ret1)
+
+
+state 96
+
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+   75 ret1: RET expr2 . ';'
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    ';'  shift, and go to state 129
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+
+state 97
+
+   62 if1: ifdecl1 '{' funcbody '}' .
+   63    | ifdecl1 '{' funcbody '}' . elsedecl1 '{' funcbody '}'
+
+    ELSE  shift, and go to state 130
+
+    $default  reduce using rule 62 (if1)
+
+    elsedecl1  go to state 131
+
+
+state 98
+
+   20 funcbody: funcbody funcbody2 .
+
+    $default  reduce using rule 20 (funcbody)
+
+
+state 99
+
+   13 funcbody2: assn1 ';' .
+
+    $default  reduce using rule 13 (funcbody2)
+
+
+state 100
+
+   34 expr1: expr2 ';' .
+
+    $default  reduce using rule 34 (expr1)
+
+
+state 101
+
+   66 fdecl1: ID ID .
+
+    $default  reduce using rule 66 (fdecl1)
+
+
+state 102
+
+   68 fdecl2: fdecl2 ',' . fdecl1
+
+    ID  shift, and go to state 60
+
+    fdecl1  go to state 132
+
+
+state 103
+
+   70 fdecl3: '(' fdecl2 ')' .
+
+    $default  reduce using rule 70 (fdecl3)
+
+
+state 104
+
+   72 func1: funcdecl fdecl3 '{' '}' .
+
+    $default  reduce using rule 72 (func1)
+
+
+state 105
+
+   20 funcbody: funcbody . funcbody2
+   73 func1: funcdecl fdecl3 '{' funcbody . '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+    '}'       shift, and go to state 133
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 98
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 106
+
+   11 decl1: ID ID '=' expr2 ';' .
+
+    $default  reduce using rule 11 (decl1)
+
+
+state 107
+
+   51 expr4: ID '(' ')' .
+
+    $default  reduce using rule 51 (expr4)
+
+
+state 108
+
+   26 exprlist: exprlist . ',' expr2
+   52 expr4: ID '(' exprlist . ')'
+
+    ','  shift, and go to state 134
+    ')'  shift, and go to state 135
+
+
+state 109
+
+   25 exprlist: expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 25 (exprlist)
+
+
+state 110
+
+   59 expr4: '(' ID ')' . expr4
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr4  go to state 136
+    val1   go to state 45
+
+
+state 111
+
+   50 expr4: '(' expr2 ')' .
+
+    $default  reduce using rule 50 (expr4)
+
+
+state 112
+
+   30 condexpr: expr2 EQEQ expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 30 (condexpr)
+
+
+state 113
+
+   36 expr2: expr2 OR expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 36 (expr2)
+
+
+state 114
+
+   37 expr2: expr2 AND expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 37 (expr2)
+
+
+state 115
+
+   38 expr2: expr2 XOR expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 38 (expr2)
+
+
+state 116
+
+   31 condexpr: expr2 NEQ expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 31 (condexpr)
+
+
+state 117
+
+   32 condexpr: expr2 GEQ expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 32 (condexpr)
+
+
+state 118
+
+   33 condexpr: expr2 SEQ expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 33 (condexpr)
+
+
+state 119
+
+   28 condexpr: expr2 '<' expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 28 (condexpr)
+
+
+state 120
+
+   29 condexpr: expr2 '>' expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 29 (condexpr)
+
+
+state 121
+
+   39 expr2: expr2 '|' expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 39 (expr2)
+
+
+state 122
+
+   40 expr2: expr2 '&' expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 40 (expr2)
+
+
+state 123
+
+   41 expr2: expr2 '^' expr2a .
+   43 expr2a: expr2a . '+' expr3
+   44       | expr2a . '-' expr3
+
+    '+'  shift, and go to state 89
+    '-'  shift, and go to state 90
+
+    $default  reduce using rule 41 (expr2)
+
+
+state 124
+
+   43 expr2a: expr2a '+' expr3 .
+   46 expr3: expr3 . '*' expr4
+   47      | expr3 . '/' expr4
+   48      | expr3 . '%' expr4
+
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 43 (expr2a)
+
+
+state 125
+
+   44 expr2a: expr2a '-' expr3 .
+   46 expr3: expr3 . '*' expr4
+   47      | expr3 . '/' expr4
+   48      | expr3 . '%' expr4
+
+    '*'  shift, and go to state 91
+    '/'  shift, and go to state 92
+    '%'  shift, and go to state 93
+
+    $default  reduce using rule 44 (expr2a)
+
+
+state 126
+
+   46 expr3: expr3 '*' expr4 .
+
+    $default  reduce using rule 46 (expr3)
+
+
+state 127
+
+   47 expr3: expr3 '/' expr4 .
+
+    $default  reduce using rule 47 (expr3)
+
+
+state 128
+
+   48 expr3: expr3 '%' expr4 .
+
+    $default  reduce using rule 48 (expr3)
+
+
+state 129
+
+   75 ret1: RET expr2 ';' .
+
+    $default  reduce using rule 75 (ret1)
+
+
+state 130
+
+   60 elsedecl1: ELSE .
+
+    $default  reduce using rule 60 (elsedecl1)
+
+
+state 131
+
+   63 if1: ifdecl1 '{' funcbody '}' elsedecl1 . '{' funcbody '}'
+
+    '{'  shift, and go to state 137
+
+
+state 132
+
+   68 fdecl2: fdecl2 ',' fdecl1 .
+
+    $default  reduce using rule 68 (fdecl2)
+
+
+state 133
+
+   73 func1: funcdecl fdecl3 '{' funcbody '}' .
+
+    $default  reduce using rule 73 (func1)
+
+
+state 134
+
+   26 exprlist: exprlist ',' . expr2
+
+    NUM   shift, and go to state 20
+    ID    shift, and go to state 46
+    LNOT  shift, and go to state 32
+    '&'   shift, and go to state 33
+    '^'   shift, and go to state 34
+    '-'   shift, and go to state 35
+    '*'   shift, and go to state 36
+    '('   shift, and go to state 37
+    '!'   shift, and go to state 38
+
+    expr2   go to state 138
+    expr2a  go to state 42
+    expr3   go to state 43
+    expr4   go to state 44
+    val1    go to state 45
+
+
+state 135
+
+   52 expr4: ID '(' exprlist ')' .
+
+    $default  reduce using rule 52 (expr4)
+
+
+state 136
+
+   59 expr4: '(' ID ')' expr4 .
+
+    $default  reduce using rule 59 (expr4)
+
+
+state 137
+
+   63 if1: ifdecl1 '{' funcbody '}' elsedecl1 '{' . funcbody '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 53
+    funcbody   go to state 139
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 138
+
+   26 exprlist: exprlist ',' expr2 .
+   36 expr2: expr2 . OR expr2a
+   37      | expr2 . AND expr2a
+   38      | expr2 . XOR expr2a
+   39      | expr2 . '|' expr2a
+   40      | expr2 . '&' expr2a
+   41      | expr2 . '^' expr2a
+
+    OR   shift, and go to state 78
+    AND  shift, and go to state 79
+    XOR  shift, and go to state 80
+    '|'  shift, and go to state 86
+    '&'  shift, and go to state 87
+    '^'  shift, and go to state 88
+
+    $default  reduce using rule 26 (exprlist)
+
+
+state 139
+
+   20 funcbody: funcbody . funcbody2
+   63 if1: ifdecl1 '{' funcbody '}' elsedecl1 '{' funcbody . '}'
+
+    NUM       shift, and go to state 20
+    ID        shift, and go to state 49
+    RET       shift, and go to state 50
+    LNOT      shift, and go to state 32
+    IF        shift, and go to state 6
+    COMMENT   shift, and go to state 7
+    COMMENT2  shift, and go to state 8
+    '&'       shift, and go to state 33
+    '^'       shift, and go to state 34
+    '-'       shift, and go to state 35
+    '*'       shift, and go to state 36
+    '('       shift, and go to state 37
+    '!'       shift, and go to state 38
+    '}'       shift, and go to state 140
+
+    comments   go to state 51
+    decl1      go to state 52
+    funcbody2  go to state 98
+    assn1      go to state 55
+    expr1      go to state 56
+    expr2      go to state 57
+    expr2a     go to state 42
+    expr3      go to state 43
+    expr4      go to state 44
+    ifdecl1    go to state 14
+    if1        go to state 58
+    val1       go to state 45
+    ret1       go to state 59
+
+
+state 140
+
+   63 if1: ifdecl1 '{' funcbody '}' elsedecl1 '{' funcbody '}' .
+
+    $default  reduce using rule 63 (if1)

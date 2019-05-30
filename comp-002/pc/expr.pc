@@ -1,0 +1,12 @@
+
+	aa + bb * cc - dd;
+	cc - dd;
+	//ee * ff;
+	//gg / hh;
+	//oo = pp + qq;
+	//aa = zz + jj * cc ^ kk * cc;
+	//iii = ii + (jj - kk) / mm;
+	//iii = (jj + kk) * (ww + zz);
+	//vvv = eee | fff  +  (ggg & hhh) * -iii;
+    //uuu = www || eee + fff ^^ rrrr;
+    //xxx =  yyyy(zzz, uuu + sss);
