@@ -9,6 +9,6 @@ high level, medium level and low level code at the same time?
  * That is simple?
  * That is safe?
  * That can reuse previous code, objects, libraries?
- * That can get injection from high / low level extensions
+ * That can get injection from high / medium / low / ASM level extensions
 
 //# EOF
