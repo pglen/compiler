@@ -27,7 +27,10 @@
 
 char outfile[MAX_VARLEN * 3] = {0,};
 char usetmp[MAX_VARLEN * 3] = {0,};
-char outtmp[MAX_VARLEN * 3] = {0,};
+//char outtmp[MAX_VARLEN * 3] = {0,};
+
+char    *version = "1.0.0";
+char    *build = "Thu 03.Jul.2025";
 
 // Flags for operation. Some referenced in other files.
 
@@ -37,28 +40,22 @@ int     help()
 
 {
     printf("\n");
-    printf(" ----------------------------------------------------\n");
-    printf("   Parallel compiler by Peter Glen. 2007-2019-2025   \n");
-    printf(" ----------------------------------------------------\n");
+    printf("  ---------------------------------------------------------------\n");
+    printf("          Parallel compiler by Peter Glen. 2007-2019-2025        \n");
+    printf("  ---------------------------------------------------------------\n");
+    printf("\n");
     printf(" Usage: pcomp [options] filename(s)\n");
-    printf("       -a no assembly phase\n");
-    printf("       -b show alloc buffers\n");
-    printf("       -c cat assembly to stdout\n");
-    printf("       -d debug level\n");
-    printf("       -i interlace symtab in output\n");
-    printf("       -f show lex output\n");
-    printf("       -m show comments in source\n");
-    printf("       -n do not show progress\n");
-    printf("       -o output file\n");
-    printf("       -u use tmp dir\n");
-    printf("       -p no prologue for assembly\n");
-    printf("       -r no pre processing\n");
-    printf("       -q cat pre processing to stdout\n");
-    printf("       -s show symtab\n");
-    printf("       -t do not compile\n");
-    printf("       -v verbose\n");
-    printf("       -y show yacc output\n");
-    printf("       -h help (this screen)\n");
+    printf("\n");
+    printf("    -d debug level               |   -c cat assembly to stdout\n");
+    printf("    -t do not compile            |   -f show lex output\n");
+    printf("    -r no pre processing         |   -n do not show progress\n");
+    printf("    -y show yacc output          |   -a no assembly phase\n");
+    printf("    -V version                   |   -v verbose\n");
+    printf("    -h help (this screen         |   -b show alloc buffers\n");
+    printf("    -i interlace symtab in out   |   -m show comments in source\n");
+    printf("    -o output file               |   -u use tmp dir\n");
+    printf("    -p no prologue for asm       |   -q cat pre proc to stdout\n");
+    printf("    -s show symtab\n");
     printf("\n");
 
     exit(1);
@@ -88,13 +85,12 @@ int     main (int argc, char **argv)
            {0, 0, 0, 0}
        	};
 
-    	cc = getopt_long (argc, argv, "abc012fhilmnpqrstvyko:d:u:",
+    	cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvyko:d:u:",
                         long_options, &option_index);
-
                if (cc == -1)
                    break;
-
-               switch (cc) {
+               switch (cc)
+               {
                case 0:
                    printf ("long option %s", long_options[option_index].name);
                    if (optarg)
@@ -210,6 +206,7 @@ int     main (int argc, char **argv)
                         printf("usetmp: '%s' must be a dir.\n", usetmp);
                         exit(1);
                         }
+                    strcat(usetmp, "/");
                    if(config.verbose)
                        printf("usetmp: '%s'\n", usetmp);
                     break;
@@ -217,6 +214,10 @@ int     main (int argc, char **argv)
                case 'v':
                    //printf ("option v\n");
                    config.verbose += 1;
+                   break;
+
+                case 'V':
+                   printf ("Version: %s built: %s\n", version, build);
                    break;
 
                case 'y':
@@ -231,10 +232,9 @@ int     main (int argc, char **argv)
                    printf ("?? getopt returned character code 0%o ??\n", cc);
                }
             }
-
             if (optind < argc)
                 {
-				struct timespec ts;
+				Ts ts;
 				clock_gettime(CLOCK_REALTIME, &ts);
 
                 //printf ("non-option ARGV-elements: ");
@@ -261,7 +261,7 @@ int     main (int argc, char **argv)
                 //printf ("\n");
 				//dump_symtab();
 
-				struct timespec ts2;
+				Ts ts2;
 				clock_gettime(CLOCK_REALTIME, &ts2);
 
 				int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
@@ -280,12 +280,15 @@ int     main (int argc, char **argv)
 	//empty_symtab();
 	//efreeall();
 
+    if(outfile[0] == '\0')
+        {
+        strcpy(outfile, "a.out");
+        }
 	if(config.showallocbuff)
 		{
 		print_emalloc();
 		print_estrdup();
 		}
-
 	exit(config.errorcount);
 }
 

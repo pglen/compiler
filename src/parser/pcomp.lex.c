@@ -792,10 +792,10 @@ char *yytext;
 #include "../emalloc.h"
 #include "../pcomp.h"
 
+FILE    *asmfp;
+
 static	char tmp_str2[MAX_VARLEN];
 static  FILE    *infp, *ppfp;
-
-FILE    *asmfp;
 
 int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
 
@@ -2638,39 +2638,29 @@ int     compile(char *ptr)
 		//	syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
 		return 0;
 		}
-    if(usetmp[0] == '\0')
-        {
-    	strcpy(outdir, ptr);
-    	char *last2 = strrchr(outdir, '/');
-    	if (last2 != NULL)
-    		{
-    		*last2 = '\0';
-    		}
-    	else
-    		{
-    		outdir[0] = '.'; outdir[1] = '\0';
-    		}
-        }
-    else
-        {
-        }
-	//strcat(outdir, "/tmp/");
-	strcat(outdir, "/");
-
-	if (config.verbose)
-        printf("outdir: '%s'\n", outdir);
-
-    #if 1
-	if(stat(outdir, &buf) < 0)
+    strcpy(outdir, ptr);
+	char *last2 = strrchr(outdir, '/');
+	if (last2 != NULL)
 		{
-		if(mkdir(outdir, 0777) < 0)
+		*last2 = '\0';
+		}
+	else
+		{
+		outdir[0] = '.'; outdir[1] = '\0';
+		}
+	strcat(outdir, "/");
+    strcat(usetmp, outdir);
+	if (config.verbose)
+        printf("usetmp: '%s'\n", usetmp);
+        //printf("outdir: '%s'\n", outdir);
+	if(stat(usetmp, &buf) < 0)
+		{
+		if(mkdir(usetmp, 0777) < 0)
 			{
-			printf("Cannot create tmp dir: '%s'\n", outdir);
+			printf("Cannot create tmp dir: '%s'\n", usetmp);
 			return 0;
 			}
 		}
-    #endif
-
 	char asmfile[MAX_VARLEN];
 	strcpy(asmfile, ptr);
 	char *last = strrchr(asmfile, '/');
@@ -2678,9 +2668,8 @@ int     compile(char *ptr)
 		{
 		strcpy(asmfile, last + 1);
 		}
-
 	char asmfile2[MAX_VARLEN];
-	strcpy(asmfile2, outdir);
+	strcpy(asmfile2, usetmp);
 	strcat(asmfile2, asmfile);
 	char *last3 = strrchr(asmfile2, '.');
 	if (last3 != NULL)
@@ -2690,9 +2679,8 @@ int     compile(char *ptr)
 		if(config.verbose)
             printf("asm2: '%s'\n", asmfile2);
 		}
-
 	char objfile2[MAX_VARLEN];
-	strcpy(objfile2, outdir);
+	strcpy(objfile2, usetmp);
 	strcat(objfile2, asmfile);
 	char *last4 = strrchr(objfile2, '.');
 	if (last4 != NULL)
@@ -2703,15 +2691,15 @@ int     compile(char *ptr)
     		printf("obj2: '%s'\n", objfile2);
 		}
 
-    strcpy(outtmp, outdir);
-	strcat(outtmp, asmfile);
-	char *last5 = strrchr(outtmp, '.');
-	if (last5 != NULL)
-		{
-		*last5 = '\0';
-		if(config.verbose)
-    		printf("outtmp: '%s'\n", outtmp);
-		}
+    //strcpy(usetmp, outdir);
+	//strcat(usetmp, asmfile);
+	//char *last5 = strrchr(usetmp, '.');
+	//if (last5 != NULL)
+	//	{
+	//	*last5 = '\0';
+	//	if(config.verbose)
+    //		printf("usetmp: '%s'\n", usetmp);
+	//	}
 
     asmfp = fopen(asmfile2, "w");
 
@@ -2752,7 +2740,6 @@ int     compile(char *ptr)
 		printf ("OK\n");
 
 	config.errorcount += ret;
-
 	if(!config.showcomm)
 		{
 		//printf("\n");
@@ -2765,7 +2752,6 @@ int     compile(char *ptr)
 		//printf("\n");
 		}
 	fclose(asmfp);
-
 	if(!config.noassembly)
 		{
 		sprintf(tmp_str, "nasm -felf64 %s > /dev/null\n", asmfile2);
@@ -2779,10 +2765,10 @@ int     compile(char *ptr)
 			ret_val = 0;
 			}
 		}
-
 	if(!config.nolink)
 		{
-		sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null\n", objfile2, outtmp);
+		sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null\n",
+                                asmfile2, outfile);
         if(config.verbose)
             printf("Linking %s\n", tmp_str);
 		int ret = system(tmp_str);
