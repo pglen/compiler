@@ -1,0 +1,16 @@
+LANGUAGE REFERENCE
+
+See SYNTAX file.
+
+Entry point:
+
+//process
+
+function int main()
+
+{
+
+}
+
+
+
