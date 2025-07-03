@@ -8,25 +8,10 @@
 
 // Flags for operation. Some referenced in other files.
 
-int   	testflex = 0;
-int   	testyacc = 0;
-int	  	showcomm = 0;
-int	  	dumpsymtab = 0;
-int 	errorcount = 0;
-int		debuglevel = 0;
-int		noprologue = 0;
-int 	catsrc = 0;
-int 	catpre = 0;
-int		interlace_sym = 0;
-int		noassembly = 0;
-int		nolink = 0;
-int		showallocbuff = 0;
-int		noprog = 0;
-int		nocompile = 0;
-int		verbose = 0;
-int		nopre = 0;
+Configx config;
 
 static	char tmp_str2[1024];
+
 static	char outfile[MAX_VARLEN] = {0,};
 static	char outtmp[MAX_VARLEN] = {0,};
 
@@ -68,7 +53,7 @@ FNN  [\~_a-zA-Z0-9]
 \/\/\/\/.*\n                       { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[double slash comment] '%s", yytext);
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -78,7 +63,7 @@ FNN  [\~_a-zA-Z0-9]
 \/\/\/.*\n                       { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[slash comment2] '%s", yytext);
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -90,7 +75,7 @@ FNN  [\~_a-zA-Z0-9]
 \/\/.*\n                       { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[slash comment] '%s", yytext);
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -100,7 +85,7 @@ FNN  [\~_a-zA-Z0-9]
 ##.*\n                           {  /* double comment */
 								num_lines++;
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[double comment] '%s", yytext);
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -110,7 +95,7 @@ FNN  [\~_a-zA-Z0-9]
 #.*\n                           {  /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[comment] '%s", yytext);
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -118,19 +103,19 @@ FNN  [\~_a-zA-Z0-9]
 								}
 
 ^\r\n                             /* empty line */ {
-								if(testflex)
+								if(config.testflex)
                                     printf("[empty line]\r\n");
 								num_lines++;
 								}
 
 ^\r                             /* empty line */ {
-								if(testflex)
+								if(config.testflex)
                                     printf("[empty line \\r]\r\n");
 								num_lines++;
 								}
 
 ^\n                             /* empty line */ {
-								if(testflex)
+								if(config.testflex)
                                     printf("[empty line \\n]\r\n");
 								num_lines++;
 								}
@@ -141,7 +126,7 @@ FNN  [\~_a-zA-Z0-9]
   /*
 \<class\>                           {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("<CLASS> ");
 	#endif
                                 yylval.strval = strdup(yytext);
@@ -149,7 +134,7 @@ FNN  [\~_a-zA-Z0-9]
                                 }
 \<ssalc\>                           {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf("<SSALC> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(SSALC);
@@ -157,14 +142,14 @@ FNN  [\~_a-zA-Z0-9]
     /* ----------------------------------------------------------------- */
 \<dir\>                            {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
 	                                printf("<DIR> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(DIR);
                                 }
 \<rid\>                         {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<RID> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(RID);
@@ -172,7 +157,7 @@ FNN  [\~_a-zA-Z0-9]
 
 function                        {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("[Function] ");
 	#endif
                                 yylval.strval = strdup(yytext); return(FUNC);
@@ -180,7 +165,7 @@ function                        {
 
 begin                          {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("lex: begin ");
 	#endif
 
@@ -189,7 +174,7 @@ begin                          {
 
 end                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("lex: end ");
 	#endif
 
@@ -200,7 +185,7 @@ end                             {
 
 debug                          {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<DBG> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(DBG);
@@ -208,7 +193,7 @@ debug                          {
 
 return                         {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("[RET] ");
 	#endif
                                 yylval.strval = strdup(yytext); return(RET);
@@ -216,7 +201,7 @@ return                         {
 
 \|\|                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<OR> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(OR);
@@ -224,7 +209,7 @@ return                         {
 
 \!\!                            {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<LNOT> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(LNOT);
@@ -232,7 +217,7 @@ return                         {
 
 \&\&                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<AND> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(AND);
@@ -240,7 +225,7 @@ return                         {
 
 \=\=                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<EQEQ> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(EQEQ);
@@ -248,7 +233,7 @@ return                         {
 
 !\=                            {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<NEQ> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(NEQ);
@@ -256,7 +241,7 @@ return                         {
 
 \^\^                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<XOR> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(XOR);
@@ -264,7 +249,7 @@ return                         {
 
 \>\=                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<GEQ> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(GEQ);
@@ -273,7 +258,7 @@ return                         {
 
 \<\=                            {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<SEQ> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(SEQ);
@@ -282,7 +267,7 @@ return                         {
 
 \<\<\<                          {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<ROL> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(ROL);
@@ -290,7 +275,7 @@ return                         {
 
 \>\>\>                          {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<ROR> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(ROR);
@@ -299,7 +284,7 @@ return                         {
 
 if                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<IF> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(IF);
@@ -307,7 +292,7 @@ if                             {
 
 else                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<ELSE> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(ELSE);
@@ -315,35 +300,35 @@ else                             {
 
 log                             {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 printf("<LOG> ");
 	#endif
                                 yylval.strval = strdup(yytext); return(LOG);
                                 }
 0y[0-1]+                        {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 	printf("[NUM] '%s' ", yytext);
 	#endif
                                 return(NUM);
                                 }
 0x[0-9a-fA-f]+                  {            /* hexadecimal */
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 	printf("[ID] '%s' ", (char*)yytext);
 	#endif
                                 yylval.strval = strdup(yytext); return(ID);
                                 }
 [0-9]+                          {
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
  	                               printf("[NUM] '%s' ", (char*)yytext);
 	#endif
                                 yylval.strval = strdup(yytext); return(NUM);
                                 }
 {FN}{FNN}*                      {             /* Identity */
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 	printf("[ID] '%s' ", (char*)yytext);
 	#endif
                                 yylval.strval = strdup(yytext); return(ID);
@@ -351,7 +336,7 @@ log                             {
 
 [ \t\r\n]+                        {          /* white space */
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                 	printf("[SP] '%d' len=%d ",
 													yytext[0], strlen(yytext));
 	#endif
@@ -366,7 +351,7 @@ log                             {
 \"                              {              /* begin quote */
                                 BEGIN(STR2);
 	#ifdef DEBUGLEX
-                                if(testflex)
+                                if(config.testflex)
                                     printf(" str<<<");
 	#endif
                                 prog = 0; backslash  = 0;
@@ -376,7 +361,7 @@ log                             {
                                 }
 
 .                               {
-                                if(testflex)
+                                if(config.testflex)
                                     printf("[CHAR] '%c' ", yytext[0]);
 
                                 return(yytext[0]);
@@ -392,7 +377,7 @@ log                             {
                                      {
                                      BEGIN(INITIAL);
 
-                                     if(testflex)
+                                     if(config.testflex)
                                         printf(">>>str ");
 
 								     tmp_str2[prog++] = yytext[0];
@@ -409,7 +394,7 @@ log                             {
 <STR2>.                         {
                                 backslash  = 0;
 
-                                if(testflex)
+                                if(config.testflex)
                                     printf("%s", yytext);
 
 								tmp_str2[prog++] = yytext[0];
@@ -430,30 +415,33 @@ int     help()
 {
     printf("\n");
     printf(" ----------------------------------------------------\n");
-    printf("  Parallel compiler by Peter Glen. 2007-2019\n");
-    printf(" -----------------------------------------------------\n");
+    printf("  Parallel compiler by Peter Glen. 2007-2019-2025    \n");
+    printf(" ----------------------------------------------------\n");
     printf("\n");
     printf(" Usage: pcomp [options] filename(s)\n");
     printf("       -a no assembly phase\n");
     printf("       -b show alloc buffers\n");
     printf("       -c cat assembly to stdout\n");
     printf("       -d debug level\n");
-    printf("       -h help\n");
     printf("       -i interlace symtab in output\n");
     printf("       -f show lex output\n");
     printf("       -m show comments in source\n");
     printf("       -n do not show progress\n");
     printf("       -o output file\n");
     printf("       -p no prologue for assembly\n");
+    printf("       -r no pre processing\n");
     printf("       -q cat pre processing to stdout\n");
     printf("       -s show symtab\n");
     printf("       -t do not compile\n");
     printf("       -v verbose\n");
     printf("       -y show yacc output\n");
+    printf("       -h help (this screen)\n");
     printf("\n");
 
-		exit(1);
+    exit(1);
 }
+
+// Main Entry point
 
 int     main (int argc, char **argv)
 
@@ -462,6 +450,8 @@ int     main (int argc, char **argv)
 
     //int *dd = 0;
     //*dd = 1;
+
+    memset(&config, '\0', sizeof(config));
 
     // Parse command line
    	while (1) {
@@ -500,103 +490,103 @@ int     main (int argc, char **argv)
 
                 case 'a':
                    //printf ("option a\n");
-                   noassembly = 1;
+                   config.noassembly = 1;
                    break;
 
                 case 'k':
                    //printf ("option k\n");
-                   nolink = 1;
+                   config.nolink = 1;
                    break;
 
                case 'b':
                    //printf ("option b\n");
-                   showallocbuff = 1;
+                   config.showallocbuff = 1;
                    break;
 
                case 'c':
                    //printf ("option c\n");
-                   catsrc = 1;
+                   config.catsrc = 1;
                    break;
 
                case 'd':
                    //printf ("option d with value '%s'\n", optarg);
-                   debuglevel = atoi(optarg);
-                   if(debuglevel > 10)
-                        debuglevel = 10;
+                   config.debuglevel = atoi(optarg);
+                   if(config.debuglevel > 10)
+                        config.debuglevel = 10;
                    break;
 
                case 'f':
                    //printf ("Debug FLEX option is on\n");
-                   testflex = 1;
+                   config.testflex = 1;
                    break;
 
                case 'h':
                    //printf ("option i\n");
-                   //interlace_sym = 1;
+                   //config.interlace_sym = 1;
                    help();
                    break;
 
                 case 'i':
                    //printf ("option i\n");
-                   interlace_sym = 1;
+                   config.interlace_sym = 1;
                    break;
 
                case 'm':
                    //printf ("option m\n");
-					showcomm = 1;
+					config.showcomm = 1;
                    	break;
 
                 case 'l':
                     //printf ("option l\n");
-					showcomm = 1;
+					config.showcomm = 1;
                    	break;
 
                case 'n':
                    //printf ("option n\n");
-					noprog = 1;
+					config.noprog = 1;
                    	break;
 
                case 'o':
                    //printf ("option o\n");
                    strncpy(outfile, optarg, sizeof(outfile));
-                   if(verbose)
+                   if(config.verbose)
                        printf("outfile: '%s'\n", outfile);
                    break;
 
                case 'p':
                    //printf ("option p\n");
-                   noprologue = 1;
+                   config.noprologue = 1;
                    break;
 
                 case 'q':
                    //printf ("option c\n");
-                   catpre = 1;
+                   config.catpre = 1;
                    break;
 
                case 'r':
                    //printf ("option r\n");
-                   nopre = 1;
+                   config.nopre = 1;
                    break;
 
                case 's':
                    //printf ("option s\n");
                    //printf ("Showing symtab\n");
-                   dumpsymtab = 1;
+                   config.dumpsymtab = 1;
                    break;
 
                case 't':
                    //printf ("Do not compile\n");
-                   nocompile = 1;
+                   config.nocompile = 1;
                    break;
 
                case 'v':
                    //printf ("option v\n");
-                   verbose = 1;
+                   config.verbose = 1;
                    break;
 
                case 'y':
                    //printf ("Debug YACC option is on\n");
-                   testyacc = 1;
+                   config.testyacc = 1;
                    break;
 
                case '?':
@@ -618,12 +608,12 @@ int     main (int argc, char **argv)
                     // Preprocess and compile
 					num_lines = 1; empty_symtab();
 
-					if(nopre == 0)
+					if(config.nopre == 0)
 						preprocess(argv[optind]);
 					else
 						strcpy(ppfile2, argv[optind]);
 
-					if(nocompile == 0)
+					if(config.nocompile == 0)
 	                	compile(argv[optind]);
 
                     optind++;
@@ -636,7 +626,7 @@ int     main (int argc, char **argv)
 				clock_gettime(CLOCK_REALTIME, &ts2);
 
 				int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
-				if(verbose)
+				if(config.verbose)
             	 	printf("Total %d sec %d usec\n", dts, dtu);
                 }
              else
@@ -651,13 +641,13 @@ int     main (int argc, char **argv)
 	//empty_symtab();
 	//efreeall();
 
-	if(showallocbuff)
+	if(config.showallocbuff)
 		{
 		print_emalloc();
 		print_estrdup();
 		}
 
-	exit(errorcount);
+	exit(config.errorcount);
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -669,7 +659,7 @@ int     compile(char *ptr)
 	int ret_val = 1;
 	struct stat buf;
 
-    if(verbose)
+    if(config.verbose)
         printf("Compile: '%s'\n", ptr);
 
 	// re - initialize compiler
@@ -678,14 +668,14 @@ int     compile(char *ptr)
 	if(stat(ptr, &buf) < 0)
 		{
 		printf("Cannot stat file '%s'.\n", ptr);
-		//if(debuglevel > 0)
+		//if(config.debuglevel > 0)
 		//	syslog(LOG_DEBUG, "log: cannot stat file %s\n", ptr);
 		return 0;
 		}
 	if(S_ISDIR(buf.st_mode))
 		{
 		printf("Cannot operate on directory '%s'.\n", ptr);
-		//if(debuglevel > 0)
+		//if(config.debuglevel > 0)
 		//	syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
 		return 0;
 		}
@@ -695,7 +685,7 @@ int     compile(char *ptr)
 	if(!infp)
 		{
 		printf("Cannot open file '%s'.\n", ptr);
-		//if(debuglevel > 0)
+		//if(config.debuglevel > 0)
 		//	syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
 		return 0;
 		}
@@ -744,7 +734,7 @@ int     compile(char *ptr)
 		{
 		*last3 = '\0';
 		strcat(asmfile2, ".asm");
-		if(verbose)
+		if(config.verbose)
             printf("asm2: '%s'\n", asmfile2);
 		}
 
@@ -756,7 +746,7 @@ int     compile(char *ptr)
 		{
 		*last4 = '\0';
 		strcat(objfile2, ".o");
-		if(verbose)
+		if(config.verbose)
     		printf("obj2: '%s'\n", objfile2);
 		}
 
@@ -766,7 +756,7 @@ int     compile(char *ptr)
 	if (last5 != NULL)
 		{
 		*last5 = '\0';
-		if(verbose)
+		if(config.verbose)
     		printf("outtmp: '%s'\n", outtmp);
 		}
 
@@ -779,9 +769,9 @@ int     compile(char *ptr)
 		return 0;
 		}
 
-	int	olderrcnt = errorcount;
+	int	olderrcnt = config.errorcount;
 
-	if(!noprog)
+	if(!config.noprog)
 		printf ("Compiling: '%s' ", ptr);
 
 	struct timespec ts;
@@ -797,20 +787,23 @@ int     compile(char *ptr)
 
 	int ret = getretcode();
 
-	if(verbose)
+	if(config.verbose)
 		{
-		if(ret == 0 && (olderrcnt == errorcount))
+		if(ret == 0 && (olderrcnt == config.errorcount))
 			printf ("OK %d sec %d usec\n", dts, dtu);
 		else
 			printf ("Compiled: '%s' ERR %d sec %d usec\n", ptr, dts, dtu);
 		}
 
-	errorcount += ret;
+    if(!config.noprog)
+		printf ("OK\n");
 
-	if(!showcomm)
+	config.errorcount += ret;
+
+	if(!config.showcomm)
 		{
 		//printf("\n");
-		if(dumpsymtab)
+		if(config.dumpsymtab)
 			{
 			dump_symtab();
 			//printf("\n");
@@ -818,13 +811,12 @@ int     compile(char *ptr)
 		gen_code();
 		//printf("\n");
 		}
-
 	fclose(asmfp);
 
-	if(!noassembly)
+	if(!config.noassembly)
 		{
 		sprintf(tmp_str, "nasm -felf64 %s > /dev/null\n", asmfile2);
-        if(verbose)
+        if(config.verbose)
             printf("Assembly: '%s'\n", tmp_str);
 
 		int ret = system(tmp_str);
@@ -835,10 +827,10 @@ int     compile(char *ptr)
 			}
 		}
 
-	if(!nolink)
+	if(!config.nolink)
 		{
 		sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null\n", objfile2, outtmp);
-        if(verbose)
+        if(config.verbose)
             printf("Linking %s\n", tmp_str);
 		int ret = system(tmp_str);
 		if(ret != 0)
@@ -848,7 +840,7 @@ int     compile(char *ptr)
 			}
 		}
 
-	if(catsrc)
+	if(config.catsrc)
 		{
 		printf("Displaying source file:\n\n");
 		sprintf(tmp_str, "cat %s\n", asmfile2);

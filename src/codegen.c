@@ -8,6 +8,7 @@
 #include <malloc.h>
 #include <string.h>
 
+#include "pcomp.h"
 #include "symtab.h"
 #include "codegen.h"
 
@@ -233,7 +234,7 @@ format2: db      \"Hello world\", 10, 0                                   \n\
 int	prologue()
 
 {
-	if(noprologue)
+	if(config.noprologue)
 		return;
     fprintf(asmfp, prolstr);
     return 0;
@@ -243,7 +244,7 @@ int	prologue()
 int	epilogue()
 
 {
-	if(noprologue)
+	if(config.noprologue)
 		return;
 
 fprintf(asmfp, "\
@@ -617,7 +618,7 @@ int		show_item(Symbol *sp, outstr **root)
 
 {
 	// No showing is desired
-	if(interlace_sym == 0)
+	if(config.interlace_sym == 0)
 	 	return 0;
 
 	char *opstr; translate_type(sp->type, &opstr);

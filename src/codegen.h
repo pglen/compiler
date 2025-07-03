@@ -15,20 +15,8 @@
 #define S16_MIN -1000
 #define S32_MIN -10000
 
-///////////////////////////////////////////////////////////////////////////
 // Externals
-
-extern  int   	testflex;
-extern  int   	testyacc;
-extern  int	  	showcomm;
-extern  int	  	dumpsymtab;
-extern  int 	errorcount;
-extern  int		debuglevel;
-extern  int		noprologue;
-extern  int 	catsrc;
-extern  int		interlace_sym;
-extern  int		noassembly;
 
 int		gen_code();
 
-
+// EOF

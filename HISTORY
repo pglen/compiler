@@ -1,4 +1,7 @@
-                    HISTORY
+         HISTORY
 
- Fri 13.Nov.2020  Restructure for github
- Sat 14.Nov.2020  Switched to NASM
+    Fri 13.Nov.2020     Restructure for github
+    Sat 14.Nov.2020     Switched to NASM
+    Thu 03.Jul.2025     United pcomp and comp to 'compiler'
+
+# EOF
