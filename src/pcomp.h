@@ -31,11 +31,8 @@ typedef struct _configx {
 } Configx;
 
 extern Configx config;
-
 extern char ppfile2[];
-
 extern int num_lines, num_chars, backslash, prog;
-
 extern char outfile[MAX_VARLEN];
 extern char outtmp[MAX_VARLEN];
 
