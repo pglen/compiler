@@ -8,8 +8,8 @@
 #include <malloc.h>
 #include <string.h>
 
-#include "pcomp.h"
 #include "symtab.h"
+#include "pcomp.h"
 #include "codegen.h"
 
 static int		gen_expr(Symbol *sp);

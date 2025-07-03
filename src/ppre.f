@@ -4,13 +4,11 @@
 
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
-#include <getopt.h>
 
 #include "../symtab.h"
 #include  "../pcomp.h"
 
-static int num_lines = 1, num_chars = 0, backslash = 0;
-static     int 	prog = 0;
+//int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
 
 static    char	tmp_str[MAX_VARLEN];
 static    char	tmp_str2[MAX_VARLEN];

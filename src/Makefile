@@ -29,7 +29,7 @@ LIBS = -lm
 #CFLAGS =  -Wformat=no
 CFLAGS =  -w
 
-DEPENDSON =  symtab.c symtab.h codegen.c codegen.h emalloc.c emalloc.h \
+DEPENDSON =  main.c symtab.c symtab.h codegen.c codegen.h emalloc.c emalloc.h \
              pmath.c Makefile parser/pcomp.yacc.c parser/ppre.yacc.c \
              parser/pcomp.lex.c parser/ppre.lex.c
 
@@ -48,13 +48,13 @@ OBJS = emalloc.o codegen.o pmath.o symtab.o
 #${CC} ${CFLAGS} emalloc.c -c -o emalloc.o
 #
 
-pcomp: pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
+pcomp: main.c pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
 	mkdir -p parser
 	${CC} ${CFLAGS} codegen.c -c -o codegen.o
 	${CC} ${CFLAGS} pmath.c -c -o pmath.o
 	${CC} ${CFLAGS} symtab.c -c -o symtab.o
 	${CC} ${CFLAGS} emalloc.c -c -o emalloc.o
-	${CC} ${CFLAGS} ${LDFLAGS} parser/pcomp.lex.c parser/ppre.lex.c \
+	${CC} ${CFLAGS} main.c ${LDFLAGS} parser/pcomp.lex.c parser/ppre.lex.c \
             ${OBJS} -o pcomp  ${LIBS}
 
 parser/ppre.lex.c: ppre.f  ppre.y
@@ -72,9 +72,8 @@ parser/ppre.yacc.c:  ppre.y ppre.f
 clean:
 	rm -f *.o  parser/* pcomp.c pcomp.tab.c core pcomp \#*
 
-test: pcomp
+tests: pcomp
 	./pcomp ../tests/comment.pc
-
 
 
 

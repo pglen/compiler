@@ -34,6 +34,9 @@ extern Configx config;
 
 extern char ppfile2[];
 
-void	calc_usec_diff(struct timespec *ts, struct timespec *ts2, int *pdts, int *pdtu);
+extern int num_lines, num_chars, backslash, prog;
+
+extern char outfile[MAX_VARLEN];
+extern char outtmp[MAX_VARLEN];
 
 // EOF

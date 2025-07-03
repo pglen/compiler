@@ -29,9 +29,6 @@
 
 #include "../symtab.h"
 
-extern int num_lines;
-extern int testyacc;
-
 static  char    tmp_str[MAX_VARLEN];
 static  char    if_str[MAX_VARLEN];
 static  char    el_str[MAX_VARLEN];
