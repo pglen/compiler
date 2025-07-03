@@ -5,17 +5,17 @@
 
      Revisions:
 
-     REV    DATE         BY             DESCRIPTION
-     ----   --------     ----------     -----------------------------------
-     0.00   dec/1/2013   Peter Glen     Initial
-     0.03   dec/23/2013  Peter Glen     Progress.
-     0.04   jan/22/2014  Peter Glen     Added new symtab
+     REV    DATE            BY             DESCRIPTION
+     ----   --------        ----------     --------------------------------
+     0.00   dec/1/2013      Peter Glen     Initial
+     0.03   dec/23/2013     Peter Glen     Progress.
+     0.04   jan/22/2014     Peter Glen     Added new symtab
+     0.04   Thu 03.Jul.2025 Peter Glen     Restructuret to compler project
 
      ======================================================================= */
-
 %{
 
-  /* -------- System includes:  -------------------------------------------- */
+/* -------- System includes:  ----------------------------------------- */
 
 #include <sys/stat.h>
 #include <syslog.h>
@@ -309,7 +309,11 @@ assn2:  assn1 ';'
 assn1:
         ID '=' STR
         {
-        printf("string %s\n", (char*)$3);
+        if(config.verbose > 1)
+            {
+            printf("string %s\n", (char*)$3);
+            }
+
         create_unique2(tmp_str, "tmp", (char*)$1, (char*)$3);
         Symbol  *st = push_symtab((char*)$1, (char*)$3, tmp_str, '=', 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);

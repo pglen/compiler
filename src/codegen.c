@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
+#include <limits.h>
 
 #include "symtab.h"
 #include "pcomp.h"

@@ -1,6 +1,8 @@
 #--------------------------------------------------------------------------
 # Makefile for pcomp
 
+.PHONY: tests clean
+
 all:
 	make -C src
 
@@ -17,7 +19,7 @@ clean:
 	rm -f tests/*.bin
 	rm -f tests/*.asm
 
-test:
-	make -C src test
+tests:
+	make -C src tests
 
-
+# EOF

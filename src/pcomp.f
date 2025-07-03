@@ -1,21 +1,17 @@
 %{
 
+#include "limits.h"
+
 /* This lexer and parser assumes that int is same size as pointer */
 
 #include "../symtab.h"
 #include "../emalloc.h"
 #include "../pcomp.h"
 
-// Flags for operation. Some referenced in other files.
+static	char tmp_str2[MAX_VARLEN];
+static  FILE    *infp, *ppfp;
 
-Configx config;
-
-static	char tmp_str2[1024];
-
-char outfile[MAX_VARLEN] = {0,};
-char outtmp[MAX_VARLEN] = {0,};
-
-FILE    *infp, *asmfp, *ppfp;
+FILE    *asmfp;
 
 int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
 
@@ -410,6 +406,8 @@ log                             {
 
 #include "../codegen.h"
 
+char outdir[MAX_VARLEN];
+
 ///////////////////////////////////////////////////////////////////////////
 //
 
@@ -419,7 +417,7 @@ int     compile(char *ptr)
 	int ret_val = 1;
 	struct stat buf;
 
-    if(config.verbose)
+    if(config.verbose > 0)
         printf("Compile: '%s'\n", ptr);
 
 	// re - initialize compiler
@@ -449,23 +447,27 @@ int     compile(char *ptr)
 		//	syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
 		return 0;
 		}
-
-	char outdir[MAX_VARLEN];
-	strcpy(outdir, ptr);
-	char *last2 = strrchr(outdir, '/');
-	if (last2 != NULL)
-		{
-		*last2 = '\0';
-		}
-	else
-		{
-		outdir[0] = '.'; outdir[1] = '\0';
-		}
-
+    if(usetmp[0] == '\0')
+        {
+    	strcpy(outdir, ptr);
+    	char *last2 = strrchr(outdir, '/');
+    	if (last2 != NULL)
+    		{
+    		*last2 = '\0';
+    		}
+    	else
+    		{
+    		outdir[0] = '.'; outdir[1] = '\0';
+    		}
+        }
+    else
+        {
+        }
 	//strcat(outdir, "/tmp/");
 	strcat(outdir, "/");
 
-	//printf("outdir: '%s'\n", outdir);
+	if (config.verbose)
+        printf("outdir: '%s'\n", outdir);
 
     #if 1
 	if(stat(outdir, &buf) < 0)

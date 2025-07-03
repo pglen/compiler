@@ -31,9 +31,16 @@ typedef struct _configx {
 } Configx;
 
 extern Configx config;
-extern char ppfile2[];
 extern int num_lines, num_chars, backslash, prog;
-extern char outfile[MAX_VARLEN];
-extern char outtmp[MAX_VARLEN];
+
+extern char ppfile2[];
+
+extern char outfile[MAX_VARLEN * 3];
+extern char outtmp[MAX_VARLEN * 3];
+extern char usetmp[MAX_VARLEN * 3];
+
+typedef struct timespec Ts;
+
+void calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu);
 
 // EOF

@@ -1,28 +1,45 @@
 
+  /* =====[ PCOMP ]=========================================================
+
+     Description: PCOMP parallel compiler. See README and SYNTAX.
+
+     Revisions:
+
+     REV    DATE            BY             DESCRIPTION
+     ----   --------        ----------     ----------------------------
+     0.00   Thu 03.Jul.2025 Peter Glen     Initial
+
+     ======================================================================= */
+
   /* -------- System includes:  -------------------------------------------- */
 
 #include <sys/stat.h>
 #include <syslog.h>
 #include <time.h>
 #include <stdio.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <getopt.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include "symtab.h"
 #include "pcomp.h"
 
-// Main Entry point
+char outfile[MAX_VARLEN * 3] = {0,};
+char usetmp[MAX_VARLEN * 3] = {0,};
+char outtmp[MAX_VARLEN * 3] = {0,};
+
+// Flags for operation. Some referenced in other files.
+
+Configx config;
 
 int     help()
 
 {
     printf("\n");
     printf(" ----------------------------------------------------\n");
-    printf("  Parallel compiler by Peter Glen. 2007-2019-2025    \n");
+    printf("   Parallel compiler by Peter Glen. 2007-2019-2025   \n");
     printf(" ----------------------------------------------------\n");
-    printf("\n");
     printf(" Usage: pcomp [options] filename(s)\n");
     printf("       -a no assembly phase\n");
     printf("       -b show alloc buffers\n");
@@ -33,6 +50,7 @@ int     help()
     printf("       -m show comments in source\n");
     printf("       -n do not show progress\n");
     printf("       -o output file\n");
+    printf("       -u use tmp dir\n");
     printf("       -p no prologue for assembly\n");
     printf("       -r no pre processing\n");
     printf("       -q cat pre processing to stdout\n");
@@ -46,45 +64,12 @@ int     help()
     exit(1);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-
-void calc_usec_diff(struct timespec *ts, struct timespec *ts2, int *pdts, int *pdtu)
-
-{
-	#define CALC_NANO  1000000000
-	#define CALC_MICRO 1000000
-
-	// Wrapping nanoseconds
-	// --------^------^-----|---------------------|---------------------
-	// --------^------------|-----^---------------|----------------------
-	// --------^------------|---------------------|-----^----------------
-    //            NANO - nsec                       nsec2
-
-	int	dtn, dts = ts2->tv_sec - ts->tv_sec;
-	if(dts == 0)    // same sec
-		dtn = (ts2->tv_nsec - ts->tv_nsec) / 1000;
-	else           // jump sec
-		dtn = (ts2->tv_nsec + (CALC_NANO - ts->tv_nsec)) / 1000, dts--;
-
-	if(dtn > CALC_MICRO)	// over a sec
-		dtn -= CALC_MICRO, dts++;
-
-	*pdts = dts;
-	*pdtu = dtn;
-
-	#undef CALC_NANO 	// Make sure define stays local
-	#undef CALC_MICRO
-}
-
+// Main Entry point
 
 int     main (int argc, char **argv)
 
 {
    	int cc, digit_optind = 0, loop, loop2;
-
-    //int *dd = 0;
-    //*dd = 1;
 
     memset(&config, '\0', sizeof(config));
 
@@ -103,7 +88,7 @@ int     main (int argc, char **argv)
            {0, 0, 0, 0}
        	};
 
-    	cc = getopt_long (argc, argv, "abcd:012fhio:lmnpqrstvyk",
+    	cc = getopt_long (argc, argv, "abc012fhilmnpqrstvyko:d:u:",
                         long_options, &option_index);
 
                if (cc == -1)
@@ -182,7 +167,6 @@ int     main (int argc, char **argv)
                    	break;
 
                case 'o':
-                   //printf ("option o\n");
                    strncpy(outfile, optarg, sizeof(outfile));
                    if(config.verbose)
                        printf("outfile: '%s'\n", outfile);
@@ -204,7 +188,6 @@ int     main (int argc, char **argv)
                    break;
 
                case 's':
-                   //printf ("option s\n");
                    //printf ("Showing symtab\n");
                    config.dumpsymtab = 1;
                    break;
@@ -214,9 +197,26 @@ int     main (int argc, char **argv)
                    config.nocompile = 1;
                    break;
 
+               case 'u':
+                    strncpy(usetmp, optarg, sizeof(usetmp));
+                    struct stat statbuf;
+                    if(stat(usetmp, &statbuf) < 0)
+                        {
+                        printf("usetmp: '%s' must exist.\n", usetmp);
+                        exit(1);
+                        }
+                    if (!(statbuf.st_mode & S_IFDIR))
+                        {
+                        printf("usetmp: '%s' must be a dir.\n", usetmp);
+                        exit(1);
+                        }
+                   if(config.verbose)
+                       printf("usetmp: '%s'\n", usetmp);
+                    break;
+
                case 'v':
                    //printf ("option v\n");
-                   config.verbose = 1;
+                   config.verbose += 1;
                    break;
 
                case 'y':
@@ -244,10 +244,14 @@ int     main (int argc, char **argv)
 					num_lines = 1; empty_symtab();
 
 					if(config.nopre == 0)
+                        {
 						preprocess(argv[optind]);
+                        }
 					else
-						strcpy(ppfile2, argv[optind]);
-
+                        {
+						//strcnpy(ppfile2, argv[optind], sizeof(ppfile2));
+                        strcpy(ppfile2, argv[optind]);
+                        }
 					if(config.nocompile == 0)
 	                	compile(argv[optind]);
 
@@ -285,4 +289,4 @@ int     main (int argc, char **argv)
 	exit(config.errorcount);
 }
 
-
+// EOF

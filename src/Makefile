@@ -29,6 +29,8 @@ LIBS = -lm
 #CFLAGS =  -Wformat=no
 CFLAGS =  -w
 
+EXEMAIN = main.c utils.c
+
 DEPENDSON =  main.c symtab.c symtab.h codegen.c codegen.h emalloc.c emalloc.h \
              pmath.c Makefile parser/pcomp.yacc.c parser/ppre.yacc.c \
              parser/pcomp.lex.c parser/ppre.lex.c
@@ -41,20 +43,14 @@ OBJS = emalloc.o codegen.o pmath.o symtab.o
 #.c.o :
 #	$(CC) $(CFLAGS) –c $@c
 
-#all: pcomp
-#${CC} ${CFLAGS} codegen.c -c -o codegen.o
-#${CC} ${CFLAGS} pmath.c -c -o pmath.o
-#${CC} ${CFLAGS} symtab.c -c -o symtab.o
-#${CC} ${CFLAGS} emalloc.c -c -o emalloc.o
-#
 
-pcomp: main.c pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
+pcomp: $(EXEMAIN) pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
 	mkdir -p parser
 	${CC} ${CFLAGS} codegen.c -c -o codegen.o
 	${CC} ${CFLAGS} pmath.c -c -o pmath.o
 	${CC} ${CFLAGS} symtab.c -c -o symtab.o
 	${CC} ${CFLAGS} emalloc.c -c -o emalloc.o
-	${CC} ${CFLAGS} main.c ${LDFLAGS} parser/pcomp.lex.c parser/ppre.lex.c \
+	${CC} ${CFLAGS} $(EXEMAIN) ${LDFLAGS} parser/pcomp.lex.c parser/ppre.lex.c \
             ${OBJS} -o pcomp  ${LIBS}
 
 parser/ppre.lex.c: ppre.f  ppre.y

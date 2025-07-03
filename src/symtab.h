@@ -177,10 +177,11 @@ extern int     create_unique2(char *str, char *prefix, char *str1, char *str2);
 /* -------- Definitions: ------------------------------------------------- */
 
 extern Symbol *symlist;
-extern int 	errorcount;
-extern int noprologue;
-extern	FILE *asmfp;
 
+//extern int 	errorcount;
+//extern int noprologue;
+
+extern	FILE *asmfp;
 
 #undef  EXTERN
 #undef  EXPORT

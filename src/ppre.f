@@ -8,13 +8,11 @@
 #include "../symtab.h"
 #include  "../pcomp.h"
 
-//int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
-
 static    char	tmp_str[MAX_VARLEN];
 static    char	tmp_str2[MAX_VARLEN];
 
-char    ppfile2[MAX_VARLEN];
-char    ppfile[MAX_VARLEN];
+char    ppfile2[3 * MAX_VARLEN];
+char    ppfile[3 * MAX_VARLEN];
 
 FILE *ppfp3, *ppfp2;
 
@@ -344,10 +342,9 @@ int     preprocess(char *ptr)
     // re - initialize preprocessor
     num_lines = 1;
 
-    #if 1
     if(stat(ptr, &buf) < 0)
     	{
-    	//printf("Cannot stat file '%s'.\n", ptr);
+    	printf("Cannot stat file '%s'.\n", ptr);
     	//if(config.debuglevel > 0)
     	//    syslog(LOG_DEBUG, "Cannot stat file %s\n", ptr);
     	return 0;
@@ -355,21 +352,19 @@ int     preprocess(char *ptr)
     if(S_ISDIR(buf.st_mode))
     	{
     	//printf("Cannot operate on directory '%s'.\n", ptr);
-    	if(config.debuglevel > 0)
-    	    syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
+    	//if(config.debuglevel > 0)
+    	//    syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
     	return 0;
     	}
-    #endif
 
     ppfp3 = fopen(ptr, "r");
     if(!ppfp3)
     	{
     	printf("Cannot open file '%s'.\n", ptr);
-    	if(config.debuglevel > 0)
-    	    syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
+    	//if(config.debuglevel > 0)
+    	//    syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
     	return 0;
     	}
-
     char outdir[MAX_VARLEN];
     strcpy(outdir, ptr);
     char *last2 = strrchr(outdir, '/');
@@ -385,16 +380,15 @@ int     preprocess(char *ptr)
 
     //printf("outdir: '%s'\n", outdir);
 
-    #if 1
     if(stat(outdir, &buf) < 0)
     	{
     	if(mkdir(outdir, 0777) < 0)
     	    {
     	    printf("Cannot create tmp dir: '%s'\n", outdir);
-    	    return 0;
+    	    exit(1);
+            //return 0;
     	    }
     	}
-    #endif
 
     strcpy(ppfile, ptr);
     char *last = strrchr(ppfile, '/');
@@ -417,13 +411,13 @@ int     preprocess(char *ptr)
     if(!ppfp2)
     	{
     	printf("Cannot create file '%s'.\n", ppfile);
-    	syslog(LOG_DEBUG, "pcomp: Cannot create preprocessed file.\n");
+    	//syslog(LOG_DEBUG, "pcomp: Cannot create preprocessed file.\n");
     	return 0;
     	}
 
     int    olderrcnt = config.errorcount;
 
-    if(config.verbose)
+    if(config.verbose > 0)
     	printf ("Pre processing: '%s' ", ptr);
 
     struct timespec ts;
