@@ -1,14 +1,20 @@
-# Compiler studies
+#--------------------------------------------------------------------------
+# Makefile for pcomp
+
+
 
 all:
-	@echo Targets: git help
-
-help:
-	@echo Help ...
+	make -C src
 
 git:
 	git add .
-	git commit -m autocheck
+	git commit -m autocommit
+	git push
 
 clean:
-	find -type f -name "*.o" -exec rm {} \;
+	make -C src clean
+
+test:
+	make -C src test
+
+
