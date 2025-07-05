@@ -40,6 +40,16 @@ L1:
                                                                           
         section .data                                                     
                                                                           
-format: db      '71777176 1', 10, 0                                          
+format: db      '-1037284456 1', 10, 0                                          
 format2: db      "Hello world", 10, 0                                   
                                                                           
+; Data
+
+START_CODE:
+
+; Code
+
+
+END_CODE:
+    ;End of program
+

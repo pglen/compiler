@@ -1,0 +1,3 @@
+// Macro definitions
+
+%define HELLO 23

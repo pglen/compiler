@@ -299,9 +299,9 @@ conflicting vars and func names are allowed either.
  Preprocessing:
 
 	Processing is controlled by defined names and ifdef statements.
-	The definitions posess an exist / does not exist state.
-    The pre processor is executed before every other stage.
-    The preprocessor maintains the following vars:
+	The definitions are in an and exist / does not exist state.
+    The pre-processor is executed before every other stage.
+    The pre-processor maintains the following vars:
 
         __file__  __line__  __func__ __platform__ __target__
         __version__
@@ -334,6 +334,46 @@ conflicting vars and func names are allowed either.
     de-comment -> optional interface file
     compile
     generate assembly
+
+# Compiler studies
+
+## pcomp - parallel compiler
+
+     Quick intro --- teaser, see SYNTAX
+
+ 	Types:
+
+		u8; u16; u32; 				; Unsigned integers
+		s8; s16; s32; 				; Signed integers
+
+		single,	double				; Floating point types
+
+	Custom types:
+
+		type_name					; declared by struct statement
+
+
+ Exceptions:
+
+		The kill exception terminates the application by default.
+		Other exceptions set (increment) the appropriate exception variable,
+		(excpt) and return without any action.
+		It is the application's responsibility to respond to the exception
+		condition by checking the variable against a saved value.
+		The exception variable is not reset automatically.
+
+ Expressions:
+
+		Expressions are evaluated much like in 'C'. New operators are introduced,
+		and the order of precendece follows industrial conventions.
+		The operators are obeying the signed / unsigned interpretation
+		of variables, in case the oparator sign-nesses are in conflict,
+		the compiler reports an error.
+
+ Type conversions:
+
+		Casting not required upwards, to larger storage size. Size promotion
+		is automatic.
 
 # EOF
 

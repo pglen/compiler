@@ -8,11 +8,18 @@
 
    ======================================================================= */
 
+// Scratch pad for temp name / all names
+
+#define MAX_VARLEN      256
+#define MAX_PATHLEN     1024
+
 // Flags for operation. Some referenced in other files.
 
 typedef struct _configx {
     int   	testflex ;
     int   	testyacc ;
+    int   	testpreflex ;
+    int   	testpreyacc ;
     int	  	showcomm ;
     int	  	dumpsymtab ;
     int 	errorcount ;
@@ -34,13 +41,12 @@ extern Configx config;
 extern int num_lines, num_chars, backslash, prog;
 
 extern char ppfile2[];
-
-extern char outfile[MAX_VARLEN * 3];
-//extern char outtmp[MAX_VARLEN * 3];
-extern char usetmp[MAX_VARLEN * 3];
+extern char outfile[];
+extern char usetmp[];
 
 typedef struct timespec Ts;
 
-void calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu);
+void    calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu);
+int     str2int(char *ptr);
 
 // EOF

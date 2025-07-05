@@ -1,0 +1,2 @@
+
+ %define  HELLO  1024 | 24

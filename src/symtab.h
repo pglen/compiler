@@ -22,9 +22,6 @@
 
 #define MAX_ARRAY 4
 
-// Scratch pad for temp name
-#define MAX_VARLEN  256
-
 #define 	SYMTAB_MAGIC	0x2324567
 #define 	IFSTACK_MAGIC	0x2323432
 #define 	OUTSRIN_MAGIC	0x2332543

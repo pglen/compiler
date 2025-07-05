@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <math.h>
 
+#include "pcomp.h"
 #include "symtab.h"
 #include "pmath.h"
 #include "emalloc.h"
@@ -138,9 +139,9 @@ void    init_symtab(void)
 void    dump_symtab(void)
 
 {
-    Symbol *sp ;
+    Symbol *sp;
 
-    printf("Dumping symtab:\n\n");
+    printf("Dumping symtab:\n");
 
     for (sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
         {

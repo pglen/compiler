@@ -1,18 +1,4 @@
-// Preprocessing
-
-#define HELLO2 // #define hello
-
-#ifdef HELLO3
-	// compiled hello2
- 	u32 bb = 0;
- 	u32 cc = 100;
-#endif
-
-#undef HELLO2
-#ifdef HELLO2
-	// compiled hello2
- 	u32 bb = 0;
- 	u32 cc = 100;
-#endif
-
-// EOF
+%define HELLO2
+%ifdef HELLO2
+    u32  bb  =  0;
+%endif

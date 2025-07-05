@@ -15,8 +15,6 @@
      ======================================================================= */
 %{
 
-/* -------- System includes:  ----------------------------------------- */
-
 #include <sys/stat.h>
 #include <syslog.h>
 #include <time.h>
@@ -24,8 +22,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-  /* -------- Includes:  --------------------------------------------------- */
 
 #include "../symtab.h"
 

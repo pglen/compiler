@@ -4,14 +4,13 @@
 
 /* This lexer and parser assumes that int is same size as pointer */
 
+#include "../pcomp.h"
 #include "../symtab.h"
 #include "../emalloc.h"
-#include "../pcomp.h"
 
-FILE    *asmfp;
-
-static	char tmp_str2[MAX_VARLEN];
+static	char tmp_str2[MAX_PATHLEN];
 static  FILE    *infp, *ppfp;
+FILE    *asmfp;
 
 int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
 
@@ -420,9 +419,9 @@ int     compile(char *ptr)
     if(config.verbose > 0)
         printf("Compile: '%s'\n", ptr);
 
-	// re - initialize compiler
+	// re - initialize compiler for preprocess
+    // ??
 
-	#if 1
 	if(stat(ptr, &buf) < 0)
 		{
 		printf("Cannot stat file '%s'.\n", ptr);
@@ -437,8 +436,6 @@ int     compile(char *ptr)
 		//	syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
 		return 0;
 		}
-	#endif
-
 	infp = fopen(ppfile2, "r");
 	if(!infp)
 		{
@@ -459,9 +456,6 @@ int     compile(char *ptr)
 		}
 	strcat(outdir, "/");
     strcat(usetmp, outdir);
-	if (config.verbose)
-        printf("usetmp: '%s'\n", usetmp);
-        //printf("outdir: '%s'\n", outdir);
 	if(stat(usetmp, &buf) < 0)
 		{
 		if(mkdir(usetmp, 0777) < 0)
@@ -485,7 +479,7 @@ int     compile(char *ptr)
 		{
 		*last3 = '\0';
 		strcat(asmfile2, ".asm");
-		if(config.verbose)
+		if(config.verbose > 1)
             printf("asm2: '%s'\n", asmfile2);
 		}
 	char objfile2[MAX_VARLEN];
@@ -496,31 +490,23 @@ int     compile(char *ptr)
 		{
 		*last4 = '\0';
 		strcat(objfile2, ".o");
-		if(config.verbose)
+		if(config.verbose > 2)
     		printf("obj2: '%s'\n", objfile2);
 		}
 
-    //strcpy(usetmp, outdir);
-	//strcat(usetmp, asmfile);
-	//char *last5 = strrchr(usetmp, '.');
-	//if (last5 != NULL)
-	//	{
-	//	*last5 = '\0';
-	//	if(config.verbose)
-    //		printf("usetmp: '%s'\n", usetmp);
-	//	}
-
+    char outfile2[MAX_VARLEN];
+	//strcpy(outfile2, usetmp);
+	//strcat(outfile2, outfile);
+	strcpy(outfile2, outfile);
+	char *last5 = strrchr(outfile2, '.');
     asmfp = fopen(asmfile2, "w");
-
 	if(!asmfp)
 		{
 		printf("Cannot create file '%s'.\n", asmfile);
 		syslog(LOG_DEBUG, "pcomp: Cannot create asm file.\n");
 		return 0;
 		}
-
 	int	olderrcnt = config.errorcount;
-
 	if(!config.noprog)
 		printf ("Compiling: '%s' ", ptr);
 
@@ -530,13 +516,10 @@ int     compile(char *ptr)
 	struct timespec ts2;
 	//sleep(2); // test time measurement
 	clock_gettime(CLOCK_REALTIME, &ts2);
-
     fclose(infp);
 
 	int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
-
 	int ret = getretcode();
-
 	if(config.verbose)
 		{
 		if(ret == 0 && (olderrcnt == config.errorcount))
@@ -544,9 +527,8 @@ int     compile(char *ptr)
 		else
 			printf ("Compiled: '%s' ERR %d sec %d usec\n", ptr, dts, dtu);
 		}
-
-    if(!config.noprog)
-		printf ("OK\n");
+    //if(!config.noprog)
+	//	printf ("OK\n");
 
 	config.errorcount += ret;
 	if(!config.showcomm)
@@ -561,9 +543,11 @@ int     compile(char *ptr)
 		//printf("\n");
 		}
 	fclose(asmfp);
+
 	if(!config.noassembly)
 		{
-		sprintf(tmp_str, "nasm -felf64 %s > /dev/null\n", asmfile2);
+		//sprintf(tmp_str, "nasm -felf64 %s > /dev/null", asmfile2);
+        sprintf(tmp_str, "nasm -felf64 %s ", asmfile2);
         if(config.verbose)
             printf("Assembly: '%s'\n", tmp_str);
 
@@ -576,10 +560,11 @@ int     compile(char *ptr)
 		}
 	if(!config.nolink)
 		{
-		sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null\n",
-                                asmfile2, outfile);
+		//sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null",
+        sprintf(tmp_str, "gcc -no-pie %s -o %s ",
+                                objfile2, outfile2);
         if(config.verbose)
-            printf("Linking %s\n", tmp_str);
+            printf("Linking: '%s'\n", tmp_str);
 		int ret = system(tmp_str);
 		if(ret != 0)
 			{
@@ -587,7 +572,6 @@ int     compile(char *ptr)
 			ret_val = 0;
 			}
 		}
-
 	if(config.catsrc)
 		{
 		printf("Displaying source file:\n\n");

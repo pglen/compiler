@@ -22,12 +22,11 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include "symtab.h"
 #include "pcomp.h"
+#include "symtab.h"
 
-char outfile[MAX_VARLEN * 3] = {0,};
-char usetmp[MAX_VARLEN * 3] = {0,};
-//char outtmp[MAX_VARLEN * 3] = {0,};
+char outfile[MAX_PATHLEN] = {0,};
+char usetmp[MAX_PATHLEN] = {0,};
 
 char    *version = "1.0.0";
 char    *build = "Thu 03.Jul.2025";
@@ -47,15 +46,16 @@ int     help()
     printf(" Usage: pcomp [options] filename(s)\n");
     printf("\n");
     printf("    -d debug level               |   -c cat assembly to stdout\n");
-    printf("    -t do not compile            |   -f show lex output\n");
+    printf("    -t do not compile            |   -C extract comments\n");
     printf("    -r no pre processing         |   -n do not show progress\n");
-    printf("    -y show yacc output          |   -a no assembly phase\n");
     printf("    -V version                   |   -v verbose\n");
     printf("    -h help (this screen         |   -b show alloc buffers\n");
     printf("    -i interlace symtab in out   |   -m show comments in source\n");
     printf("    -o output file               |   -u use tmp dir\n");
     printf("    -p no prologue for asm       |   -q cat pre proc to stdout\n");
-    printf("    -s show symtab\n");
+    printf("    -s show symtab               |   -a no assembly phase\n");
+    printf("    -f show lex output           |   -y show yacc output \n");
+    printf("    -F show preproc lex output   |   -Y show preproc yacc output \n");
     printf("\n");
 
     exit(1);
@@ -66,12 +66,12 @@ int     help()
 int     main (int argc, char **argv)
 
 {
-   	int cc, digit_optind = 0, loop, loop2;
+       int cc, digit_optind = 0, loop, loop2;
 
     memset(&config, '\0', sizeof(config));
 
     // Parse command line
-   	while (1) {
+       while (1) {
        int this_option_optind = optind ? optind : 1;
        int option_index = 0;
        static struct option long_options[] = {
@@ -83,13 +83,13 @@ int     main (int argc, char **argv)
            {"create", 1, 0, 'c'},
            {"file", 1, 0, 0},
            {0, 0, 0, 0}
-       	};
+        };
 
-    	cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvyko:d:u:",
+        cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvykFYXoC:d:u:",
                         long_options, &option_index);
-               if (cc == -1)
-                   break;
-               switch (cc)
+        if (cc == -1)
+            break;
+        switch (cc)
                {
                case 0:
                    printf ("long option %s", long_options[option_index].name);
@@ -136,6 +136,11 @@ int     main (int argc, char **argv)
                    config.testflex = 1;
                    break;
 
+               case 'F':
+                   //printf ("Debug FLEX option is on\n");
+                   config.testpreflex = 1;
+                   break;
+
                case 'h':
                    //printf ("option i\n");
                    //config.interlace_sym = 1;
@@ -149,22 +154,17 @@ int     main (int argc, char **argv)
 
                case 'm':
                    //printf ("option m\n");
-					config.showcomm = 1;
-                   	break;
-
-                case 'l':
-                    //printf ("option l\n");
-					config.showcomm = 1;
-                   	break;
+                     config.showcomm = 1;
+                       break;
 
                case 'n':
                    //printf ("option n\n");
-					config.noprog = 1;
-                   	break;
+                     config.noprog = 1;
+                       break;
 
                case 'o':
                    strncpy(outfile, optarg, sizeof(outfile));
-                   if(config.verbose)
+                   if(config.verbose > 2)
                        printf("outfile: '%s'\n", outfile);
                    break;
 
@@ -207,8 +207,8 @@ int     main (int argc, char **argv)
                         exit(1);
                         }
                     strcat(usetmp, "/");
-                   if(config.verbose)
-                       printf("usetmp: '%s'\n", usetmp);
+                   if(config.verbose > 2)
+                       printf("Usetmp: '%s'\n", usetmp);
                     break;
 
                case 'v':
@@ -225,6 +225,11 @@ int     main (int argc, char **argv)
                    config.testyacc = 1;
                    break;
 
+               case 'Y':
+                   //printf ("Debug YACC option is on\n");
+                   config.testpreyacc = 1;
+                   break;
+
                case '?':
                    break;
 
@@ -232,64 +237,72 @@ int     main (int argc, char **argv)
                    printf ("?? getopt returned character code 0%o ??\n", cc);
                }
             }
-            if (optind < argc)
+    if (optind < argc)
+        {
+        Ts ts;
+        clock_gettime(CLOCK_REALTIME, &ts);
+
+        //printf ("non-option ARGV-elements: ");
+        while (optind < argc)
+            {
+            // Fill in defaults
+            if(outfile[0] == '\0')
                 {
-				Ts ts;
-				clock_gettime(CLOCK_REALTIME, &ts);
-
-                //printf ("non-option ARGV-elements: ");
-                while (optind < argc)
+                strcpy(outfile, argv[optind]);
+                char *last4 = strrchr(outfile, '.');
+                if (last4 != NULL)
                     {
-                    // Preprocess and compile
-					num_lines = 1; empty_symtab();
-
-					if(config.nopre == 0)
-                        {
-						preprocess(argv[optind]);
-                        }
-					else
-                        {
-						//strcnpy(ppfile2, argv[optind], sizeof(ppfile2));
-                        strcpy(ppfile2, argv[optind]);
-                        }
-					if(config.nocompile == 0)
-	                	compile(argv[optind]);
-
-                    optind++;
+                    *last4 = '\0';
                     }
+                strcat(outfile, ".run");
+                if(config.verbose > 2)
+                    printf("outfile: '%s'\n", outfile);
+                }
 
-                //printf ("\n");
-				//dump_symtab();
-
-				Ts ts2;
-				clock_gettime(CLOCK_REALTIME, &ts2);
-
-				int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
-				if(config.verbose)
-            	 	printf("Total %d sec %d usec\n", dts, dtu);
+            // Preprocess and compile
+            num_lines = 1; empty_symtab();
+            if(config.nopre == 0)
+                {
+                preprocess(argv[optind]);
                 }
              else
                 {
-                //help();
-                printf("Parallel compiler. Use 'pcomp -h' for options and help.\n");
-                exit(0);
+                 //strcnpy(ppfile2, argv[optind], sizeof(ppfile2));
+                strcpy(ppfile2, argv[optind]);
                 }
+            if(config.nocompile == 0)
+               compile(argv[optind]);
+            optind++;
+            }
+        //printf ("\n");
+        if(config.dumpsymtab)
+            dump_symtab();
 
-	//print_emalloc();
-	//print_estrdup();
-	//empty_symtab();
-	//efreeall();
+        Ts ts2;
+        clock_gettime(CLOCK_REALTIME, &ts2);
 
-    if(outfile[0] == '\0')
-        {
-        strcpy(outfile, "a.out");
+        int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
+        if(config.verbose)
+            printf("Total %d sec %d usec\n", dts, dtu);
         }
-	if(config.showallocbuff)
-		{
-		print_emalloc();
-		print_estrdup();
-		}
-	exit(config.errorcount);
+     else
+        {
+        //help();
+        printf("Parallel compiler. Use 'pcomp -h' for options and help.\n");
+        exit(0);
+        }
+
+    //print_emalloc();
+    //print_estrdup();
+    //empty_symtab();
+    //efreeall();
+
+    if(config.showallocbuff)
+        {
+        print_emalloc();
+        print_estrdup();
+        }
+    exit(config.errorcount + 127);
 }
 
 // EOF

@@ -782,11 +782,11 @@ char *yytext;
 #include "../symtab.h"
 #include  "../pcomp.h"
 
-static    char	tmp_str[MAX_VARLEN];
-static    char	tmp_str2[MAX_VARLEN];
+static    char	tmp_str[MAX_PATHLEN];
+static    char	tmp_str2[MAX_PATHLEN];
 
-char    ppfile2[3 * MAX_VARLEN];
-char    ppfile[3 * MAX_VARLEN];
+char    ppfile2[MAX_PATHLEN];
+char    ppfile[MAX_PATHLEN];
 
 FILE *ppfp3, *ppfp2;
 
@@ -796,11 +796,11 @@ FILE *ppfp3, *ppfp2;
                result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
                }
 
-void preerror(const char *str)
+void    preerror(const char *str)
 
 {
-     static int count = 0;
-      printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
+    static int count = 0;
+    printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
     if(count > 5) exit(0);
 }
 
@@ -1096,8 +1096,11 @@ YY_RULE_SETUP
 { /* comment */
     	    	    	    	num_lines++;
 
-                                if(config.testflex)
-                                    printf("[slash comment2] '%s", yytext);
+                                if(config.testpreflex)
+                                    printf("[slash_comment] '%s", yytext);
+
+                                if(config.showcomm)
+                                    printf("//comment: '%s", yytext);
 
                                 yylval.strval = strdup(yytext);
     	    	    	    	return COMMENT;
@@ -1106,12 +1109,15 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 59 "ppre.f"
+#line 62 "ppre.f"
 { /* comment */
     	    	    	    	num_lines++;
 
-                                if(config.testflex)
-                                    printf("[hash comment2] '%s", yytext);
+                                if(config.testpreflex)
+                                    printf("[hash_comment] '%s", yytext);
+
+                                if(config.showcomm)
+                                    printf("#comment: '%s", yytext);
 
                                 yylval.strval = strdup(yytext);
     	    	    	    	return COMMENT;
@@ -1119,9 +1125,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 69 "ppre.f"
+#line 75 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1130,9 +1136,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 77 "ppre.f"
+#line 83 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1141,9 +1147,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 85 "ppre.f"
+#line 91 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1153,9 +1159,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 94 "ppre.f"
+#line 100 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", (char*)yytext);
 
                                 yylval.strval = strdup(yytext); return(NUM);
@@ -1163,9 +1169,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 101 "ppre.f"
+#line 107 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [RSHIFT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(RSHIFT);
@@ -1173,9 +1179,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 108 "ppre.f"
+#line 114 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [LSHIFT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(LSHIFT);
@@ -1183,16 +1189,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 115 "ppre.f"
+#line 121 "ppre.f"
 {
                                 yylval.strval = strdup(yytext); return(PLUS);
     	    	    	    	}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 118 "ppre.f"
+#line 124 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MINUS] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MINUS);
@@ -1200,9 +1206,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 124 "ppre.f"
+#line 130 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MULT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MULT);
@@ -1210,9 +1216,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 130 "ppre.f"
+#line 136 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [DIV] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(DIV);
@@ -1220,9 +1226,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 136 "ppre.f"
+#line 142 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MOD] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MOD);
@@ -1230,9 +1236,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 142 "ppre.f"
+#line 148 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [OR] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(OR);
@@ -1240,9 +1246,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 148 "ppre.f"
+#line 154 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [AND] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(AND);
@@ -1250,16 +1256,16 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 154 "ppre.f"
+#line 160 "ppre.f"
 {
                                 yylval.strval = strdup(yytext); return(NOT);
     	    	    	    	}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 157 "ppre.f"
+#line 163 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [XOR] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(XOR);
@@ -1267,9 +1273,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 163 "ppre.f"
+#line 169 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [PAREN1] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(PAREN1);
@@ -1277,9 +1283,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 169 "ppre.f"
+#line 175 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [PAREN2] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(PAREN2);
@@ -1287,9 +1293,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 175 "ppre.f"
+#line 181 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [error] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1298,9 +1304,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 183 "ppre.f"
+#line 189 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [mmacro] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1309,9 +1315,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 191 "ppre.f"
+#line 197 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [message] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1320,9 +1326,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 198 "ppre.f"
+#line 204 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [define] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1331,9 +1337,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 206 "ppre.f"
+#line 212 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [undef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1342,9 +1348,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 214 "ppre.f"
+#line 220 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1353,9 +1359,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 222 "ppre.f"
+#line 228 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [elifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1364,9 +1370,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 230 "ppre.f"
+#line 236 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [else] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1375,9 +1381,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 238 "ppre.f"
+#line 244 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1386,9 +1392,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 246 "ppre.f"
+#line 252 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ID] '%s'\n", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1397,9 +1403,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 254 "ppre.f"
+#line 260 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [SP] '%s' ", yytext);
                                 yylval.strval = strdup(yytext);
     	    	    	    	return SP;
@@ -1407,17 +1413,22 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 261 "ppre.f"
+#line 267 "ppre.f"
 {
     	    	    	    	// Ignore
+                                if(config.testpreflex)
+                                    printf(" [rnl] '%d'\n", yytext[0]);
+    	    	    	    	num_lines++;
+                                yylval.strval = strdup(yytext);
+    	    	    	    	return NL;
     	    	    	    	}
 	YY_BREAK
 case 32:
 /* rule 32 can match eol */
 YY_RULE_SETUP
-#line 265 "ppre.f"
+#line 276 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [nl] '%d'\n", yytext[0]);
 
     	    	    	    	num_lines++;
@@ -1427,11 +1438,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 274 "ppre.f"
+#line 285 "ppre.f"
 {              /* begin quote */
                                 BEGIN(STR2);
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" str<<<");
 
                                 prog = 0; backslash  = 0;
@@ -1440,9 +1451,9 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 284 "ppre.f"
+#line 295 "ppre.f"
 {
-                                if(config.testflex)
+                                if(config.testpreflex)
     	    	    	    	    printf("\\");
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
@@ -1451,13 +1462,13 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 292 "ppre.f"
+#line 303 "ppre.f"
 {      		/* end quote */
                                 if( (backslash % 2) == 0) /* odd backslash */
                                      {
                                      BEGIN(INITIAL);
 
-                                     if(config.testflex)
+                                     if(config.testpreflex)
                                         printf(">>>str ");
 
     	    	    	    	     tmp_str2[prog++] = yytext[0];
@@ -1473,11 +1484,11 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 311 "ppre.f"
+#line 322 "ppre.f"
 {   // default string charater
                                 backslash  = 0;
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("'%s'", yytext);
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
@@ -1485,10 +1496,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 321 "ppre.f"
+#line 332 "ppre.f"
 {  // default character
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [char] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -1497,10 +1508,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 330 "ppre.f"
+#line 341 "ppre.f"
 ECHO;
 	YY_BREAK
-#line 1504 "parser/ppre.lex.c"
+#line 1515 "parser/ppre.lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STR2):
 case YY_STATE_EOF(COM2):
@@ -2507,7 +2518,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 330 "ppre.f"
+#line 341 "ppre.f"
 
 
 /* ========================= End of LEX ================================ */
@@ -2570,7 +2581,6 @@ int     preprocess(char *ptr)
             //return 0;
     	    }
     	}
-
     strcpy(ppfile, ptr);
     char *last = strrchr(ppfile, '/');
     if (last != NULL)
@@ -2586,9 +2596,7 @@ int     preprocess(char *ptr)
     	strcat(ppfile2, ".pcp");
     	//printf("asm2: '%s'\n", ppfile2);
     	}
-
     ppfp2 = fopen(ppfile2, "w");
-
     if(!ppfp2)
     	{
     	printf("Cannot create file '%s'.\n", ppfile);

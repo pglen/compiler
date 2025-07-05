@@ -8,11 +8,11 @@
 #include "../symtab.h"
 #include  "../pcomp.h"
 
-static    char	tmp_str[MAX_VARLEN];
-static    char	tmp_str2[MAX_VARLEN];
+static    char	tmp_str[MAX_PATHLEN];
+static    char	tmp_str2[MAX_PATHLEN];
 
-char    ppfile2[3 * MAX_VARLEN];
-char    ppfile[3 * MAX_VARLEN];
+char    ppfile2[MAX_PATHLEN];
+char    ppfile[MAX_PATHLEN];
 
 FILE *ppfp3, *ppfp2;
 
@@ -22,11 +22,11 @@ FILE *ppfp3, *ppfp2;
                result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
                }
 
-void preerror(const char *str)
+void    preerror(const char *str)
 
 {
-     static int count = 0;
-      printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
+    static int count = 0;
+    printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
     if(count > 5) exit(0);
 }
 
@@ -49,8 +49,11 @@ FNN  [\~_a-zA-Z0-9]
 \/\/.*\n                       { /* comment */
     	    	    	    	num_lines++;
 
-                                if(config.testflex)
-                                    printf("[slash comment2] '%s", yytext);
+                                if(config.testpreflex)
+                                    printf("[slash_comment] '%s", yytext);
+
+                                if(config.showcomm)
+                                    printf("//comment: '%s", yytext);
 
                                 yylval.strval = strdup(yytext);
     	    	    	    	return COMMENT;
@@ -59,15 +62,18 @@ FNN  [\~_a-zA-Z0-9]
 #.*\n                          { /* comment */
     	    	    	    	num_lines++;
 
-                                if(config.testflex)
-                                    printf("[hash comment2] '%s", yytext);
+                                if(config.testpreflex)
+                                    printf("[hash_comment] '%s", yytext);
+
+                                if(config.showcomm)
+                                    printf("#comment: '%s", yytext);
 
                                 yylval.strval = strdup(yytext);
     	    	    	    	return COMMENT;
     	    	    	    	}
 
 0x[0-9a-fA-F]+                  {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -75,7 +81,7 @@ FNN  [\~_a-zA-Z0-9]
                                 }
 
 0y[0-7]+                      	{
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -83,7 +89,7 @@ FNN  [\~_a-zA-Z0-9]
                                 }
 
 0z[0-1]+                        {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -92,21 +98,21 @@ FNN  [\~_a-zA-Z0-9]
                                 }
 
 [0-9]+                          {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("[NUM] '%s' ", (char*)yytext);
 
                                 yylval.strval = strdup(yytext); return(NUM);
                                 }
 
 \>\>                            {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [RSHIFT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(RSHIFT);
     	    	    	    	}
 
 \<\<                            {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [LSHIFT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(LSHIFT);
@@ -116,37 +122,37 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.strval = strdup(yytext); return(PLUS);
     	    	    	    	}
 \-                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MINUS] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MINUS);
     	    	    	    	}
 \*                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MULT] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MULT);
     	    	    	    	}
 \/                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [DIV] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(DIV);
     	    	    	    	}
 \%                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [MOD] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(MOD);
     	    	    	    	}
 \|                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [OR] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(OR);
     	    	    	    	}
 \&                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [AND] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(AND);
@@ -155,25 +161,25 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.strval = strdup(yytext); return(NOT);
     	    	    	    	}
 \^                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [XOR] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(XOR);
     	    	    	    	}
 \(                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [PAREN1] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(PAREN1);
     	    	    	    	}
 \)                              {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [PAREN2] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext); return(PAREN2);
     	    	    	    	}
 %error                          {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [error] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -181,7 +187,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %macro                          {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [mmacro] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -189,14 +195,14 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %message                          {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [message] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
     	    	    	    	return MSG;
     	    	    	    	}
 %define                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [define] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -204,7 +210,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %undef                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [undef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -212,7 +218,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %ifdef                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -220,7 +226,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %elifdef                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [elifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -228,7 +234,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %else                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [else] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -236,7 +242,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 %endif                           {
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ifdef] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -244,7 +250,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 {FN}{FNN}*                		{
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [ID] '%s'\n", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -252,7 +258,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	}
 
 [ \t]    						{
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [SP] '%s' ", yytext);
                                 yylval.strval = strdup(yytext);
     	    	    	    	return SP;
@@ -260,10 +266,15 @@ FNN  [\~_a-zA-Z0-9]
 
 \r    			    	    	{
     	    	    	    	// Ignore
+                                if(config.testpreflex)
+                                    printf(" [rnl] '%d'\n", yytext[0]);
+    	    	    	    	num_lines++;
+                                yylval.strval = strdup(yytext);
+    	    	    	    	return NL;
     	    	    	    	}
 
 \n    			    	    	{
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [nl] '%d'\n", yytext[0]);
 
     	    	    	    	num_lines++;
@@ -274,7 +285,7 @@ FNN  [\~_a-zA-Z0-9]
 \"                              {              /* begin quote */
                                 BEGIN(STR2);
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" str<<<");
 
                                 prog = 0; backslash  = 0;
@@ -282,7 +293,7 @@ FNN  [\~_a-zA-Z0-9]
                                 }
 
 <STR2>\\                        {
-                                if(config.testflex)
+                                if(config.testpreflex)
     	    	    	    	    printf("\\");
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
@@ -294,7 +305,7 @@ FNN  [\~_a-zA-Z0-9]
                                      {
                                      BEGIN(INITIAL);
 
-                                     if(config.testflex)
+                                     if(config.testpreflex)
                                         printf(">>>str ");
 
     	    	    	    	     tmp_str2[prog++] = yytext[0];
@@ -311,7 +322,7 @@ FNN  [\~_a-zA-Z0-9]
 <STR2>.                         {   // default string charater
                                 backslash  = 0;
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf("'%s'", yytext);
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
@@ -320,7 +331,7 @@ FNN  [\~_a-zA-Z0-9]
 
 .    		    	    	    {  // default character
 
-                                if(config.testflex)
+                                if(config.testpreflex)
                                     printf(" [char] '%s' ", yytext);
 
                                 yylval.strval = strdup(yytext);
@@ -389,7 +400,6 @@ int     preprocess(char *ptr)
             //return 0;
     	    }
     	}
-
     strcpy(ppfile, ptr);
     char *last = strrchr(ppfile, '/');
     if (last != NULL)
@@ -405,9 +415,7 @@ int     preprocess(char *ptr)
     	strcat(ppfile2, ".pcp");
     	//printf("asm2: '%s'\n", ppfile2);
     	}
-
     ppfp2 = fopen(ppfile2, "w");
-
     if(!ppfp2)
     	{
     	printf("Cannot create file '%s'.\n", ppfile);

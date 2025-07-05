@@ -5,17 +5,16 @@
 
      Revisions:
 
-     REV    DATE         BY             DESCRIPTION
-     ----   --------     ----------     -----------------------------------
-     0.00   dec/1/2013   Peter Glen     Initial
-     0.03   dec/23/2013  Peter Glen     Progress.
-     0.04   jan/22/2014  Peter Glen     Added new symtab
-     0.05   jan/22/2014  Peter Glen     Constant expressions
+     REV    DATE            BY             DESCRIPTION
+     ----   --------        ----------     -----------------------------------
+     0.00   dec/1/2013      Peter Glen     Initial
+     0.03   dec/23/2013     Peter Glen     Progress.
+     0.04   jan/22/2014     Peter Glen     Added new symtab
+     0.05   jan/22/2014     Peter Glen     Constant expressions
+     0.05   Fri 04.Jul.2025 Peter Glen     Breakout utils
+
      ======================================================================= */
-
 %{
-
-  /* -------- System includes:  -------------------------------------------- */
 
 #include <sys/stat.h>
 #include <syslog.h>
@@ -24,6 +23,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// It is in a subdir ./parser
 
 #include "../symtab.h"
 
@@ -35,9 +36,7 @@
 #define TESTPCOMP
 
 extern FILE *ppfp, *ppfp2;
-
 static  char    tmp_str3[128];
-static  int     str2int(char *ptr);
 
 int hasdefine = 2;
 
@@ -68,7 +67,7 @@ int hasdefine = 2;
 %type   <sym>   ch1
 %type   <sym>   ops1
 %type   <sym>   id1
-%type   <sym>   def1
+%type   <sym>   define1
 %type   <sym>   err1
 %type   <sym>   msg1
 %type   <sym>   mac1
@@ -76,9 +75,9 @@ int hasdefine = 2;
 %type   <sym>   ifdef1
 %type   <sym>   elifdef1
 %type   <sym>   endif1
-%type   <sym>   sp1
-%type   <sym>   sp1a
-%type   <sym>   spnl
+%type   <sym>   sp1b
+%type   <sym>   sp1m
+%type   <sym>   sp1mb
 %type   <sym>   else1
 %type   <sym>   num1
 %type   <sym>   expr1
@@ -86,87 +85,108 @@ int hasdefine = 2;
 %type   <sym>   expr3
 %type   <sym>   expr4
 %type   <sym>   expr5
+%type   <sym>   misc
 
 %%
 
 all1:   all2
+        {
+        if(config.testpreyacc > 0)
+            printf(" { all2 '%s' }\n ", (char*)$1);
+        }
         | all1 all2
         {
+        if(config.testpreyacc > 0)
+            printf(" { all1 all2 '%s' }\n ", (char*)$1, (char*)$2);
         }
 ;
 
-all2:   def1
+all2:   define1
         {
-        if(config.debuglevel > 0)
-            printf(" { all1 def1 '%s'} ", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf(" { all1 define '%s' }\n ", (char*)$1);
         }
         | undef1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 undef1 x'%s' }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 undef1 x'%s' }\n", (char*)$1);
         }
         | err1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 err1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 err1 x'%s'  }\n", (char*)$1);
         }
         | msg1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 msg1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 msg1 x'%s'  }\n", (char*)$1);
         }
         | mac1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 mac1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 mac1 x'%s'  }\n", (char*)$1);
         }
         | ifdef1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 ifdef1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 ifdef1 x'%s'  }\n", (char*)$1);
         }
         | elifdef1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 elifdef1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 elifdef1 x'%s'  }\n", (char*)$1);
         }
         | else1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 else1 x'%s'  }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 else1 x'%s'  }\n", (char*)$1);
         }
         | endif1
         {
-        if(config.debuglevel > 0)
-            printf("{all1 endif1 x'%s' }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1 endif1 x'%s' }\n", (char*)$1);
         }
         | ch2
         {
-        //if(config.debuglevel > 0)
-        //    printf("{all1: ch2 x '%s'  '%s'}\n", (char*)$1);
+        //if(config.testpreyacc > 0)
+        //    printf("{ all1: ch2 x '%s'  '%s'}\n", (char*)$1);
         }
         | num1
         {
-        if(config.debuglevel > 0)
-            printf("{all1: num1 x '%s' }\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ all1: num1 x '%s' }\n", (char*)$1);
+        $$ = strdup($1);
+        }
+        | sp1m
+        {
+        if(config.testpreyacc > 0)
+            printf("{ all1: space x '%s' }\n", (char*)$1);
+        // Ignore
         }
 ;
 
-def1:  sp1 DEF sp2 ID spnl
-        {
-        if(config.debuglevel > 0)
-            printf("{def1 '%s' '%s'}\n", (char*)$2, (char*)$4);
-        Symbol  *st2 = push_symtab((char*)$4, "", "",  DECL_DEFINE, 0);
-        }
-        |  sp1 DEF spnl
+define1: sp1b DEF sp1m ID sp1m expr1 sp1m
         { // Ignore
+        if(config.testpreyacc > 0)
+            printf("{ define1 '%s' '%s' '%s'}\n",
+                            (char*)$2, (char*)$4, (char*)$6);
+        Symbol  *st2 = push_symtab((char*)$2, (char*)$4, (char*)$6, DECL_DEFINE, 0);
+        //$$ = $2;
         }
+        | sp1b DEF sp1m ID sp1m
+        {
+        if(config.testpreyacc > 0)
+            printf("{ define1 '%s' '%s'}\n", (char*)$2, (char*)$4);
+        Symbol  *st2 = push_symtab((char*)$2, (char*)$4, "",  DECL_DEFINE, 0);
+        //$$ = $2;
+        }
+
 ;
 
-undef1:  sp1 UNDEF sp2 ID spnl
+undef1:  sp1b UNDEF sp1m ID sp1m
         {
-        if(config.debuglevel > 0)
-            printf("{undef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
+        if(config.testpreyacc > 0)
+            printf("{ undef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
         Symbol  *st2 = lookup_symtab((char*)$4, DECL_DEFINE);
         if(st2)
             {
@@ -179,12 +199,12 @@ undef1:  sp1 UNDEF sp2 ID spnl
                 (char *) $4);
             }
         }
-        |  sp1 UNDEF spnl
+        |  sp1b UNDEF sp1m
         { // Ignore
         }
 ;
 
-err1:   ERR sp1 STR spnl
+err1:   ERR sp1b STR sp1m
     {
         // Erase quotes
         if(hasdefine == 2)
@@ -200,7 +220,7 @@ err1:   ERR sp1 STR spnl
     }
 ;
 
-msg1:   MSG sp1 STR spnl
+msg1:   MSG sp1b STR sp1m
     {
         // Erase quotes
         if(hasdefine == 2)
@@ -214,7 +234,7 @@ msg1:   MSG sp1 STR spnl
             }
      }
 
-mac1:   MAC sp1 ID sp1 STR spnl
+mac1:   MAC sp1b ID sp1b STR sp1m
         {
         // Erase quotes
         char *tmp_strx = strdup(((char*)$5) + 1);
@@ -234,10 +254,10 @@ mac1:   MAC sp1 ID sp1 STR spnl
         free(tmp_strx);
         }
 
-ifdef1:  sp1 IFDEF sp2 ID spnl
+ifdef1:  sp1b IFDEF sp1m ID sp1m misc
         {
-        if(config.debuglevel > 0)
-            printf("{ifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
+        if(config.testpreyacc > 0)
+            printf("{ ifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
 
         if(lookup_symtab((char*)$4, DECL_DEFINE) != NULL)
             {
@@ -250,10 +270,10 @@ ifdef1:  sp1 IFDEF sp2 ID spnl
         }
 ;
 
-elifdef1:  sp1 ELIFDEF sp2 ID spnl
+elifdef1:  sp1b ELIFDEF sp1m ID sp1m
         {
-        if(config.debuglevel > 0)
-            printf("{elifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
+        if(config.testpreyacc > 0)
+            printf("{ elifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
 
         if(hasdefine == 1)
             {
@@ -269,18 +289,18 @@ elifdef1:  sp1 ELIFDEF sp2 ID spnl
         }
 ;
 
-endif1:  sp1 ENDIF spnl
+endif1:  sp1b ENDIF sp1m
         {
-        if(config.debuglevel > 0)
-            printf("{endif1 '%s'}\n", (char*)$2);
+        if(config.testpreyacc > 0)
+            printf("{ endif1 '%s'}\n", (char*)$2);
         hasdefine = 2;
         }
 ;
 
 else1:  ELSE
         {
-        if(config.debuglevel > 0)
-            printf("{else1 '%s'}\n", (char*)$1);
+        if(config.testpreyacc > 0)
+            printf("{ else1 '%s'}\n", (char*)$1);
 
         if(hasdefine == 1)
             hasdefine = 2;
@@ -289,23 +309,23 @@ else1:  ELSE
         }
 ;
 
-sp1:           {}   /* empty */
+// Space combos
+
+sp1b:          {}   /* empty */
         | SP   {}   /* single */
+        | NL   {}   /* single */
 ;
 
-sp1a:               {}  /* empty */
-        | SP        {}  /* single */
-        | sp1a SP   {}  /* multiple */
+sp1m:   SP          {}  /* single */
+        | NL        {}
+        | sp1m SP   {}  /* multiple */
+        | sp1m NL   {}  /* multiple */
 ;
 
-sp2:    SP
-        | sp2 SP
+sp1mb:              {}  /* empty */
+        | sp1m      {}  /* multiple */
 ;
 
-spnl:   SP
-        | NL
-        | COMMENT
-;
 
 ch2:   ch1
       | ch2 ch1
@@ -319,44 +339,44 @@ ops1:   PLUS
 
 ch1:   CH
       {
-      //if(config.debuglevel > 0)
+      //if(config.testpreyacc > 0)
       //      printf(" { CH '%s' }", (char*)$2);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
       | id1
-      { if(config.debuglevel > 0)
+      { if(config.testpreyacc > 0)
             printf("{ ID '%s' }", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
       | SP
-      { if(config.debuglevel > 0)
+      { if(config.testpreyacc > 0)
             printf("{ SP '%s' }", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
-      | ops1
-      { if(config.debuglevel > 0)
-            printf("{ ops '%s' }", (char*)$1);
-      if(hasdefine == 2)
-            fprintf(ppfp2, "%s", (char*)$1);
-      }
+      //| ops1
+      //{ if(config.testpreyacc > 0)
+      //      printf("{ ops '%s' }", (char*)$1);
+      //if(hasdefine == 2)
+      //      fprintf(ppfp2, "%s", (char*)$1);
+      //}
       | NL
-      { if(config.debuglevel > 0)
+      { if(config.testpreyacc > 0)
             printf("{ NL '%s' }", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
       | STR
-      { if(config.debuglevel > 0)
+      { if(config.testpreyacc > 0)
             printf("{ STR '%s}' ", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
       | COMMENT
-      { if(config.debuglevel > 0)
-            printf("{ COM '%s}' ", (char*)$1);
+      { if(config.testpreyacc > 0)
+            printf("{ COMMENT '%s}' ", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
@@ -364,7 +384,7 @@ ch1:   CH
 
 id1:   ID
     {
-    if(config.debuglevel > 0)
+    if(config.testpreyacc > 0)
             printf("{ id1 : ID '%s}' ", (char*)$1);
     Symbol *sp = lookup_symtab((char*)$1, DECL_MACRO);
     if(sp)
@@ -376,13 +396,12 @@ id1:   ID
         $$ = $1;
     }
 
-
 num1:   expr1
         {
         if(hasdefine == 2)
             fprintf(ppfp2, "%d", str2int((char*)$1));
 
-        str2int((char*)$1);
+        $$ = str2int((char*)$1);
         }
 ;
 
@@ -443,7 +462,7 @@ expr3:  expr4
     }
     | expr3 MULT expr4
         {
-        int val = str2int((char*)$1) * str2int((char*)$3);
+        int val = str2int((char*)$2) * str2int((char*)$2);
         sprintf(tmp_str3, "%d", val);
         $$ = (void*)strdup(tmp_str3);
         }
@@ -464,95 +483,35 @@ expr3:  expr4
 expr4:  expr5
     {
     }
-    | sp1a PAREN1 sp1a expr1 sp1a PAREN2 sp1a
+    | sp1mb PAREN1 sp1mb expr1 sp1mb PAREN2 sp1mb
         {
+        if(config.testpreyacc > 0)
+            printf("{ paren: expr4 '%s}' ", (char*)$4);
+
         $$ = $4;
         }
-    | sp1a MINUS sp1a expr5
+    | sp1m MINUS sp1m expr5
         {
         int val = str2int((char*)$4); val = -val;
         sprintf(tmp_str3, "%d", val);
-        //printf("MINUS %d %s\n", val, tmp_str3);
+        if(config.testpreyacc > 0)
+            printf("MINUS %d %s\n", val, tmp_str3);
         $$ = (void*)strdup(tmp_str3);
         }
 ;
 
-expr5:  sp1a NUM sp1a
+expr5:  NUM
         {
-        //printf("NUM %s\n", (char*)$2);
-        $$ = $2;
+         if(config.testpreyacc > 0)
+            printf("expr5 NUM %s\n", (char*)$1);
+        $$ = $1;
         }
+
+misc:   {}   /* empty */
+
+;
 
 %%
 
-///////////////////////////////////////////////////////////////////////////
-
-int     str2int(char *ptr)
-
-{
-    int ret = 0, base = 10, sign = 0;
-
-    if(ptr[0] && ptr[1])    // If string is big enough
-        {
-        // Determine base
-        char base1 = ptr[0], base2 = ptr[1];
-
-        if(base1 == '0' && (base2 == 'x' || base2 == 'X'))
-            base = 16, ptr += 2;
-
-        if(base1 == '0' && (base2 == 'y' || base2 == 'Y'))
-            base = 8, ptr += 2;
-
-        if(base1 == '0' && (base2 == 'z' || base2 == 'Z'))
-            base = 2, ptr += 2;
-        }
-
-    if(ptr[0])    // If string is big enough
-        {
-        // Determine sign
-        char sign1 = ptr[0];
-        if(sign1 == '-')
-            sign = 1, ptr++;
-        else if(sign1 == '+')
-            ptr++;  // skip plus
-        }
-
-    //printf(" str2int(%s) ", ptr);
-
-    while(1)
-        {
-        char digit = *ptr++;
-
-        if(digit == 0)      // End of str
-            break;
-
-        if(digit >= '0' && digit <= '9')
-            {
-            ret *= base;
-            ret += digit - '0';
-            }
-          else if(digit >= 'A' && digit <= ('A' + base))
-            {
-            ret *= base;
-            ret += digit - 'A' + 10;
-            }
-          else if(digit >= 'a' && digit <= ('a' + base))
-            {
-            ret *= base;
-            ret += digit - 'a' + 10;
-            }
-        else
-            {
-            // Not a valid number
-            break;
-            }
-        }
-
-    if(sign)
-        ret = - ret;
-
-    //printf("base=%d  ret=%d\n", base, ret);
-    return ret;
-}
 
 // EOF

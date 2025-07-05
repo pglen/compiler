@@ -788,14 +788,13 @@ char *yytext;
 
 /* This lexer and parser assumes that int is same size as pointer */
 
+#include "../pcomp.h"
 #include "../symtab.h"
 #include "../emalloc.h"
-#include "../pcomp.h"
 
-FILE    *asmfp;
-
-static	char tmp_str2[MAX_VARLEN];
+static	char tmp_str2[MAX_PATHLEN];
 static  FILE    *infp, *ppfp;
+FILE    *asmfp;
 
 int num_lines = 1, num_chars = 0, backslash = 0, prog = 0;
 
@@ -819,9 +818,9 @@ void conferror(const char *str)
 
 #include "pcomp.yacc.c"
 
-#line 823 "parser/pcomp.lex.c"
+#line 822 "parser/pcomp.lex.c"
 
-#line 825 "parser/pcomp.lex.c"
+#line 824 "parser/pcomp.lex.c"
 
 #define INITIAL 0
 #define STR2 1
@@ -1042,10 +1041,10 @@ YY_DECL
 		}
 
 	{
-#line 47 "pcomp.f"
+#line 46 "pcomp.f"
 
 
-#line 1049 "parser/pcomp.lex.c"
+#line 1048 "parser/pcomp.lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1106,7 +1105,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 49 "pcomp.f"
+#line 48 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1120,7 +1119,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 59 "pcomp.f"
+#line 58 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1134,7 +1133,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 71 "pcomp.f"
+#line 70 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1148,7 +1147,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 81 "pcomp.f"
+#line 80 "pcomp.f"
 {  /* double comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1162,7 +1161,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 91 "pcomp.f"
+#line 90 "pcomp.f"
 {  /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1176,7 +1175,7 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 101 "pcomp.f"
+#line 100 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line]\r\n");
@@ -1185,7 +1184,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 107 "pcomp.f"
+#line 106 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line \\r]\r\n");
@@ -1195,7 +1194,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 113 "pcomp.f"
+#line 112 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line \\n]\r\n");
@@ -1222,7 +1221,7 @@ YY_RULE_SETUP
     /* ----------------------------------------------------------------- */
 case 9:
 YY_RULE_SETUP
-#line 139 "pcomp.f"
+#line 138 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1233,7 +1232,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 146 "pcomp.f"
+#line 145 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1244,7 +1243,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 154 "pcomp.f"
+#line 153 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1255,7 +1254,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 162 "pcomp.f"
+#line 161 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1267,7 +1266,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 171 "pcomp.f"
+#line 170 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1280,7 +1279,7 @@ YY_RULE_SETUP
 /* ----------------------------------------------------------------- */
 case 14:
 YY_RULE_SETUP
-#line 182 "pcomp.f"
+#line 181 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1291,7 +1290,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 190 "pcomp.f"
+#line 189 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1302,7 +1301,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 198 "pcomp.f"
+#line 197 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1313,7 +1312,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 206 "pcomp.f"
+#line 205 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1324,7 +1323,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 214 "pcomp.f"
+#line 213 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1335,7 +1334,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 222 "pcomp.f"
+#line 221 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1346,7 +1345,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 230 "pcomp.f"
+#line 229 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1357,7 +1356,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 238 "pcomp.f"
+#line 237 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1368,7 +1367,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 246 "pcomp.f"
+#line 245 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1379,7 +1378,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 255 "pcomp.f"
+#line 254 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1390,7 +1389,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 264 "pcomp.f"
+#line 263 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1401,7 +1400,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 272 "pcomp.f"
+#line 271 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1412,7 +1411,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 281 "pcomp.f"
+#line 280 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1423,7 +1422,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 289 "pcomp.f"
+#line 288 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1434,7 +1433,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 297 "pcomp.f"
+#line 296 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1445,7 +1444,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 304 "pcomp.f"
+#line 303 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1456,7 +1455,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 311 "pcomp.f"
+#line 310 "pcomp.f"
 {            /* hexadecimal */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1467,7 +1466,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 318 "pcomp.f"
+#line 317 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1478,7 +1477,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 325 "pcomp.f"
+#line 324 "pcomp.f"
 {             /* Identity */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1490,7 +1489,7 @@ YY_RULE_SETUP
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 333 "pcomp.f"
+#line 332 "pcomp.f"
 {          /* white space */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1507,7 +1506,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 347 "pcomp.f"
+#line 346 "pcomp.f"
 {              /* begin quote */
                                 BEGIN(STR2);
 	#ifdef DEBUGLEX
@@ -1522,7 +1521,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 359 "pcomp.f"
+#line 358 "pcomp.f"
 {
                                 if(config.testflex)
                                     printf("[CHAR] '%c' ", yytext[0]);
@@ -1532,7 +1531,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 366 "pcomp.f"
+#line 365 "pcomp.f"
 {
 								//printf("\\");
 								backslash++;
@@ -1540,7 +1539,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 371 "pcomp.f"
+#line 370 "pcomp.f"
 {  			/* end quote */
                                 if( (backslash % 2) == 0) /* odd backslash */
                                      {
@@ -1562,7 +1561,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 390 "pcomp.f"
+#line 389 "pcomp.f"
 {
                                 backslash  = 0;
 
@@ -1574,10 +1573,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 399 "pcomp.f"
+#line 398 "pcomp.f"
 ECHO;
 	YY_BREAK
-#line 1581 "parser/pcomp.lex.c"
+#line 1580 "parser/pcomp.lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STR2):
 	yyterminate();
@@ -2586,7 +2585,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 399 "pcomp.f"
+#line 398 "pcomp.f"
 
 
 /* ========================= End of LEX ================================ */
@@ -2611,9 +2610,9 @@ int     compile(char *ptr)
     if(config.verbose > 0)
         printf("Compile: '%s'\n", ptr);
 
-	// re - initialize compiler
+	// re - initialize compiler for preprocess
+    // ??
 
-	#if 1
 	if(stat(ptr, &buf) < 0)
 		{
 		printf("Cannot stat file '%s'.\n", ptr);
@@ -2628,8 +2627,6 @@ int     compile(char *ptr)
 		//	syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
 		return 0;
 		}
-	#endif
-
 	infp = fopen(ppfile2, "r");
 	if(!infp)
 		{
@@ -2650,9 +2647,6 @@ int     compile(char *ptr)
 		}
 	strcat(outdir, "/");
     strcat(usetmp, outdir);
-	if (config.verbose)
-        printf("usetmp: '%s'\n", usetmp);
-        //printf("outdir: '%s'\n", outdir);
 	if(stat(usetmp, &buf) < 0)
 		{
 		if(mkdir(usetmp, 0777) < 0)
@@ -2676,7 +2670,7 @@ int     compile(char *ptr)
 		{
 		*last3 = '\0';
 		strcat(asmfile2, ".asm");
-		if(config.verbose)
+		if(config.verbose > 1)
             printf("asm2: '%s'\n", asmfile2);
 		}
 	char objfile2[MAX_VARLEN];
@@ -2687,31 +2681,23 @@ int     compile(char *ptr)
 		{
 		*last4 = '\0';
 		strcat(objfile2, ".o");
-		if(config.verbose)
+		if(config.verbose > 2)
     		printf("obj2: '%s'\n", objfile2);
 		}
 
-    //strcpy(usetmp, outdir);
-	//strcat(usetmp, asmfile);
-	//char *last5 = strrchr(usetmp, '.');
-	//if (last5 != NULL)
-	//	{
-	//	*last5 = '\0';
-	//	if(config.verbose)
-    //		printf("usetmp: '%s'\n", usetmp);
-	//	}
-
+    char outfile2[MAX_VARLEN];
+	//strcpy(outfile2, usetmp);
+	//strcat(outfile2, outfile);
+	strcpy(outfile2, outfile);
+	char *last5 = strrchr(outfile2, '.');
     asmfp = fopen(asmfile2, "w");
-
 	if(!asmfp)
 		{
 		printf("Cannot create file '%s'.\n", asmfile);
 		syslog(LOG_DEBUG, "pcomp: Cannot create asm file.\n");
 		return 0;
 		}
-
 	int	olderrcnt = config.errorcount;
-
 	if(!config.noprog)
 		printf ("Compiling: '%s' ", ptr);
 
@@ -2721,13 +2707,10 @@ int     compile(char *ptr)
 	struct timespec ts2;
 	//sleep(2); // test time measurement
 	clock_gettime(CLOCK_REALTIME, &ts2);
-
     fclose(infp);
 
 	int dts, dtu; calc_usec_diff(&ts, &ts2, &dts, &dtu);
-
 	int ret = getretcode();
-
 	if(config.verbose)
 		{
 		if(ret == 0 && (olderrcnt == config.errorcount))
@@ -2735,9 +2718,8 @@ int     compile(char *ptr)
 		else
 			printf ("Compiled: '%s' ERR %d sec %d usec\n", ptr, dts, dtu);
 		}
-
-    if(!config.noprog)
-		printf ("OK\n");
+    //if(!config.noprog)
+	//	printf ("OK\n");
 
 	config.errorcount += ret;
 	if(!config.showcomm)
@@ -2752,9 +2734,11 @@ int     compile(char *ptr)
 		//printf("\n");
 		}
 	fclose(asmfp);
+
 	if(!config.noassembly)
 		{
-		sprintf(tmp_str, "nasm -felf64 %s > /dev/null\n", asmfile2);
+		//sprintf(tmp_str, "nasm -felf64 %s > /dev/null", asmfile2);
+        sprintf(tmp_str, "nasm -felf64 %s ", asmfile2);
         if(config.verbose)
             printf("Assembly: '%s'\n", tmp_str);
 
@@ -2767,10 +2751,11 @@ int     compile(char *ptr)
 		}
 	if(!config.nolink)
 		{
-		sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null\n",
-                                asmfile2, outfile);
+		//sprintf(tmp_str, "gcc -no-pie %s -o %s > /dev/null",
+        sprintf(tmp_str, "gcc -no-pie %s -o %s ",
+                                objfile2, outfile2);
         if(config.verbose)
-            printf("Linking %s\n", tmp_str);
+            printf("Linking: '%s'\n", tmp_str);
 		int ret = system(tmp_str);
 		if(ret != 0)
 			{
@@ -2778,7 +2763,6 @@ int     compile(char *ptr)
 			ret_val = 0;
 			}
 		}
-
 	if(config.catsrc)
 		{
 		printf("Displaying source file:\n\n");
