@@ -231,14 +231,6 @@ strx1:  strx1 sp1b PLUS sp1b STR
         char *sum = addstrs($1, $5);
         $$=sum;
         }
-        | STR
-        {
-        $$=$1;
-        }
-        | NUM
-        {
-        $$=$1;
-        }
 ;
 
 msg1:   MSG STR
@@ -540,6 +532,14 @@ misc:   {}   /* empty */
 ;
 
 %%
+
+//| STR
+//        {
+//        $$=$1;
+//        }
+//        | NUM
+//        {
+//        $$=$1;
 
 
 // EOF
