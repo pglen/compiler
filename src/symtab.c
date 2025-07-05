@@ -474,7 +474,7 @@ int pop_ddef(outstr **root, int *state)
 
 {
     if(*root == NULL)
-        return;
+        return 0;
 
     outstr *last = *root;
 
@@ -522,6 +522,73 @@ int print_ddata(outstr *root)
         }
     return 0;
 }
+
+int     parse_line(char *str, char **ptr1, char **ptr2, char **ptr3)
+
+{
+    int loop, loop2, loop3, len = strlen(str);
+
+    *ptr1 = str + len; *ptr2 = str + len; *ptr3 = str + len;
+
+    // skip initial blanks
+    for (loop = 0; loop < len; loop++)
+        {
+        if(str[loop] != ' ' && str[loop] != '\t')
+            break;
+        }
+    //printf("skipped blanks '%s'\n", str + loop);
+    //*ptr1 = strdup(str + loop);
+
+    // skip till non blank
+    for (loop2 = loop; loop2 < len; loop2++)
+        {
+        if(str[loop2] == ' ' || str[loop2] == '\t' ||
+            str[loop2] == ',')
+            break;
+        }
+     //(*ptr1)[loop2 - loop] = '\0';
+
+    *ptr1 =  strndup(str + loop, loop2 - loop);
+
+    // skip initial blanks
+    for (loop3 = loop2 + 1; loop3 < len; loop3++)
+        {
+        if(str[loop3] != ' ' && str[loop3] != '\t')
+            break;
+        }
+
+    //*ptr2 = strdup(str + loop3);
+
+    // skip till non blank
+    for (loop2 = loop3 + 1; loop2 < len; loop2++)
+        {
+        if(str[loop2] == ' ' || str[loop2] == '\t' ||
+            str[loop2] == ',' || str[loop2] == '\n' || str[loop2] == '\r')
+            break;
+        }
+     //(*ptr2)[loop2 - loop3] = '\0';
+     *ptr2 =  strndup(str + loop3, loop2 - loop3);
+
+    // skip initial blanks
+    for (loop3 = loop2 + 1; loop3 < len; loop3++)
+        {
+        if(str[loop3] != ' ' && str[loop3] != '\t')
+            break;
+        }
+
+    //*ptr3 = strdup(str + loop3);
+
+    // skip till non blank
+    for (loop2 = loop3 + 1; loop2 < len; loop2++)
+        {
+        if(str[loop2] == ' ' || str[loop2] == '\t' ||
+            str[loop2] == ',' || str[loop2] == '\n'|| str[loop2] == '\r')
+            break;
+        }
+     //(*ptr3)[loop2 - loop3] = '\0';
+     *ptr3 =  strndup(str + loop3, loop2 - loop3);
+}
+
 
 // print with code duplication left out
 
@@ -588,72 +655,6 @@ int print_ddcode(outstr *root)
         }
 
     return 0;
-}
-
-int parse_line(char *str, char **ptr1, char **ptr2, char **ptr3)
-
-{
-    int loop, loop2, loop3, len = strlen(str);
-
-    *ptr1 = str + len; *ptr2 = str + len; *ptr3 = str + len;
-
-    // skip initial blanks
-    for (loop = 0; loop < len; loop++)
-        {
-        if(str[loop] != ' ' && str[loop] != '\t')
-            break;
-        }
-    //printf("skipped blanks '%s'\n", str + loop);
-    //*ptr1 = strdup(str + loop);
-
-    // skip till non blank
-    for (loop2 = loop; loop2 < len; loop2++)
-        {
-        if(str[loop2] == ' ' || str[loop2] == '\t' ||
-            str[loop2] == ',')
-            break;
-        }
-     //(*ptr1)[loop2 - loop] = '\0';
-
-    *ptr1 =  strndup(str + loop, loop2 - loop);
-
-    // skip initial blanks
-    for (loop3 = loop2 + 1; loop3 < len; loop3++)
-        {
-        if(str[loop3] != ' ' && str[loop3] != '\t')
-            break;
-        }
-
-    //*ptr2 = strdup(str + loop3);
-
-    // skip till non blank
-    for (loop2 = loop3 + 1; loop2 < len; loop2++)
-        {
-        if(str[loop2] == ' ' || str[loop2] == '\t' ||
-            str[loop2] == ',' || str[loop2] == '\n' || str[loop2] == '\r')
-            break;
-        }
-     //(*ptr2)[loop2 - loop3] = '\0';
-     *ptr2 =  strndup(str + loop3, loop2 - loop3);
-
-    // skip initial blanks
-    for (loop3 = loop2 + 1; loop3 < len; loop3++)
-        {
-        if(str[loop3] != ' ' && str[loop3] != '\t')
-            break;
-        }
-
-    //*ptr3 = strdup(str + loop3);
-
-    // skip till non blank
-    for (loop2 = loop3 + 1; loop2 < len; loop2++)
-        {
-        if(str[loop2] == ' ' || str[loop2] == '\t' ||
-            str[loop2] == ',' || str[loop2] == '\n'|| str[loop2] == '\r')
-            break;
-        }
-     //(*ptr3)[loop2 - loop3] = '\0';
-     *ptr3 =  strndup(str + loop3, loop2 - loop3);
 }
 
 void    empty_ddef(outstr **root)

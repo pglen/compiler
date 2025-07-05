@@ -30,6 +30,8 @@ static	char	*get_regstr(int size, char rname);
 static 	char	*get_sizestr(int size);
 static  int		is_num(char *str);
 
+int	prologue();
+int	epilogue();
 
 static	char	tmp_str[128];
 
@@ -51,6 +53,119 @@ static	int 	errstate = 0;		// error variable
 
 #define 	IN_FUNC 1
 #define 	MAX(aa, bb) aa > bb ? aa : bb
+
+///////////////////////////////////////////////////////////////////////////
+
+int		decl_call(Symbol *sp)
+
+{
+		//show_item(sp, &coderoot);
+
+		sprintf(tmp_str, "    call %s\n", sp->name);
+		add_ddef(&coderoot, tmp_str);
+
+		sprintf(tmp_str, "    mov [%s], ax\n", sp->res);
+		add_ddef(&coderoot, tmp_str);
+
+	    //state = IN_FUNC;
+}
+
+int		ret_expr(Symbol *sp)
+
+{
+		//show_item(sp, &coderoot);
+
+		sprintf(tmp_str, "    mov ax, %s\n", sp->name);
+		add_ddef(&coderoot, tmp_str);
+
+	    //state = IN_FUNC;
+}
+
+int		decl_cast(Symbol *sp)
+
+{
+		sprintf(tmp_str, "    cwd %s ; cast %s to %s\n", sp->var, sp->name, "u8");
+
+		add_ddef(&coderoot, tmp_str);
+
+	    //state = IN_FUNC;
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+char *typep2a(char *name, char *str, double *val, int *pri)
+
+{
+	char *ret = "tnone";
+
+	//printf("typep2a name='%s' str='%s' %p %p\n", name, str, val, pri);
+
+	if(strcmp(str, "u32") == 0)
+		{
+		if(*val > U32_MAX)
+			{
+			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
+			 name, (int)*val, str, U32_MAX);
+			*val = U32_MAX;
+			}
+
+		ret = "dd";
+		*pri = 32;
+		}
+	else if(strcmp(str, "u16") == 0)
+		{
+		if(*val > U16_MAX)
+			{
+			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
+			name, (int)*val, str, U16_MAX);
+			*val = U16_MAX;
+			}
+
+		ret = "dw";
+		*pri = 16;
+		}
+	else if(strcmp(str, "u8") == 0)
+		{
+		if(*val > U8_MAX)
+			{
+			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
+			name, (int)*val, str, U8_MAX);
+			*val = U8_MAX;
+			}
+		ret = "db";
+		*pri = 16;
+		}
+	else if(strcmp(str, "s32") == 0)
+		{
+		ret = "dd";
+		*pri = 32;
+		}
+	else if(strcmp(str, "s16") == 0)
+		{
+		ret = "dw";
+		*pri = 16;
+		}
+	else if(strcmp(str, "s8") == 0)
+		{
+		ret = "db";
+		*pri = 16;
+		}
+	else if(strcmp(str, "float") == 0)
+		{
+		ret = "dd";
+		*pri = 32;
+		}
+	else if(strcmp(str, "double") == 0)
+		{
+		ret = "dq";
+		*pri = 64;
+		}
+
+	return ret;
+}
+
+
+
 
 int	gen_code()
 
@@ -236,8 +351,9 @@ int	prologue()
 
 {
 	if(config.noprologue)
-		return;
-    fprintf(asmfp, prolstr);
+		return 0;
+
+    fprintf(asmfp, "%s", prolstr);
     return 0;
 }
 
@@ -246,11 +362,11 @@ int	epilogue()
 
 {
 	if(config.noprologue)
-		return;
+		return 0;
 
-fprintf(asmfp, "\
-\nEND_CODE:\n    ;End of program\n\n"\
-);
+    fprintf(asmfp, "%s", "\nEND_CODE:\n ;End of program\n\n");
+
+    return 0;
 }
 
 int		decl_assign(Symbol *sp)
@@ -331,7 +447,8 @@ int		decl_arit(Symbol *sp, char *str, int mul)
 
 			char	*deex = get_regstr(MAX(pri1, pri2), 'd');
 
-			sprintf(tmp_str, "    mov  %s, %s\n", accum, deex, str, opsize, sp->var);
+			sprintf(tmp_str, "    mov  %s, %s %s %s %s\n",
+                                    accum, deex, str, opsize, sp->var);
 			add_ddef(&coderoot, tmp_str);
 			}
 		else if(mul == 1)
@@ -452,115 +569,6 @@ int		decl_func_end(Symbol *sp)
 	    compstate = 0;
 }
 
-///////////////////////////////////////////////////////////////////////////
-
-int		decl_call(Symbol *sp)
-
-{
-		//show_item(sp, &coderoot);
-
-		sprintf(tmp_str, "    call %s\n", sp->name);
-		add_ddef(&coderoot, tmp_str);
-
-		sprintf(tmp_str, "    mov [%s], ax\n", sp->res);
-		add_ddef(&coderoot, tmp_str);
-
-	    //state = IN_FUNC;
-}
-
-int		ret_expr(Symbol *sp)
-
-{
-		//show_item(sp, &coderoot);
-
-		sprintf(tmp_str, "    mov ax, %s\n", sp->name);
-		add_ddef(&coderoot, tmp_str);
-
-	    //state = IN_FUNC;
-}
-
-int		decl_cast(Symbol *sp)
-
-{
-		sprintf(tmp_str, "    cwd %s ; cast %s to %s\n", sp->var, sp->name, "u8");
-
-		add_ddef(&coderoot, tmp_str);
-
-	    //state = IN_FUNC;
-}
-
-///////////////////////////////////////////////////////////////////////////
-
-char *typep2a(char *name, char *str, double *val, int *pri)
-
-{
-	char *ret = "tnone";
-
-	//printf("typep2a name='%s' str='%s' %p %p\n", name, str, val, pri);
-
-	if(strcmp(str, "u32") == 0)
-		{
-		if(*val > U32_MAX)
-			{
-			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
-			 name, (int)*val, str, U32_MAX);
-			*val = U32_MAX;
-			}
-
-		ret = "dd";
-		*pri = 32;
-		}
-	else if(strcmp(str, "u16") == 0)
-		{
-		if(*val > U16_MAX)
-			{
-			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
-			name, (int)*val, str, U16_MAX);
-			*val = U16_MAX;
-			}
-
-		ret = "dw";
-		*pri = 16;
-		}
-	else if(strcmp(str, "u8") == 0)
-		{
-		if(*val > U8_MAX)
-			{
-			printf("; Warning: %s value %d out of range for %s - truncating to %d\n",
-			name, (int)*val, str, U8_MAX);
-			*val = U8_MAX;
-			}
-		ret = "db";
-		*pri = 16;
-		}
-	else if(strcmp(str, "s32") == 0)
-		{
-		ret = "dd";
-		*pri = 32;
-		}
-	else if(strcmp(str, "s16") == 0)
-		{
-		ret = "dw";
-		*pri = 16;
-		}
-	else if(strcmp(str, "s8") == 0)
-		{
-		ret = "db";
-		*pri = 16;
-		}
-	else if(strcmp(str, "float") == 0)
-		{
-		ret = "dd";
-		*pri = 32;
-		}
-	else if(strcmp(str, "double") == 0)
-		{
-		ret = "dq";
-		*pri = 64;
-		}
-
-	return ret;
-}
 
 //////////////////////////////////////////////////////////////////////////
 //

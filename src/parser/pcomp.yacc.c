@@ -87,9 +87,9 @@
 
 #include "../symtab.h"
 
-static  char    tmp_str[MAX_VARLEN];
-static  char    if_str[MAX_VARLEN];
-static  char    el_str[MAX_VARLEN];
+static  char    tmp_str[4 * MAX_VARLEN];
+static  char    if_str[2*MAX_VARLEN];
+static  char    el_str[2*MAX_VARLEN];
 
 /* define this to see indivdual parsing. Controled by options -y -l */
 
@@ -696,13 +696,13 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    85,    85,    87,    98,   112,   124,   148,   159,   173,
-     186,   201,   217,   227,   250,   285,   286,   287,   288,   289,
-     290,   295,   296,   300,   306,   317,   323,   329,   356,   360,
-     369,   370,   378,   386,   393,   400,   407,   416,   431,   435,
-     441,   447,   453,   459,   465,   472,   478,   484,   492,   498,
-     504,   510,   518,   521,   529,   536,   543,   549,   555,   561,
-     567,   573,   579,   588,   596,   606,   618,   629,   638,   651,
-     661,   670,   682,   683,   690,   698,   713,   739,   748
+     186,   201,   217,   228,   252,   288,   289,   290,   291,   292,
+     293,   298,   299,   303,   309,   320,   326,   332,   359,   363,
+     372,   373,   381,   389,   396,   403,   410,   419,   434,   438,
+     444,   450,   456,   462,   468,   475,   481,   487,   495,   501,
+     507,   513,   521,   524,   532,   539,   546,   552,   558,   564,
+     570,   576,   582,   591,   599,   609,   621,   632,   641,   654,
+     664,   673,   685,   686,   693,   701,   717,   744,   753
 };
 #endif
 
@@ -1409,7 +1409,7 @@ yyreduce:
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+                printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
             #endif
 
             create_unique(tmp_str, "debug" );
@@ -1424,7 +1424,7 @@ yyreduce:
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+                printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
             #endif
 
             create_unique(tmp_str, "comment" );
@@ -1442,7 +1442,7 @@ yyreduce:
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+                printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
             #endif
 
             create_unique(tmp_str, "decl" );
@@ -1457,7 +1457,7 @@ yyreduce:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+            printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
         #endif
 
         create_unique(tmp_str, "func" );
@@ -1472,7 +1472,7 @@ yyreduce:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+            printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
         #endif
 
         create_unique(tmp_str, "if" );
@@ -1487,7 +1487,7 @@ yyreduce:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", (yyvsp[-1].sym));
+            printf("{all1}: %s\r\n", (char*)(yyvsp[-1].sym));
         #endif
 
         create_unique(tmp_str, "assn" );
@@ -1502,14 +1502,14 @@ yyreduce:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-          printf("{Comment}: %s\r\n", (yyvsp[0].sym));
+          printf("{Comment}: %s\r\n", (char*)(yyvsp[0].sym));
         #endif
 
         //create_unique(tmp_str, "comment");
         //Symbol  *st2 = push_symtab(tmp_str, "tmp", COMMENT, 0);
         //Symbol  *st = push_symtab("Comment", (char*)$1, COMMENT, 0);
         //if(config.showcomm)
-        //  printf("%s", $1);
+        //  printf("%s", (char*)$1);
         }
 #line 1515 "parser/pcomp.yacc.c"
     break;
@@ -1519,7 +1519,7 @@ yyreduce:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-          printf("{Comment}: %s\r\n", (yyvsp[0].sym));
+          printf("{Comment}: %s\r\n", (char*)(yyvsp[0].sym));
         #endif
 
         create_unique(tmp_str, "comment");
@@ -1536,7 +1536,7 @@ yyreduce:
 {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{Debug level}: %s\r\n", (yyvsp[0].sym));
+        printf("{Debug level}: %s\r\n", (char*)(yyvsp[0].sym));
     #endif
 
     create_unique(tmp_str, "debug");
@@ -1554,25 +1554,27 @@ yyreduce:
 
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl}='type=%s var=%s val=%s'\r\n ", (yyvsp[-4].sym), (yyvsp[-3].sym), (yyvsp[-1].sym));
+         printf("{decl}='type=%s var=%s val=%s'\r\n ",
+                            (char*)(yyvsp[-4].sym), (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
     #endif
     }
-#line 1561 "parser/pcomp.yacc.c"
+#line 1562 "parser/pcomp.yacc.c"
     break;
 
   case 13: /* decl1: ID ID '=' expr2 ';'  */
-#line 228 "pcomp.y"
+#line 229 "pcomp.y"
     {
     Symbol  *st;
 
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl}='type=%s var=%s val=%s'\r\n ", (yyvsp[-4].sym), (yyvsp[-3].sym), (yyvsp[-1].sym));
+         printf("{decl}='type=%s var=%s val=%s'\r\n ", (char*)(yyvsp[-4].sym), (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
     #endif
 
     if(lookup_symtab((char*)(yyvsp[-3].sym), DECL_VAR) != NULL)
         {
-        printf("Error: Duplicate definition of '%s' on line %d\r\n", (yyvsp[-3].sym), num_lines);
+        printf("Error: Duplicate definition of '%s' on line %d\r\n",
+                                (char*)(yyvsp[-3].sym), num_lines);
         config.errorcount++;
         //errstate++;
         }
@@ -1583,20 +1585,21 @@ yyreduce:
         }
     (yyval.sym) = (yyvsp[-3].sym);
     }
-#line 1587 "parser/pcomp.yacc.c"
+#line 1589 "parser/pcomp.yacc.c"
     break;
 
   case 14: /* decl1: ID ID ';'  */
-#line 251 "pcomp.y"
+#line 253 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl ni}='type=%s var=%s'\r\n", (yyvsp[-2].sym), (yyvsp[-1].sym));
+         printf("{decl ni}='type=%s var=%s'\r\n", (char*)(yyvsp[-2].sym), (char*)(yyvsp[-1].sym));
     #endif
 
     if(lookup_symtab((char*)(yyvsp[-1].sym), DECL_VAR) != NULL)
         {
-        printf("Error: Duplicate definition of '%s' on line %d\r\n", (yyvsp[-1].sym), num_lines);
+        printf("Error: Duplicate definition of '%s' on line %d\r\n",
+                            (char*)(yyvsp[-1].sym), num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -1609,37 +1612,37 @@ yyreduce:
         }
     (yyval.sym) = (yyvsp[-1].sym);
     }
-#line 1613 "parser/pcomp.yacc.c"
+#line 1616 "parser/pcomp.yacc.c"
     break;
 
   case 20: /* funcbody2: if1  */
-#line 291 "pcomp.y"
+#line 294 "pcomp.y"
             {
             }
-#line 1620 "parser/pcomp.yacc.c"
+#line 1623 "parser/pcomp.yacc.c"
     break;
 
   case 21: /* funcbody: funcbody2  */
-#line 295 "pcomp.y"
+#line 298 "pcomp.y"
                        {}
-#line 1626 "parser/pcomp.yacc.c"
+#line 1629 "parser/pcomp.yacc.c"
     break;
 
   case 22: /* funcbody: funcbody funcbody2  */
-#line 297 "pcomp.y"
+#line 300 "pcomp.y"
             {}
-#line 1632 "parser/pcomp.yacc.c"
+#line 1635 "parser/pcomp.yacc.c"
     break;
 
   case 23: /* assn2: assn1 ';'  */
-#line 301 "pcomp.y"
+#line 304 "pcomp.y"
         {
         }
-#line 1639 "parser/pcomp.yacc.c"
+#line 1642 "parser/pcomp.yacc.c"
     break;
 
   case 24: /* assn1: ID '=' STR  */
-#line 307 "pcomp.y"
+#line 310 "pcomp.y"
         {
         if(config.verbose > 1)
             {
@@ -1650,136 +1653,136 @@ yyreduce:
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '=', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1654 "parser/pcomp.yacc.c"
+#line 1657 "parser/pcomp.yacc.c"
     break;
 
   case 25: /* assn1: ID '=' expr2  */
-#line 318 "pcomp.y"
+#line 321 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '=', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1664 "parser/pcomp.yacc.c"
+#line 1667 "parser/pcomp.yacc.c"
     break;
 
   case 26: /* assn1: ID '=' condexpr ';'  */
-#line 324 "pcomp.y"
+#line 327 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym), tmp_str, '=', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1674 "parser/pcomp.yacc.c"
+#line 1677 "parser/pcomp.yacc.c"
     break;
 
   case 27: /* assn1: ID '=' assn1 ';'  */
-#line 330 "pcomp.y"
+#line 333 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym), tmp_str, '=', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1684 "parser/pcomp.yacc.c"
+#line 1687 "parser/pcomp.yacc.c"
     break;
 
   case 28: /* exprlist: expr2  */
-#line 357 "pcomp.y"
+#line 360 "pcomp.y"
         {
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", "", DECL_VARITEM, 0);
         }
-#line 1692 "parser/pcomp.yacc.c"
+#line 1695 "parser/pcomp.yacc.c"
     break;
 
   case 29: /* exprlist: exprlist ',' expr2  */
-#line 361 "pcomp.y"
+#line 364 "pcomp.y"
         {
         create_unique2(tmp_str, "arg", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", tmp_str, DECL_VARITEM, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1703 "parser/pcomp.yacc.c"
+#line 1706 "parser/pcomp.yacc.c"
     break;
 
   case 30: /* condexpr: %empty  */
-#line 369 "pcomp.y"
+#line 372 "pcomp.y"
           {}
-#line 1709 "parser/pcomp.yacc.c"
+#line 1712 "parser/pcomp.yacc.c"
     break;
 
   case 31: /* condexpr: expr2 '<' expr2  */
-#line 371 "pcomp.y"
+#line 374 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '<', 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1720 "parser/pcomp.yacc.c"
+#line 1723 "parser/pcomp.yacc.c"
     break;
 
   case 32: /* condexpr: expr2 '>' expr2  */
-#line 379 "pcomp.y"
+#line 382 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '<', 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1731 "parser/pcomp.yacc.c"
+#line 1734 "parser/pcomp.yacc.c"
     break;
 
   case 33: /* condexpr: expr2 EQEQ expr2  */
-#line 387 "pcomp.y"
+#line 390 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, EQEQ, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1742 "parser/pcomp.yacc.c"
+#line 1745 "parser/pcomp.yacc.c"
     break;
 
   case 34: /* condexpr: expr2 NEQ expr2  */
-#line 394 "pcomp.y"
+#line 397 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, NEQ, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1753 "parser/pcomp.yacc.c"
+#line 1756 "parser/pcomp.yacc.c"
     break;
 
   case 35: /* condexpr: expr2 GEQ expr2  */
-#line 401 "pcomp.y"
+#line 404 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, GEQ, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1764 "parser/pcomp.yacc.c"
+#line 1767 "parser/pcomp.yacc.c"
     break;
 
   case 36: /* condexpr: expr2 SEQ expr2  */
-#line 408 "pcomp.y"
+#line 411 "pcomp.y"
     {
         create_unique2(tmp_str, "cond", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, SEQ, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", 1031, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 1775 "parser/pcomp.yacc.c"
+#line 1778 "parser/pcomp.yacc.c"
     break;
 
   case 37: /* expr1: expr2 ';'  */
-#line 417 "pcomp.y"
+#line 420 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{expr1}='%s' \r\n", (yyvsp[-1].sym));
+        printf("{expr1}='%s' \r\n", (char*)(yyvsp[-1].sym));
     #endif
 
     //create_unique2(tmp_str, "expr1", (char*)$1, "");
@@ -1788,156 +1791,156 @@ yyreduce:
     //Symbol  *st = push_symtab((char*)$1, "", "", 1050, 0);
     (yyval.sym) = (yyvsp[-1].sym);
     }
-#line 1792 "parser/pcomp.yacc.c"
+#line 1795 "parser/pcomp.yacc.c"
     break;
 
   case 38: /* expr2: expr2a  */
-#line 432 "pcomp.y"
+#line 435 "pcomp.y"
         {
         //Symbol  *st = push_symtab("", "", "", 1100, 0);
         }
-#line 1800 "parser/pcomp.yacc.c"
+#line 1803 "parser/pcomp.yacc.c"
     break;
 
   case 39: /* expr2: expr2 OR expr2a  */
-#line 436 "pcomp.y"
+#line 439 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, OR, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1810 "parser/pcomp.yacc.c"
+#line 1813 "parser/pcomp.yacc.c"
     break;
 
   case 40: /* expr2: expr2 AND expr2a  */
-#line 442 "pcomp.y"
+#line 445 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, AND, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1820 "parser/pcomp.yacc.c"
+#line 1823 "parser/pcomp.yacc.c"
     break;
 
   case 41: /* expr2: expr2 XOR expr2a  */
-#line 448 "pcomp.y"
+#line 451 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, XOR, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1830 "parser/pcomp.yacc.c"
+#line 1833 "parser/pcomp.yacc.c"
     break;
 
   case 42: /* expr2: expr2 '|' expr2a  */
-#line 454 "pcomp.y"
+#line 457 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '|', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1840 "parser/pcomp.yacc.c"
+#line 1843 "parser/pcomp.yacc.c"
     break;
 
   case 43: /* expr2: expr2 '&' expr2a  */
-#line 460 "pcomp.y"
+#line 463 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '&', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1850 "parser/pcomp.yacc.c"
+#line 1853 "parser/pcomp.yacc.c"
     break;
 
   case 44: /* expr2: expr2 '^' expr2a  */
-#line 466 "pcomp.y"
+#line 469 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '^', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1860 "parser/pcomp.yacc.c"
+#line 1863 "parser/pcomp.yacc.c"
     break;
 
   case 45: /* expr2a: expr3  */
-#line 473 "pcomp.y"
+#line 476 "pcomp.y"
         {
         //create_unique(tmp_str, "var");
         //Symbol  *st = push_symtab(tmp_str, "", 1002, 0);
         //Symbol  *st = push_symtab((char*)$1, "", 1002, 0);
         }
-#line 1870 "parser/pcomp.yacc.c"
+#line 1873 "parser/pcomp.yacc.c"
     break;
 
   case 46: /* expr2a: expr2a '+' expr3  */
-#line 479 "pcomp.y"
+#line 482 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '+', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1880 "parser/pcomp.yacc.c"
+#line 1883 "parser/pcomp.yacc.c"
     break;
 
   case 47: /* expr2a: expr2a '-' expr3  */
-#line 485 "pcomp.y"
+#line 488 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '-', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1890 "parser/pcomp.yacc.c"
+#line 1893 "parser/pcomp.yacc.c"
     break;
 
   case 48: /* expr3: expr4  */
-#line 493 "pcomp.y"
+#line 496 "pcomp.y"
         {
         //Symbol  *st = push_symtab((char*)$1, "", ' ', 0);
         //create_unique(tmp_str, "var");
         //$$ = tmp_str;
         }
-#line 1900 "parser/pcomp.yacc.c"
+#line 1903 "parser/pcomp.yacc.c"
     break;
 
   case 49: /* expr3: expr3 '*' expr4  */
-#line 499 "pcomp.y"
+#line 502 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '*', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1910 "parser/pcomp.yacc.c"
+#line 1913 "parser/pcomp.yacc.c"
     break;
 
   case 50: /* expr3: expr3 '/' expr4  */
-#line 505 "pcomp.y"
+#line 508 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '/', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1920 "parser/pcomp.yacc.c"
+#line 1923 "parser/pcomp.yacc.c"
     break;
 
   case 51: /* expr3: expr3 '%' expr4  */
-#line 511 "pcomp.y"
+#line 514 "pcomp.y"
         {
         create_unique2(tmp_str, "tmp", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, '%', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1930 "parser/pcomp.yacc.c"
+#line 1933 "parser/pcomp.yacc.c"
     break;
 
   case 52: /* expr4: val1  */
-#line 519 "pcomp.y"
+#line 522 "pcomp.y"
         {
         }
-#line 1937 "parser/pcomp.yacc.c"
+#line 1940 "parser/pcomp.yacc.c"
     break;
 
   case 53: /* expr4: '(' expr2 ')'  */
-#line 522 "pcomp.y"
+#line 525 "pcomp.y"
         {
         //Symbol  *st = push_symtab((char*)$2, "", '(', 0);
         //create_unique(tmp_str, "tmp");
@@ -1945,114 +1948,114 @@ yyreduce:
         //$$ = estrdup(tmp_str);
         (yyval.sym) = (yyvsp[-1].sym);
         }
-#line 1949 "parser/pcomp.yacc.c"
+#line 1952 "parser/pcomp.yacc.c"
     break;
 
   case 54: /* expr4: ID '(' ')'  */
-#line 530 "pcomp.y"
+#line 533 "pcomp.y"
         {
         create_unique2(tmp_str, "call", (char*)(yyvsp[-2].sym), (char*)"void");
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)"", tmp_str, DECL_CALL2, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", DECL_CALL, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1960 "parser/pcomp.yacc.c"
+#line 1963 "parser/pcomp.yacc.c"
     break;
 
   case 55: /* expr4: ID '(' exprlist ')'  */
-#line 537 "pcomp.y"
+#line 540 "pcomp.y"
         {
         create_unique2(tmp_str, "call", (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
         Symbol  *st = push_symtab((char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym), tmp_str, DECL_CALL3, 0);
         //Symbol  *st2 = push_symtab(tmp_str, "", DECL_CALL, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1971 "parser/pcomp.yacc.c"
+#line 1974 "parser/pcomp.yacc.c"
     break;
 
   case 56: /* expr4: '!' expr4  */
-#line 544 "pcomp.y"
+#line 547 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), (char*)"", tmp_str, '!', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1981 "parser/pcomp.yacc.c"
+#line 1984 "parser/pcomp.yacc.c"
     break;
 
   case 57: /* expr4: LNOT expr4  */
-#line 550 "pcomp.y"
+#line 553 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), (char*)"", tmp_str, LNOT, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 1991 "parser/pcomp.yacc.c"
+#line 1994 "parser/pcomp.yacc.c"
     break;
 
   case 58: /* expr4: '-' expr4  */
-#line 556 "pcomp.y"
+#line 559 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", tmp_str, '-', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2001 "parser/pcomp.yacc.c"
+#line 2004 "parser/pcomp.yacc.c"
     break;
 
   case 59: /* expr4: '^' expr4  */
-#line 562 "pcomp.y"
+#line 565 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", tmp_str, '^', 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2011 "parser/pcomp.yacc.c"
+#line 2014 "parser/pcomp.yacc.c"
     break;
 
   case 60: /* expr4: '*' expr4  */
-#line 568 "pcomp.y"
+#line 571 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", tmp_str, DECL_DEREF, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2021 "parser/pcomp.yacc.c"
+#line 2024 "parser/pcomp.yacc.c"
     break;
 
   case 61: /* expr4: '&' expr4  */
-#line 574 "pcomp.y"
+#line 577 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", tmp_str, DECL_ADDOF, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2031 "parser/pcomp.yacc.c"
+#line 2034 "parser/pcomp.yacc.c"
     break;
 
   case 62: /* expr4: '(' ID ')' expr4  */
-#line 580 "pcomp.y"
+#line 583 "pcomp.y"
         {
         create_unique(tmp_str, "tmp");
         Symbol  *st = push_symtab((char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym), tmp_str, DECL_CAST, 0);
         //$$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         (yyval.sym) = (void*)estrdup2((char*)(yyvsp[0].sym), __LINE__, __FILE__);
         }
-#line 2042 "parser/pcomp.yacc.c"
+#line 2045 "parser/pcomp.yacc.c"
     break;
 
   case 63: /* elsedecl1: ELSE  */
-#line 589 "pcomp.y"
+#line 592 "pcomp.y"
         {
         peek_ifstack(tmp_str, if_str, el_str, NULL);
         Symbol  *st = push_symtab(tmp_str, if_str, el_str, DECL_ELSE, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2052 "parser/pcomp.yacc.c"
+#line 2055 "parser/pcomp.yacc.c"
     break;
 
   case 64: /* ifdecl1: IF '(' condexpr ')'  */
-#line 597 "pcomp.y"
+#line 600 "pcomp.y"
         {
         create_unique(if_str, "if");
         create_unique(el_str, "else");
@@ -2060,11 +2063,11 @@ yyreduce:
         push_ifstack( (char *)(yyvsp[-1].sym), if_str, el_str, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2064 "parser/pcomp.yacc.c"
+#line 2067 "parser/pcomp.yacc.c"
     break;
 
   case 65: /* if1: ifdecl1 '{' funcbody '}'  */
-#line 607 "pcomp.y"
+#line 610 "pcomp.y"
         {
         if((yyvsp[-1].sym))
             {
@@ -2075,11 +2078,11 @@ yyreduce:
 
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2079 "parser/pcomp.yacc.c"
+#line 2082 "parser/pcomp.yacc.c"
     break;
 
   case 66: /* if1: ifdecl1 '{' funcbody '}' elsedecl1 '{' funcbody '}'  */
-#line 619 "pcomp.y"
+#line 622 "pcomp.y"
         {
         pop_ifstack(tmp_str, if_str, el_str, 0);
         Symbol  *st2 = push_symtab(tmp_str, if_str, "", TERM_IF, 0);
@@ -2088,11 +2091,11 @@ yyreduce:
         //Symbol  *st2 = push_symtab(tmp_str, "", 1014, 0);
         (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
-#line 2092 "parser/pcomp.yacc.c"
+#line 2095 "parser/pcomp.yacc.c"
     break;
 
   case 67: /* val1: NUM  */
-#line 630 "pcomp.y"
+#line 633 "pcomp.y"
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
@@ -2101,11 +2104,11 @@ yyreduce:
         //$1->type = NUM;
         (yyval.sym) = (yyvsp[0].sym);
         }
-#line 2105 "parser/pcomp.yacc.c"
+#line 2108 "parser/pcomp.yacc.c"
     break;
 
   case 68: /* val1: ID  */
-#line 639 "pcomp.y"
+#line 642 "pcomp.y"
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
@@ -2115,77 +2118,78 @@ yyreduce:
         //$1->type = ID;
         (yyval.sym) = (yyvsp[0].sym);
         }
-#line 2119 "parser/pcomp.yacc.c"
+#line 2122 "parser/pcomp.yacc.c"
     break;
 
   case 69: /* fdecl1: ID ID  */
-#line 652 "pcomp.y"
+#line 655 "pcomp.y"
     {
     //strcpy($$->name, $1);
     create_unique2(tmp_str, "funcarg", (char*)(yyvsp[0].sym), (char*)(yyvsp[-1].sym));
     Symbol  *st = push_symtab((char*)(yyvsp[0].sym), (char*)(yyvsp[-1].sym), tmp_str, FUNC_DECL_ARG, 0);
             (yyval.sym) = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
     }
-#line 2130 "parser/pcomp.yacc.c"
+#line 2133 "parser/pcomp.yacc.c"
     break;
 
   case 70: /* fdecl2: fdecl1  */
-#line 662 "pcomp.y"
+#line 665 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{fdecl1}='%s'\r\n", (yyvsp[0].sym));
+         printf("{fdecl1}='%s'\r\n", (char*)(yyvsp[0].sym));
     #endif
     //$$ = (void*)estrdup((char*)$1);
     (yyval.sym) = (void*)estrdup2((char*)(yyvsp[0].sym), __LINE__, __FILE__);
     }
-#line 2143 "parser/pcomp.yacc.c"
+#line 2146 "parser/pcomp.yacc.c"
     break;
 
   case 71: /* fdecl2: fdecl2 ',' fdecl1  */
-#line 671 "pcomp.y"
+#line 674 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{Fdecl2}='%s' '%s'\r\n", (yyvsp[-2].sym), (yyvsp[0].sym));
+         printf("{Fdecl2}='%s' '%s'\r\n", (char*)(yyvsp[-2].sym), (char*)(yyvsp[0].sym));
     #endif
     (yyval.sym) = (void*)estrdup2((char*)(yyvsp[-2].sym), __LINE__, __FILE__);
     //$$ = (void*)estrdup((char*)$1);
     }
-#line 2156 "parser/pcomp.yacc.c"
+#line 2159 "parser/pcomp.yacc.c"
     break;
 
   case 72: /* fdecl3: '(' ')'  */
-#line 682 "pcomp.y"
+#line 685 "pcomp.y"
                 { }
-#line 2162 "parser/pcomp.yacc.c"
+#line 2165 "parser/pcomp.yacc.c"
     break;
 
   case 73: /* fdecl3: '(' fdecl2 ')'  */
-#line 684 "pcomp.y"
+#line 687 "pcomp.y"
     {
         (yyval.sym) = (void*)estrdup2((char*)(yyvsp[-1].sym), __LINE__, __FILE__);
         //$$ = (void*)estrdup((char*)$2);
     }
-#line 2171 "parser/pcomp.yacc.c"
+#line 2174 "parser/pcomp.yacc.c"
     break;
 
   case 74: /* funcdecl: FUNC ID  */
-#line 691 "pcomp.y"
+#line 694 "pcomp.y"
     {
     Symbol  *st = push_symtab((char*)(yyvsp[0].sym), "", "", FUNC_DECL_NAME, 0);
     //$$ = (void*)estrdup((char*)$2);
     (yyval.sym) = (void*)estrdup2((char*)(yyvsp[0].sym), __LINE__, __FILE__);
     }
-#line 2181 "parser/pcomp.yacc.c"
+#line 2184 "parser/pcomp.yacc.c"
     break;
 
   case 75: /* func1: funcdecl fdecl3 '{' '}'  */
-#line 699 "pcomp.y"
+#line 702 "pcomp.y"
     {
     if(lookup_symtab((char*)(yyvsp[-3].sym), FUNC) != NULL)
         {
-        printf("Error: Duplicate function '%s' on line %d\r\n", (yyvsp[-3].sym), num_lines);
+        printf("Error: Duplicate function '%s' on line %d\r\n",
+                                    (char*)(yyvsp[-3].sym), num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -2196,20 +2200,21 @@ yyreduce:
         }
 
     }
-#line 2200 "parser/pcomp.yacc.c"
+#line 2204 "parser/pcomp.yacc.c"
     break;
 
   case 76: /* func1: funcdecl fdecl3 '{' funcbody '}'  */
-#line 714 "pcomp.y"
+#line 718 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{Function}='%s' '%s'\r\n", (yyvsp[-3].sym), (yyvsp[-1].sym));
+         printf("{Function}='%s' '%s'\r\n", (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym));
     #endif
 
     if(lookup_symtab((char*)(yyvsp[-4].sym), FUNC) != NULL)
         {
-        printf("Error: Duplicate function(2) '%s' on line %d\r\n", (yyvsp[-4].sym), num_lines);
+        printf("Error: Duplicate function(2) '%s' on line %d\r\n",
+            (char*)(yyvsp[-4].sym), num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -2223,35 +2228,35 @@ yyreduce:
         (yyval.sym) = (yyvsp[-4].sym);
         }
     }
-#line 2227 "parser/pcomp.yacc.c"
+#line 2232 "parser/pcomp.yacc.c"
     break;
 
   case 77: /* ret1: RET ';'  */
-#line 740 "pcomp.y"
+#line 745 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{ret}='%s'\r\n", (yyvsp[-1].sym));
+        printf("{ret}='%s'\r\n", (char*)(yyvsp[-1].sym));
     #endif
     Symbol  *st = push_symtab("", "", "", RET, 0);
     }
-#line 2239 "parser/pcomp.yacc.c"
+#line 2244 "parser/pcomp.yacc.c"
     break;
 
   case 78: /* ret1: RET expr2 ';'  */
-#line 749 "pcomp.y"
+#line 754 "pcomp.y"
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{ret}='%s' '%s' \r\n", (yyvsp[-2].sym), (yyvsp[-1].sym));
+        printf("{ret}='%s' '%s' \r\n", (char*)(yyvsp[-2].sym), (char*)(yyvsp[-1].sym));
     #endif
     Symbol  *st = push_symtab((char*)(yyvsp[-1].sym), "", "", RET_EXPR, 0);
     }
-#line 2251 "parser/pcomp.yacc.c"
+#line 2256 "parser/pcomp.yacc.c"
     break;
 
 
-#line 2255 "parser/pcomp.yacc.c"
+#line 2260 "parser/pcomp.yacc.c"
 
       default: break;
     }
@@ -2444,7 +2449,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 780 "pcomp.y"
+#line 785 "pcomp.y"
 
 
 ///////////////////////////////////////////////////////////////////////////

@@ -14,9 +14,11 @@
 //  Add an entry to allocated list of buffers for debugging
 //
 
+#include <malloc.h>
+#include <string.h>
+
 #include "emalloc.h"
-#include "malloc.h"
-#include "string.h"
+#include "symtab.h"
 
 #define	EMALLOC_MAGIC 0x32345654
 
@@ -205,7 +207,7 @@ int pop_minfo(meminf **root, void **ptr, int *line, char *file)
 
 {
 	if(*root == MNULL)
-        	return;
+        return 0;
 
     if((*root)->magic != EMALLOC_MAGIC)
     	printf("pop_minfo (*root)->magic != EMALLOC_MAGIC\n");

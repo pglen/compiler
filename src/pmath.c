@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#include "symtab.h"
+
 double  Log2( double x)
 
 {

@@ -27,11 +27,13 @@ LIBS = -lm
 # Debug
 #CFLAGS =  -DSETPROCTITLE -Wformat=no
 #CFLAGS =  -Wformat=no
-CFLAGS =  -w
+CFLAGS  =  -Wno-incompatible-pointer-types -Wno-int-conversion
 
-EXEMAIN = main.c utils.c
 
-DEPENDSON =  main.c symtab.c symtab.h codegen.c codegen.h emalloc.c emalloc.h \
+EXEMAIN = main.c utils.c xmalloc.c
+
+DEPENDSON =  main.c symtab.c symtab.h codegen.c codegen.h emalloc.c \
+             emalloc.h pcomp.h \
              pmath.c Makefile parser/pcomp.yacc.c parser/ppre.yacc.c \
              parser/pcomp.lex.c parser/ppre.lex.c
 
@@ -45,7 +47,7 @@ OBJS = emalloc.o codegen.o pmath.o symtab.o
 
 
 pcomp: $(EXEMAIN) pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
-	mkdir -p parser
+	@mkdir -p parser
 	${CC} ${CFLAGS} codegen.c -c -o codegen.o
 	${CC} ${CFLAGS} pmath.c -c -o pmath.o
 	${CC} ${CFLAGS} symtab.c -c -o symtab.o

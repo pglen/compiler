@@ -25,9 +25,9 @@
 
 #include "../symtab.h"
 
-static  char    tmp_str[MAX_VARLEN];
-static  char    if_str[MAX_VARLEN];
-static  char    el_str[MAX_VARLEN];
+static  char    tmp_str[4 * MAX_VARLEN];
+static  char    if_str[2*MAX_VARLEN];
+static  char    el_str[2*MAX_VARLEN];
 
 /* define this to see indivdual parsing. Controled by options -y -l */
 
@@ -88,7 +88,7 @@ all1:    {   /* empty */
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", $1);
+                printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
             create_unique(tmp_str, "debug" );
@@ -99,7 +99,7 @@ all1:    {   /* empty */
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", $1);
+                printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
             create_unique(tmp_str, "comment" );
@@ -113,7 +113,7 @@ all1:    {   /* empty */
             {
             #ifdef TESTPCOMP
             if(config.testyacc)
-                printf("{all1}: %s\r\n", $1);
+                printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
             create_unique(tmp_str, "decl" );
@@ -125,7 +125,7 @@ all1:    {   /* empty */
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", $1);
+            printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
         create_unique(tmp_str, "func" );
@@ -137,7 +137,7 @@ all1:    {   /* empty */
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", $1);
+            printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
         create_unique(tmp_str, "expr" );
@@ -149,7 +149,7 @@ all1:    {   /* empty */
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", $1);
+            printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
         create_unique(tmp_str, "if" );
@@ -160,7 +160,7 @@ all1:    {   /* empty */
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-            printf("{all1}: %s\r\n", $1);
+            printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
         create_unique(tmp_str, "assn" );
@@ -174,20 +174,20 @@ comments:
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-          printf("{Comment}: %s\r\n", $1);
+          printf("{Comment}: %s\r\n", (char*)$1);
         #endif
 
         //create_unique(tmp_str, "comment");
         //Symbol  *st2 = push_symtab(tmp_str, "tmp", COMMENT, 0);
         //Symbol  *st = push_symtab("Comment", (char*)$1, COMMENT, 0);
         //if(config.showcomm)
-        //  printf("%s", $1);
+        //  printf("%s", (char*)$1);
         }
     | COMMENT2
         {
         #ifdef TESTPCOMP
         if(config.testyacc)
-          printf("{Comment}: %s\r\n", $1);
+          printf("{Comment}: %s\r\n", (char*)$1);
         #endif
 
         create_unique(tmp_str, "comment");
@@ -203,7 +203,7 @@ debug1: DBG val1
 {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{Debug level}: %s\r\n", $2);
+        printf("{Debug level}: %s\r\n", (char*)$2);
     #endif
 
     create_unique(tmp_str, "debug");
@@ -220,7 +220,8 @@ decl1:
 
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl}='type=%s var=%s val=%s'\r\n ", $1, $2, $4);
+         printf("{decl}='type=%s var=%s val=%s'\r\n ",
+                            (char*)$1, (char*)$2, (char*)$4);
     #endif
     }
 
@@ -230,12 +231,13 @@ decl1:
 
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl}='type=%s var=%s val=%s'\r\n ", $1, $2, $4);
+         printf("{decl}='type=%s var=%s val=%s'\r\n ", (char*)$1, (char*)$2, (char*)$4);
     #endif
 
     if(lookup_symtab((char*)$2, DECL_VAR) != NULL)
         {
-        printf("Error: Duplicate definition of '%s' on line %d\r\n", $2, num_lines);
+        printf("Error: Duplicate definition of '%s' on line %d\r\n",
+                                (char*)$2, num_lines);
         config.errorcount++;
         //errstate++;
         }
@@ -251,12 +253,13 @@ decl1:
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{decl ni}='type=%s var=%s'\r\n", $1, $2);
+         printf("{decl ni}='type=%s var=%s'\r\n", (char*)$1, (char*)$2);
     #endif
 
     if(lookup_symtab((char*)$2, DECL_VAR) != NULL)
         {
-        printf("Error: Duplicate definition of '%s' on line %d\r\n", $2, num_lines);
+        printf("Error: Duplicate definition of '%s' on line %d\r\n",
+                            (char*)$2, num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -417,7 +420,7 @@ expr1:  expr2 ';'
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{expr1}='%s' \r\n", $1);
+        printf("{expr1}='%s' \r\n", (char*)$1);
     #endif
 
     //create_unique2(tmp_str, "expr1", (char*)$1, "");
@@ -662,7 +665,7 @@ fdecl2:  /* {} | */
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{fdecl1}='%s'\r\n", $1);
+         printf("{fdecl1}='%s'\r\n", (char*)$1);
     #endif
     //$$ = (void*)estrdup((char*)$1);
     $$ = (void*)estrdup2((char*)$1, __LINE__, __FILE__);
@@ -671,7 +674,7 @@ fdecl2:  /* {} | */
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{Fdecl2}='%s' '%s'\r\n", $1, $3);
+         printf("{Fdecl2}='%s' '%s'\r\n", (char*)$1, (char*)$3);
     #endif
     $$ = (void*)estrdup2((char*)$1, __LINE__, __FILE__);
     //$$ = (void*)estrdup((char*)$1);
@@ -699,7 +702,8 @@ func1:  funcdecl  fdecl3  '{'  '}'
     {
     if(lookup_symtab((char*)$1, FUNC) != NULL)
         {
-        printf("Error: Duplicate function '%s' on line %d\r\n", $1, num_lines);
+        printf("Error: Duplicate function '%s' on line %d\r\n",
+                                    (char*)$1, num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -714,12 +718,13 @@ func1:  funcdecl  fdecl3  '{'  '}'
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-         printf("{Function}='%s' '%s'\r\n", $2, $4);
+         printf("{Function}='%s' '%s'\r\n", (char*)$2, (char*)$4);
     #endif
 
     if(lookup_symtab((char*)$1, FUNC) != NULL)
         {
-        printf("Error: Duplicate function(2) '%s' on line %d\r\n", $1, num_lines);
+        printf("Error: Duplicate function(2) '%s' on line %d\r\n",
+            (char*)$1, num_lines);
         config.errorcount++;
         //exit(1);
         }
@@ -740,7 +745,7 @@ ret1:
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{ret}='%s'\r\n", $1);
+        printf("{ret}='%s'\r\n", (char*)$1);
     #endif
     Symbol  *st = push_symtab("", "", "", RET, 0);
     }
@@ -749,7 +754,7 @@ ret1:
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{ret}='%s' '%s' \r\n", $1, $2);
+        printf("{ret}='%s' '%s' \r\n", (char*)$1, (char*)$2);
     #endif
     Symbol  *st = push_symtab((char*)$2, "", "", RET_EXPR, 0);
     }
@@ -757,7 +762,7 @@ ret1:
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-        printf("{ret}='%s' '%s' \r\n", $1, $2);
+        printf("{ret}='%s' '%s' \r\n", (char*)$1, (char*)$2);
     #endif
     Symbol  *st = push_symtab((char*)$2, "", "", RET_NUM, 0);
     }
@@ -770,7 +775,7 @@ call1:  ID '(' ID ')' ';'
     {
     #ifdef TESTPCOMP
     if(config.testyacc)
-      printf("{CALL} '%s + %s'\n", $3);
+      printf("{CALL} '%s + %s'\n", (char*)$3);
     #endif
     Symbol  *st = push_symtab((char*)$1, (char*)$3, 1000, 0);
     }

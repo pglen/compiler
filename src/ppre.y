@@ -14,6 +14,7 @@
      0.05   Fri 04.Jul.2025 Peter Glen     Breakout utils
 
      ======================================================================= */
+
 %{
 
 #include <sys/stat.h>
@@ -27,6 +28,8 @@
 // It is in a subdir ./parser
 
 #include "../symtab.h"
+#include "../xmalloc.h"
+#include "../utils.h"
 
 /* define this to see indivdual parsing. Controled by ptions -y -l */
 
@@ -65,7 +68,7 @@ int hasdefine = 2;
 %type   <sym>   all1
 %type   <sym>   all2
 %type   <sym>   ch1
-%type   <sym>   ops1
+//%type   <sym>   ops1
 %type   <sym>   id1
 %type   <sym>   define1
 %type   <sym>   err1
@@ -86,6 +89,7 @@ int hasdefine = 2;
 %type   <sym>   expr4
 %type   <sym>   expr5
 %type   <sym>   misc
+%type   <sym>   strx1
 
 %%
 
@@ -97,7 +101,7 @@ all1:   all2
         | all1 all2
         {
         if(config.testpreyacc > 0)
-            printf(" { all1 all2 '%s' }\n ", (char*)$1, (char*)$2);
+            printf(" { all1 all2 '%s' '%s'}\n ", (char*)$1, (char*)$2);
         }
 ;
 
@@ -157,12 +161,13 @@ all2:   define1
             printf("{ all1: num1 x '%s' }\n", (char*)$1);
         $$ = strdup($1);
         }
-        | sp1m
+/*        | sp1m
         {
         if(config.testpreyacc > 0)
             printf("{ all1: space x '%s' }\n", (char*)$1);
         // Ignore
-        }
+        }   */
+
 ;
 
 define1: sp1b DEF sp1m ID sp1m expr1 sp1m
@@ -220,19 +225,42 @@ err1:   ERR sp1b STR sp1m
     }
 ;
 
-msg1:   MSG sp1b STR sp1m
-    {
-        // Erase quotes
-        if(hasdefine == 2)
-            {
-            char *tmp_strx = strdup(((char*)$3) + 1);
-            char *last = strrchr(tmp_strx, '\"');
-            if(last)
-                *last = '\0';
-            printf("%s\n", tmp_strx);
-            free(tmp_strx);
-            }
-     }
+strx1:  strx1 sp1b PLUS sp1b STR
+        {
+        printf("double add' %s' '%s'\n", (char*)$1, (char*)$5);
+        char *sum = addstrs($1, $5);
+        $$=sum;
+        }
+        | STR
+        {
+        $$=$1;
+        }
+        | NUM
+        {
+        $$=$1;
+        }
+;
+
+msg1:   MSG STR
+        {
+        printf("msg2: '%s'\n", (char *)$2);
+        }
+        | MSG sp1b strx1 sp1m
+        {
+        printf("msg1: '%s'\n", (char *)$3);
+        }
+;
+        //// Erase quotes
+        //if(hasdefine == 2)
+        //    {
+        //    char *tmp_strx = strdup(((char*)$3) + 1);
+        //    char *last = strrchr(tmp_strx, '\"');
+        //    if(last)
+        //        *last = '\0';
+        //    printf("%s\n", tmp_strx);
+        //    free(tmp_strx);
+        //    }
+        //}
 
 mac1:   MAC sp1b ID sp1b STR sp1m
         {
@@ -331,11 +359,11 @@ ch2:   ch1
       | ch2 ch1
 ;
 
-ops1:   PLUS
-     |  MINUS
-     |  MULT
-     |  DIV
-     |  MOD
+//ops1:   PLUS
+//     |  MINUS
+//     |  MULT
+//     |  DIV
+//     |  MOD
 
 ch1:   CH
       {

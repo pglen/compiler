@@ -16,7 +16,9 @@
 #include <sys/stat.h>
 #include <syslog.h>
 #include <time.h>
+#include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <getopt.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -24,6 +26,8 @@
 
 #include "pcomp.h"
 #include "symtab.h"
+#include "emalloc.h"
+#include "xmalloc.h"
 
 char outfile[MAX_PATHLEN] = {0,};
 char usetmp[MAX_PATHLEN] = {0,};
@@ -292,6 +296,8 @@ int     main (int argc, char **argv)
         exit(0);
         }
 
+    xmdump(1);
+
     //print_emalloc();
     //print_estrdup();
     //empty_symtab();
@@ -302,7 +308,7 @@ int     main (int argc, char **argv)
         print_emalloc();
         print_estrdup();
         }
-    exit(config.errorcount + 127);
+    exit(config.errorcount); // + 127);
 }
 
 // EOF

@@ -44,7 +44,14 @@ extern char ppfile2[];
 extern char outfile[];
 extern char usetmp[];
 
+int     getretcode();
+
+int  translate_type(int type, char **str);
+
 typedef struct timespec Ts;
+
+int     preprocess(char *ptr);
+int     compile(char *ptr);
 
 void    calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu);
 int     str2int(char *ptr);

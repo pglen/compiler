@@ -17,9 +17,10 @@
 
 #include "symtab.h"
 #include "pcomp.h"
+#include "utils.h"
+#include "xmalloc.h"
 
 // Time diff
-//
 
 void    calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu)
 
@@ -71,6 +72,19 @@ char    *strpcpy(char *dest, const char *src, size_t nn)
         cnt++;
         }
     return ret;
+}
+
+char    *addstrs(char *str1, char *str2)
+
+{
+    int len1 = strlen(str1);
+    int len2 = strlen(str2);
+    char *sum =  xmalloc(len1 + len2 + 2);
+    memcpy(sum, str1, len1);
+    memcpy(sum + len1, str2, len2);
+    sum[len1 + len2] = '\0';
+
+    return sum;
 }
 
 // Convert string to integer

@@ -8,19 +8,41 @@
 #include "../symtab.h"
 #include  "../pcomp.h"
 
-static    char	tmp_str[MAX_PATHLEN];
-static    char	tmp_str2[MAX_PATHLEN];
+static    char	tmp_str[2 * MAX_PATHLEN];
+static    char	tmp_str2[2 * MAX_PATHLEN];
 
 char    ppfile2[MAX_PATHLEN];
 char    ppfile[MAX_PATHLEN];
 
 FILE *ppfp3, *ppfp2;
 
-#define YY_INPUT(buf,result,max_size) \
-               { \
-               int c = getc(ppfp3); \
-               result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
-               }
+//#define YY_INPUT(buf, result, max_size) \
+//               { \
+//               int c = getc(ppfp3); \
+//               result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
+//               }
+
+// Tag a new line at the end of sequence
+
+int  inputx(char *buf, int max_size)
+
+{
+    static int end = 0;
+    int ret = 1, cc = getc(ppfp3);
+    if(end) {
+        end = 0; ret = 0;
+        }
+    else if(cc == EOF)  {
+        buf[0] = '\n';  end = 1;
+        }
+    else  {
+        buf[0] = cc;
+        }
+    return ret;
+}
+
+#define YY_INPUT(buf, result, max_size) \
+                result = inputx(buf, max_size);
 
 void    preerror(const char *str)
 
@@ -45,6 +67,11 @@ FN   [\~_a-zA-Z]
 FNN  [\~_a-zA-Z0-9]
 
 %%
+
+\\\n                        {
+                            if(config.testpreflex)
+                                printf("[BS EOL] '%s", yytext);
+                            }
 
 \/\/.*\n                       { /* comment */
     	    	    	    	num_lines++;
@@ -194,7 +221,7 @@ FNN  [\~_a-zA-Z0-9]
     	    	    	    	return MAC;
     	    	    	    	}
 
-%message                          {
+%message|%msg                   {
                                 if(config.testpreflex)
                                     printf(" [message] '%s' ", yytext);
 
@@ -275,7 +302,7 @@ FNN  [\~_a-zA-Z0-9]
 
 \n    			    	    	{
                                 if(config.testpreflex)
-                                    printf(" [nl] '%d'\n", yytext[0]);
+                                    printf(" [NL] '%d'\n", yytext[0]);
 
     	    	    	    	num_lines++;
                                 yylval.strval = strdup(yytext);
@@ -285,49 +312,54 @@ FNN  [\~_a-zA-Z0-9]
 \"                              {              /* begin quote */
                                 BEGIN(STR2);
 
-                                if(config.testpreflex)
-                                    printf(" str<<<");
+                                //if(config.testpreflex)
+                                //    printf(" str<<<");
 
                                 prog = 0; backslash  = 0;
-    	    	    	           tmp_str2[prog++] = yytext[0];
+    	    	    	        //tmp_str2[prog++] = yytext[0];
                                 }
 
 <STR2>\\                        {
                                 if(config.testpreflex)
-    	    	    	    	    printf("\\");
+    	    	    	    	    printf("STR2 \\");
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
     	    	    	    	backslash++;
     	    	    	    	}
+
+<STR2>\\$                       {
+                                if(config.testpreflex)
+                                    printf("[STR2 BS EOL] '%s", yytext);
+                                // Skipping ...
+                                }
 
 <STR2>\"                        {      		/* end quote */
                                 if( (backslash % 2) == 0) /* odd backslash */
                                      {
                                      BEGIN(INITIAL);
 
-                                     if(config.testpreflex)
-                                        printf(">>>str ");
-
-    	    	    	    	     tmp_str2[prog++] = yytext[0];
+    	    	    	    	     //tmp_str2[prog++] = yytext[0];
     	    	    	    	     tmp_str2[prog] = '\0';
                                      yylval.strval = strdup(tmp_str2);
+
+                                     if(config.testpreflex)
+                                        printf("[STR] '%s'\n", yylval.strval);
                                      return(STR);
                                      }
                                   else
                                       {  /* add quote */
-    	    	    	    	    tmp_str2[prog++] = yytext[0];
+    	    	    	    	      //  tmp_str2[prog++] = yytext[0];
                                       }
                                 }
 
 <STR2>.                         {   // default string charater
                                 backslash  = 0;
 
-                                if(config.testpreflex)
-                                    printf("'%s'", yytext);
+                                //if(config.testpreflex)
+                                //    printf("'%s'", yytext);
 
     	    	    	    	tmp_str2[prog++] = yytext[0];
                                 }
-
 
 .    		    	    	    {  // default character
 
@@ -337,8 +369,18 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.strval = strdup(yytext);
     	    	    	    	return CH;
     	    	    	    	}
-
 %%
+
+//<<EOF>>                 {
+//                        //printf("got EOF");
+//                        yyterminate();
+//                        //return NL;
+//                        }
+
+//void    yywrap()
+//{
+//    return 1;
+//}
 
 /* ========================= End of LEX ================================ */
 

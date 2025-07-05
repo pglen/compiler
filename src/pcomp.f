@@ -8,7 +8,7 @@
 #include "../symtab.h"
 #include "../emalloc.h"
 
-static	char tmp_str2[MAX_PATHLEN];
+static	char tmp_str2[2 * MAX_PATHLEN];
 static  FILE    *infp, *ppfp;
 FILE    *asmfp;
 
@@ -332,7 +332,7 @@ log                             {
 [ \t\r\n]+                        {          /* white space */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
-                                	printf("[SP] '%d' len=%d ",
+                                	printf("[SP] '%d' len=%ld ",
 													yytext[0], strlen(yytext));
 	#endif
                                 yylval.strval = strdup(yytext);

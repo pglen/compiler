@@ -168,8 +168,12 @@ int	pop_ddef_ptr(outstr **root, void **ptr);
 int	peek_ddef_ptr(outstr **root, void **ptr);
 void	empty_ddef(outstr **root);
 
+ifstack *peek_ifstack(char *name, char *ifname, char *elname, int *val);
+
 extern int     create_unique(char *str, char *prefix);
 extern int     create_unique2(char *str, char *prefix, char *str1, char *str2);
+
+void    execerror(char * str, char *str2);
 
 /* -------- Definitions: ------------------------------------------------- */
 
