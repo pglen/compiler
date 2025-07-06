@@ -142,7 +142,7 @@ int     main (int argc, char **argv)
 
                case 'F':
                    //printf ("Debug FLEX option is on\n");
-                   config.testpreflex = 1;
+                   config.testpreflex += 1;
                    break;
 
                case 'h':
@@ -226,12 +226,12 @@ int     main (int argc, char **argv)
 
                case 'y':
                    //printf ("Debug YACC option is on\n");
-                   config.testyacc = 1;
+                   config.testyacc += 1;
                    break;
 
                case 'Y':
                    //printf ("Debug YACC option is on\n");
-                   config.testpreyacc = 1;
+                   config.testpreyacc += 1;
                    break;
 
                case '?':

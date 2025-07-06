@@ -59,3 +59,22 @@ adder:  NUM2 sp1mb PLUS2 sp1mb NUM2
         }
 ;
 
+expr4:  expr5
+    {
+    //if(config.testpreyacc > 0)
+    //    printf("{ expr4 '%s' } \n", $1->var);
+    }
+    | sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb
+        {
+        //if(config.testpreyacc > 0)
+        //    printf("{ paren: expr4 '%s}' ", (char*)$4);
+        $$ = make_symstr("", $4->var, NUM2);
+        //$$ = $4;
+        }
+    | sp1m MINUS2 sp1mb expr5
+        {
+        int val = str2int($4->var);
+        sprintf(tmp_str3, "%d", -val);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
+        }
+;
