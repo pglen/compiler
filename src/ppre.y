@@ -25,7 +25,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// It is in a subdir ./parser
+// We are in a subdir ./parser
 
 #include "../symtab.h"
 #include "../xmalloc.h"
@@ -38,20 +38,25 @@
 #define DEBUGYYY
 #define TESTPCOMP
 
-extern FILE *ppfp, *ppfp2;
+extern  FILE *ppfp, *ppfp2;
 static  char    tmp_str3[128];
 
 int hasdefine = 2;
 
 %}
 
-%union {                                                /* stack object type */
-    int     val ;                                            /* actual value */
-    long    lngval ;                                         /* actual value */
-    float   fltlval;                                         /* actual value */
-    double  dblval ;                                         /* actual value */
-    char    *strval;                                            /* str value */
-    Symbol  *sym ;                                       /* symbol table ptr */
+//%union {                                                /* stack object type */
+//    int     val ;                                            /* actual value */
+//    long    lngval ;                                         /* actual value */
+//    float   fltlval;                                         /* actual value */
+//    double  dblval ;                                         /* actual value */
+//    char    *strval;                                            /* str value */
+//    Symbol  *sym ;                                       /* symbol table ptr */
+//}
+
+%union {
+    //char    *strval;
+    Symbol  *sym ;
 }
 
 /* operators */
@@ -123,7 +128,7 @@ all2:   define1
         | msg1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 msg1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 msg1 x'%s'  }\n", (char*)$1->var);
         }
         | mac1
         {
@@ -225,21 +230,40 @@ err1:   ERR sp1b STR sp1m
     }
 ;
 
-strx1:  strx1 sp1b PLUS sp1b STR
-        {
-        printf("double add' %s' '%s'\n", (char*)$1, (char*)$5);
-        char *sum = addstrs($1, $5);
-        $$=sum;
-        }
+strx1:  sp1mb STR sp1mb
+            {
+            printf("msg1 STR '%s'\n", (char*)$2->var);
+
+            //printf("msg1 STR $$ '%s'\n", $$->var);
+            $$=$2;
+            }
+        | sp1mb NUM sp1mb
+            {
+            printf("msg1 NUM '%s'\n", $2->res);
+            $$=$2;
+            }
+        | sp1mb STR sp1mb PLUS sp1mb STR sp1mb
+            {
+            printf("double add' %s' '%s' %p\n", $2->var, $6->var, $$);
+            dump_symitem($$);
+
+            char *sum = addstrs($2, $6);
+            //Symbol  *st2 = push_symtab((char*)$2, (char*)$6, sum,  STR, 0);
+            Symbol  *st2 = make_symtab(sum, sum, sum,  STR, 0);
+            $$ = sum;
+            }
+        | sp1mb STR sp1mb PLUS sp1mb strx1 sp1mb
+            {
+            printf("cumm add' %s' '%s'\n", (char*)$2, (char*)$6);
+            char *sum = addstrs($2, $6);
+            Symbol  *st2 = push_symtab((char*)$2, (char*)$6, sum,  STR, 0);
+            $$=st2;
+            }
 ;
 
-msg1:   MSG STR
+msg1:   MSG strx1
         {
-        printf("msg2: '%s'\n", (char *)$2);
-        }
-        | MSG sp1b strx1 sp1m
-        {
-        printf("msg1: '%s'\n", (char *)$3);
+        printf("msg1: '%s'\n", (char *)$2);
         }
 ;
         //// Erase quotes
@@ -339,7 +363,7 @@ sp1b:          {}   /* empty */
 sp1m:   SP          {}  /* single */
         | NL        {}
         | sp1m SP   {}  /* multiple */
-        | sp1m NL   {}  /* multiple */
+        | sp1m NL   {}
 ;
 
 sp1mb:              {}  /* empty */
@@ -532,14 +556,6 @@ misc:   {}   /* empty */
 ;
 
 %%
-
-//| STR
-//        {
-//        $$=$1;
-//        }
-//        | NUM
-//        {
-//        $$=$1;
 
 
 // EOF

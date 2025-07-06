@@ -816,11 +816,13 @@ void conferror(const char *str)
 
 #define DEBUGLEX
 
+int conflex();
+
 #include "pcomp.yacc.c"
 
-#line 822 "parser/pcomp.lex.c"
-
 #line 824 "parser/pcomp.lex.c"
+
+#line 826 "parser/pcomp.lex.c"
 
 #define INITIAL 0
 #define STR2 1
@@ -1041,10 +1043,10 @@ YY_DECL
 		}
 
 	{
-#line 46 "pcomp.f"
+#line 48 "pcomp.f"
 
 
-#line 1048 "parser/pcomp.lex.c"
+#line 1050 "parser/pcomp.lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1105,7 +1107,7 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 48 "pcomp.f"
+#line 50 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1119,7 +1121,7 @@ YY_RULE_SETUP
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 58 "pcomp.f"
+#line 60 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1133,7 +1135,7 @@ YY_RULE_SETUP
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 70 "pcomp.f"
+#line 72 "pcomp.f"
 { /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1147,7 +1149,7 @@ YY_RULE_SETUP
 case 4:
 /* rule 4 can match eol */
 YY_RULE_SETUP
-#line 80 "pcomp.f"
+#line 82 "pcomp.f"
 {  /* double comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1161,7 +1163,7 @@ YY_RULE_SETUP
 case 5:
 /* rule 5 can match eol */
 YY_RULE_SETUP
-#line 90 "pcomp.f"
+#line 92 "pcomp.f"
 {  /* comment */
 								num_lines++;
 	#ifdef DEBUGLEX
@@ -1175,7 +1177,7 @@ YY_RULE_SETUP
 case 6:
 /* rule 6 can match eol */
 YY_RULE_SETUP
-#line 100 "pcomp.f"
+#line 102 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line]\r\n");
@@ -1184,7 +1186,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 106 "pcomp.f"
+#line 108 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line \\r]\r\n");
@@ -1194,7 +1196,7 @@ YY_RULE_SETUP
 case 8:
 /* rule 8 can match eol */
 YY_RULE_SETUP
-#line 112 "pcomp.f"
+#line 114 "pcomp.f"
 /* empty line */ {
 								if(config.testflex)
                                     printf("[empty line \\n]\r\n");
@@ -1221,7 +1223,7 @@ YY_RULE_SETUP
     /* ----------------------------------------------------------------- */
 case 9:
 YY_RULE_SETUP
-#line 138 "pcomp.f"
+#line 140 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1232,7 +1234,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 145 "pcomp.f"
+#line 147 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1243,7 +1245,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 153 "pcomp.f"
+#line 155 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1254,7 +1256,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 161 "pcomp.f"
+#line 163 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1266,7 +1268,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 170 "pcomp.f"
+#line 172 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1279,7 +1281,7 @@ YY_RULE_SETUP
 /* ----------------------------------------------------------------- */
 case 14:
 YY_RULE_SETUP
-#line 181 "pcomp.f"
+#line 183 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1290,7 +1292,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 189 "pcomp.f"
+#line 191 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1301,7 +1303,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 197 "pcomp.f"
+#line 199 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1312,7 +1314,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 205 "pcomp.f"
+#line 207 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1323,7 +1325,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 213 "pcomp.f"
+#line 215 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1334,7 +1336,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 221 "pcomp.f"
+#line 223 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1345,7 +1347,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 229 "pcomp.f"
+#line 231 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1356,7 +1358,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 237 "pcomp.f"
+#line 239 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1367,7 +1369,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 245 "pcomp.f"
+#line 247 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1378,7 +1380,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 254 "pcomp.f"
+#line 256 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1389,7 +1391,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 263 "pcomp.f"
+#line 265 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1400,7 +1402,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 271 "pcomp.f"
+#line 273 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1411,7 +1413,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 280 "pcomp.f"
+#line 282 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1422,7 +1424,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 288 "pcomp.f"
+#line 290 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1433,7 +1435,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 296 "pcomp.f"
+#line 298 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1444,7 +1446,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 303 "pcomp.f"
+#line 305 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1455,7 +1457,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 310 "pcomp.f"
+#line 312 "pcomp.f"
 {            /* hexadecimal */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1466,7 +1468,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 317 "pcomp.f"
+#line 319 "pcomp.f"
 {
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1477,7 +1479,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 324 "pcomp.f"
+#line 326 "pcomp.f"
 {             /* Identity */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1489,7 +1491,7 @@ YY_RULE_SETUP
 case 33:
 /* rule 33 can match eol */
 YY_RULE_SETUP
-#line 332 "pcomp.f"
+#line 334 "pcomp.f"
 {          /* white space */
 	#ifdef DEBUGLEX
                                 if(config.testflex)
@@ -1506,7 +1508,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 346 "pcomp.f"
+#line 348 "pcomp.f"
 {              /* begin quote */
                                 BEGIN(STR2);
 	#ifdef DEBUGLEX
@@ -1521,7 +1523,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 358 "pcomp.f"
+#line 360 "pcomp.f"
 {
                                 if(config.testflex)
                                     printf("[CHAR] '%c' ", yytext[0]);
@@ -1531,7 +1533,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 365 "pcomp.f"
+#line 367 "pcomp.f"
 {
 								//printf("\\");
 								backslash++;
@@ -1539,7 +1541,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 370 "pcomp.f"
+#line 372 "pcomp.f"
 {  			/* end quote */
                                 if( (backslash % 2) == 0) /* odd backslash */
                                      {
@@ -1561,7 +1563,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 389 "pcomp.f"
+#line 391 "pcomp.f"
 {
                                 backslash  = 0;
 
@@ -1573,10 +1575,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 398 "pcomp.f"
+#line 400 "pcomp.f"
 ECHO;
 	YY_BREAK
-#line 1580 "parser/pcomp.lex.c"
+#line 1582 "parser/pcomp.lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STR2):
 	yyterminate();
@@ -2585,7 +2587,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 398 "pcomp.f"
+#line 400 "pcomp.f"
 
 
 /* ========================= End of LEX ================================ */

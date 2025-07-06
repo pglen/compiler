@@ -32,6 +32,8 @@ void conferror(const char *str)
 
 #define DEBUGLEX
 
+int conflex();
+
 #include "pcomp.yacc.c"
 
 %}

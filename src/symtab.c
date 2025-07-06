@@ -140,35 +140,41 @@ void    dump_symtab(void)
 
 {
     Symbol *sp;
-
     printf("Dumping symtab:\n");
-
     for (sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
         {
-        char *opstr;
-        translate_type(sp->type, &opstr);
-
-        //printf("'%s' '%s' %s(%d) -> '%s' %.2f\n", sp->name, sp->var,
-        //               opstr, sp->type, sp->res, sp->u.dval);
-
-        if(sp->type < ALL_ITEM_EXPR || sp->type > ALL_ITEM_DECL)
-            printf("  ");
-
-        //printf("'%s' [%d] %s(%d)  '%s' [%d]  -> '%s' [%d] ", sp->name, sp->con_name,
-        //                    opstr,  sp->type, sp->var, sp->con_var,
-        //                        sp->res, sp->con_res);
-
-        printf("'%s'  %s(%d)  '%s'  -> '%s'  ", sp->name,
-                            opstr,  sp->type, sp->var, sp->res);
-
-        if(sp->u.dval != 0)
-            {
-            printf("%.2f", sp->u.dval);
-            }
-        printf("\n");
-
+        dump_symitem(sp);
         }
     printf("\r\n");
+}
+
+// Dump symtab item
+
+void  dump_symitem(Symbol *sp)
+
+{
+    //printf("Dumping: %p\n", sp);
+
+    char *opstr = "None";
+    translate_type(sp->type, &opstr);
+    //printf("'%s' '%s' %s(%d) -> '%s' %.2f\n", sp->name, sp->var,
+    //               opstr, sp->type, sp->res, sp->u.dval);
+    if(sp->type < ALL_ITEM_EXPR || sp->type > ALL_ITEM_DECL)
+        printf("  ");
+    //printf("'%s' [%d] %s(%d)  '%s' [%d]  -> '%s' [%d] ", sp->name, sp->con_name,
+    //                    opstr,  sp->type, sp->var, sp->con_var,
+    //                        sp->res, sp->con_res);
+    printf("name: '%s' op: '%s' (%d) var: '%s' ",
+                    sp->name, opstr, sp->type, sp->var);
+    //printf("ret: '%s' \n", sp->res);
+    //printf("'%s'  %s(%d)  '%s'  -> '%s'  ",
+    //                    sp->name, opstr,  sp->type,
+    //                            sp->var, sp->res);
+    //if(sp->u.dval != 0)
+        {
+        printf("dval: %.2f", sp->u.dval);
+        }
+    printf("\n");
 }
 
 /*
@@ -213,22 +219,23 @@ Symbol  *lookup_symtab(char *str, int type)
     return (Symbol *) 0 ;                               /* symbol not found */
 }
 
-/*--------------------------------------------------------------------------
-**  Install an item into the symbol in table
-*/
-
-Symbol  *push_symtab(char *name, char *var, char *res, int type, double d)
+Symbol  *make_symstr(char *name, char *var, int type)
 
 {
-    //return NULL;
+    static int serial = 0;
+    char name2[12] = "";
+    if (!strlen(name))
+        {
+        spnrintf(name2, sizeof(name2), "var_%x", serial);
+        serial++;
+        }
+    return make_symtab(name2, var, "", type, 0);
+}
 
-    Symbol *sp = lookup_symtab(name, type);
+Symbol  *make_symtab(char *name, char *var, char *res, int type, double d)
 
-    // Duplicate
-    //if(sp)
-    //  return NULL;
-
-    sp = (Symbol *) emalloc2( sizeof( Symbol), __LINE__, __FILE__) ;
+{
+    Symbol *sp = (Symbol *) emalloc2( sizeof( Symbol), __LINE__, __FILE__) ;
     //sp = (Symbol *) emalloc( sizeof( Symbol)) ;
 
     sp->magic = SYMTAB_MAGIC;
@@ -240,6 +247,24 @@ Symbol  *push_symtab(char *name, char *var, char *res, int type, double d)
     sp->type = type;
     sp->u.dval = d;
     sp->next = NULL;
+
+    return sp;
+}
+
+/*--------------------------------------------------------------------------
+**  Install an item into the symbol in table
+*/
+
+Symbol  *push_symtab(char *name, char *var, char *res, int type, double d)
+
+{
+    //return NULL;
+
+    Symbol *sp = lookup_symtab(name, type);
+    // Duplicate
+    //if(sp)
+    //  return NULL;
+    sp = make_symtab(name, var, res, type, d);
 
     if(symlist == NULL)           /* add first one */
         {
