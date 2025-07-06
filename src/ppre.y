@@ -96,6 +96,12 @@ int hasdefine = 2;
 %type   <sym>   expr4
 %type   <sym>   expr5
 
+%right EQ2
+%left AND2 OR2
+%left PLUS2 MINUS2
+%left MUL2 DIV2
+%right UMINUS
+
 %%
 
 all1:   all2
