@@ -22,6 +22,10 @@ FILE *ppfp3, *ppfp2;
 //               result = (c == EOF) ? YY_NULL : (buf[0] = c, 1); \
 //               }
 
+//char    *linearr[] = NULL;
+char    currline[1024] = {0};
+int     currprog = 0;
+
 // Tag a new line at the end of sequence
 
 int  inputx(char *buf, int max_size)
@@ -35,9 +39,18 @@ int  inputx(char *buf, int max_size)
     else if(cc == EOF)  {
         buf[0] = '\n';  end = 1;
         }
-    else  {
+    else {
         buf[0] = cc;
         }
+
+    currline[currprog] = cc;
+    currprog++;
+    currline[currprog] = '\0';
+
+    // Restart
+    if (cc == '\n')
+        currprog = 0;
+
     return ret;
 }
 
@@ -48,8 +61,15 @@ void    preerror(const char *str)
 
 {
     static int count = 0;
-    printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
-    if(count > 5) exit(0);
+
+    count++;
+
+    printf("%s  Line: %d  Near: '%s'\n", str, num_lines, yytext);
+    //printf("Line offset: %ld\n",  ftell(ppfp3));
+    //printf("Line so far: '%s'\n", currline);
+
+    if(count > 5)
+        exit(0);
 }
 
 #define DEBUGLEX
@@ -225,7 +245,13 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.sym = make_symstr("name", strdup(yytext), LSHIFT2);
                                 return(LSHIFT2);
                                 }
+;                             {
+                                if(config.testpreflex)
+                                    printf(" [SEMI] '%s' ", yytext);
 
+                                yylval.sym = make_symstr("name", strdup(yytext), SEMI2);
+                                return(SEMI2);
+                                }
 %error                          {
                                 if(config.testpreflex)
                                     printf(" [error] '%s' ", yytext);
@@ -307,7 +333,7 @@ FNN  [\~_a-zA-Z0-9]
 
 [ \t]                            {
                                 if(config.testpreflex)
-                                    printf(" [SP] '%s' ", yytext);
+                                    printf(" [SP2] '%s' ", yytext);
                                 yylval.sym = make_symstr("", strdup(yytext), SP2);
                                 return SP2;
                                 }
