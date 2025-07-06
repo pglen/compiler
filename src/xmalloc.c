@@ -45,8 +45,7 @@ void    *xmalloc(size_t xsize)
         if ( rand() % xmalloc_randfail == 0)
             {
             if(xmalloc_verbose > 0)
-                printf(
-                    " xmalloc: random fail on len=%ld", xsize);
+                printf(" xmalloc: random fail on len=%ld", xsize);
             return NULL;
             }
     void *ptr = malloc(xsize);
@@ -66,8 +65,7 @@ void    *xmalloc(size_t xsize)
                 }
             if(found2 >= 0)
                 {
-                printf(
-                        "Empty slot: at %d %p",
+                printf("Empty slot: at %d %p\n",
                                 found2, malloc_store.store[found2].ptr);
                 malloc_store.store[found2].ptr = ptr;
                 malloc_store.store[found2].size = xsize;
@@ -76,8 +74,7 @@ void    *xmalloc(size_t xsize)
             else
                 {
                 if(xmalloc_verbose > 3)
-                    printf(
-                        "NO Empty slots at: %p %ld", ptr, xsize);
+                    printf("NO Empty slots at: %p %ld\n", ptr, xsize);
                 }
             }
         else
@@ -89,16 +86,14 @@ void    *xmalloc(size_t xsize)
                 // Realloc
                 size_t newsize = malloc_store.size + xmalloc_step;
                 if(xmalloc_verbose > 3)
-                    printf(
-                            " xmalloc: store realloc at %ld", newsize);
+                    printf(" xmalloc: store realloc at %ld\n", newsize);
                 malloc_store.store = realloc(malloc_store.store,
                                             sizeof(Malloc) * newsize);
                 malloc_store.size = newsize;
                 pthread_mutex_unlock(&lock);
                 }
             if(xmalloc_verbose > 0)
-                printf(
-                        " xmalloc: allocate %p %ld bytes", ptr, xsize);
+                printf( " xmalloc: allocate %p %ld bytes\n", ptr, xsize);
             malloc_store.store[malloc_store.curr].ptr = ptr;
             malloc_store.store[malloc_store.curr].size = xsize;
             malloc_store.store[malloc_store.curr].freed = 0;
@@ -109,8 +104,7 @@ void    *xmalloc(size_t xsize)
     else
         {
         if(xmalloc_verbose > 0)
-            printf(
-                " xmalloc: allocate failed for %ld", xsize);
+            printf(" xmalloc: allocate failed for %ld\n", xsize);
         }
     return ptr;
 }
@@ -129,8 +123,7 @@ static  void    _xsfree(void *ptr, int safe)
     if (found < 0)
         {
         if(xmalloc_verbose > 0)
-            printf(
-                    " xmalloc: no entry on xfree %p", ptr);
+            printf(" xmalloc: no entry on xfree %p\n", ptr);
         goto endd;
         }
     //printf( "xsfree: %ld",
@@ -138,8 +131,7 @@ static  void    _xsfree(void *ptr, int safe)
     if(malloc_store.store[found].freed != 0)
         {
         if(xmalloc_verbose > 0)
-            printf(
-                    " xmalloc: Duplicate free  %p", ptr);
+            printf(" xmalloc: Duplicate free  %p\n", ptr);
         // Skip real free
         goto endd;
         }
@@ -151,7 +143,7 @@ static  void    _xsfree(void *ptr, int safe)
             }
         }
     if(xmalloc_verbose > 0)
-        printf( " xmalloc: freeing %p %ld bytes",
+        printf( " xmalloc: freeing %p %ld bytes\n",
                             ptr, malloc_store.store[found].size);
     malloc_store.store[found].freed = 1;
     xmalloc_bytes -= malloc_store.store[found].size;
@@ -180,7 +172,7 @@ void    xmdump(int level)
         {
         if(level)
             {
-            printf( "ptr: %p size: %ld freed: %d",
+            printf( "ptr: %p size: %ld freed: %d\n",
                     malloc_store.store[aa].ptr,
                             malloc_store.store[aa].size,
                                 malloc_store.store[aa].freed);
@@ -188,8 +180,7 @@ void    xmdump(int level)
         else
             {
             if(!malloc_store.store[aa].freed)
-                printf(
-                        "Not freed - ptr: %p size: %ld",
+                printf("Not freed - ptr: %p size: %ld\n",
                             malloc_store.store[aa].ptr,
                                 malloc_store.store[aa].size);
             }

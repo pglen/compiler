@@ -16,98 +16,71 @@
 #include "pmath.h"
 #include "emalloc.h"
 
-Symbol *symlist = (Symbol *) 0 ;
+Symbol  *symlist = (Symbol *) 0 ;
 Symcoll *symcoll = (Symcoll *) 0 ;
 
 ifstack *ifcoll = (ifstack *)0;
 
 typedef struct
-        {
-        char *name ;
-        double cval;
-        }
-        CONSTS;
+    {
+    char *name ;
+    double cval;
+    }  CONSTS;
 
 CONSTS consts[] =
 
 {
-        "PI",    3.14159265358979323846,
-        "E",     2.71828182845904523536,
-        "GAMMA", 0.57721566490153286060,
-        "DEG",   57.29577951308322087680,
-        "PHI",   1.61803389974989484820,
-        NULL,    0.0
+    "PI",    3.14159265358979323846,
+    "E",     2.71828182845904523536,
+    "GAMMA", 0.57721566490153286060,
+    "DEG",   57.29577951308322087680,
+    "PHI",   1.61803389974989484820,
+    NULL,    0.0
 } ;
 
 typedef struct
-        {
-        char     *name ;
-        double   (*func)() ;
-        }
-        BUILTINS;
+    {
+    char     *name ;
+    double   (*func)() ;
+    } BUILTINS;
 
 BUILTINS    builtins[] =
 
 {
-        "sin",      sin,
-        "cos",      cos,
-        "atan",     atan,
-        "log",      log,
-        "log10",    log10,
-        "exp",      exp,
-        "sqrt",     sqrt,
-        "int",      integer,
-        "abs",      fabs,
+    "sin",      sin,
+    "cos",      cos,
+    "atan",     atan,
+    "log",      log,
+    "log10",    log10,
+    "exp",      exp,
+    "sqrt",     sqrt,
+    "int",      integer,
+    "abs",      fabs,
 
-        "SIN",      sin,
-        "COS",      cos,
-        "ATAN",     atan,
-        "LOG",      log,
-        "LOG10",    log10,
-        "EXP",      exp,
-        "SQRT",     sqrt,
-        "INT",      integer,
-        "ABS",      fabs,
+    "SIN",      sin,
+    "COS",      cos,
+    "ATAN",     atan,
+    "LOG",      log,
+    "LOG10",    log10,
+    "EXP",      exp,
+    "SQRT",     sqrt,
+    "INT",      integer,
+    "ABS",      fabs,
 
-        NULL,       (void *) 0
+    NULL,       (void *) 0
 } ;
 
 typedef struct
-        {
-        char     *name ;
-        int      (*ifunc)() ;
-        }
-        IBUILTINS;
+    {
+    char     *name ;
+    int      (*ifunc)() ;
+    } IBUILTINS;
 
 IBUILTINS    ibuiltins[] =
 
 {
         NULL,       (void *) 0
 } ;
-
-/*--------------------------------------------------------------------------
-**  Support routines
-*/
-
-void    execerror(char * str, char *str2)
-{
-    printf("%s - %s", str, str2);
-    exit(1);
-}
-
-double errcheck( double d, char *s)
-{
-    if (errno == EDOM) {
-        errno = 0 ;
-        execerror( s, "argument out of domain") ;
-    }
-    else if (errno == ERANGE) {
-        errno = 0 ;
-        execerror(s, "result out of range") ;
-    }
-
-    return d ;
-}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -145,7 +118,7 @@ void    dump_symtab(void)
         {
         dump_symitem(sp);
         }
-    printf("\r\n");
+    printf("\n");
 }
 
 // Dump symtab item
@@ -226,7 +199,7 @@ Symbol  *make_symstr(char *name, char *var, int type)
     char name2[12] = "";
     if (!strlen(name))
         {
-        spnrintf(name2, sizeof(name2), "var_%x", serial);
+        snprintf(name2, sizeof(name2), "name_%d_%x", type, serial);
         serial++;
         }
     return make_symtab(name2, var, "", type, 0);

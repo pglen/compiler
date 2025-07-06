@@ -1,1 +1,3 @@
-%msg "1234"
+%msg  "Message from Compiler" + ":"
+%msg  "Platform"
+

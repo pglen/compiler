@@ -68,9 +68,7 @@
 #define     DECL_DEFINE        1500
 #define     DECL_MACRO        1501
 
-
 int print_emalloc();
-
 
 /* -------- Symtab ------------------------------------------------------ */
 

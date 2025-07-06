@@ -295,9 +295,8 @@ int     main (int argc, char **argv)
         printf("Parallel compiler. Use 'pcomp -h' for options and help.\n");
         exit(0);
         }
-
-    xmdump(1);
-
+    //xmdump(1);
+    //printf("\n");
     //print_emalloc();
     //print_estrdup();
     //empty_symtab();

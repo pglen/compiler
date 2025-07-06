@@ -13,7 +13,9 @@
 
 #include <time.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include "symtab.h"
 #include "pcomp.h"
@@ -210,6 +212,30 @@ int     main (int argc, char **argv)
 }
 
 #endif
+
+/*--------------------------------------------------------------------------
+**  Support routines
+*/
+
+void    execerror(char * str, char *str2)
+{
+    printf("%s - %s", str, str2);
+    exit(1);
+}
+
+double errcheck( double d, char *s)
+{
+    if (errno == EDOM) {
+        errno = 0 ;
+        execerror( s, "argument out of domain") ;
+    }
+    else if (errno == ERANGE) {
+        errno = 0 ;
+        execerror(s, "result out of range") ;
+    }
+
+    return d ;
+}
 
 
 // EOF

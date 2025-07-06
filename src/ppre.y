@@ -21,7 +21,6 @@
 #include <syslog.h>
 #include <time.h>
 #include <stdio.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -60,15 +59,15 @@ int hasdefine = 2;
 }
 
 /* operators */
-%token <sym>   PLUS MINUS MULT DIV MOD
-%token <sym>   OR AND XOR NOT LSHIFT RSHIFT
-%token <sym>   PAREN1 PAREN2
+%token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2
+%token <sym>   OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
+%token <sym>   PAREN12 PAREN22
 
 /* laguage elements */
-%token <sym>   CH ID SP NL STR COMMENT NUM MAC
+%token <sym>   CH2 ID2 SP2 NL2 STR2 COMMENT2 NUM2 MAC2
 
 /* pre processor strtements */
-%token <sym>  IFDEF ENDIF ELSE ELIFDEF DEF UNDEF ERR MSG
+%token <sym>  IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
 
 %type   <sym>   all1
 %type   <sym>   all2
@@ -87,26 +86,27 @@ int hasdefine = 2;
 %type   <sym>   sp1m
 %type   <sym>   sp1mb
 %type   <sym>   else1
-%type   <sym>   num1
+%type   <sym>   misc
+%type   <sym>   strx1
+%type   <sym>   numx1
+
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
 %type   <sym>   expr4
 %type   <sym>   expr5
-%type   <sym>   misc
-%type   <sym>   strx1
 
 %%
 
 all1:   all2
         {
         if(config.testpreyacc > 0)
-            printf(" { all2 '%s' }\n ", (char*)$1);
+            printf(" { all2 '%s' }\n ", (char*)$1->var);
         }
         | all1 all2
         {
         if(config.testpreyacc > 0)
-            printf(" { all1 all2 '%s' '%s'}\n ", (char*)$1, (char*)$2);
+            printf(" { all1 all2 '%s' '%s'}\n ", $1->var, $2->var);
         }
 ;
 
@@ -123,32 +123,32 @@ all2:   define1
         | err1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 err1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 err1 x'%s' }\n", (char*)$1);
         }
         | msg1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 msg1 x'%s'  }\n", (char*)$1->var);
+            printf("{ all1 msg1 '%s' }\n", (char*)$1->var);
         }
         | mac1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 mac1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 mac1 x'%s' }\n", (char*)$1);
         }
         | ifdef1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 ifdef1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 ifdef1 x'%s' }\n", (char*)$1);
         }
         | elifdef1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 elifdef1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 elifdef1 x'%s' }\n", (char*)$1);
         }
         | else1
         {
         if(config.testpreyacc > 0)
-            printf("{ all1 else1 x'%s'  }\n", (char*)$1);
+            printf("{ all1 else1 x'%s' }\n", (char*)$1);
         }
         | endif1
         {
@@ -160,22 +160,9 @@ all2:   define1
         //if(config.testpreyacc > 0)
         //    printf("{ all1: ch2 x '%s'  '%s'}\n", (char*)$1);
         }
-        | num1
-        {
-        if(config.testpreyacc > 0)
-            printf("{ all1: num1 x '%s' }\n", (char*)$1);
-        $$ = strdup($1);
-        }
-/*        | sp1m
-        {
-        if(config.testpreyacc > 0)
-            printf("{ all1: space x '%s' }\n", (char*)$1);
-        // Ignore
-        }   */
-
 ;
 
-define1: sp1b DEF sp1m ID sp1m expr1 sp1m
+define1: sp1b DEF2 sp1m ID2 sp1m expr1 sp1m
         { // Ignore
         if(config.testpreyacc > 0)
             printf("{ define1 '%s' '%s' '%s'}\n",
@@ -183,17 +170,16 @@ define1: sp1b DEF sp1m ID sp1m expr1 sp1m
         Symbol  *st2 = push_symtab((char*)$2, (char*)$4, (char*)$6, DECL_DEFINE, 0);
         //$$ = $2;
         }
-        | sp1b DEF sp1m ID sp1m
+        | sp1b DEF2 sp1m ID2 sp1m
         {
         if(config.testpreyacc > 0)
             printf("{ define1 '%s' '%s'}\n", (char*)$2, (char*)$4);
         Symbol  *st2 = push_symtab((char*)$2, (char*)$4, "",  DECL_DEFINE, 0);
         //$$ = $2;
         }
-
 ;
 
-undef1:  sp1b UNDEF sp1m ID sp1m
+undef1:  sp1b UNDEF2 sp1m ID2 sp1m
         {
         if(config.testpreyacc > 0)
             printf("{ undef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
@@ -209,12 +195,12 @@ undef1:  sp1b UNDEF sp1m ID sp1m
                 (char *) $4);
             }
         }
-        |  sp1b UNDEF sp1m
+        |  sp1b UNDEF2 sp1m
         { // Ignore
         }
 ;
 
-err1:   ERR sp1b STR sp1m
+err1:   ERR2 sp1b STR2 sp1m
     {
         // Erase quotes
         if(hasdefine == 2)
@@ -230,55 +216,43 @@ err1:   ERR sp1b STR sp1m
     }
 ;
 
-strx1:  sp1mb STR sp1mb
+strx1:  STR2 sp1mb
             {
-            printf("msg1 STR '%s'\n", (char*)$2->var);
-
-            //printf("msg1 STR $$ '%s'\n", $$->var);
-            $$=$2;
+            //printf("strx1 '%s'\n", $1->var);
+            //Symbol *ss = make_symstr("", $1->var, STR2);
+            //$$->var = $1->var;
+            //$$->var = $1->var;
+            //$$ = $1;
             }
-        | sp1mb NUM sp1mb
+        | STR2 sp1mb PLUS2 sp1mb strx1 sp1mb
             {
-            printf("msg1 NUM '%s'\n", $2->res);
-            $$=$2;
-            }
-        | sp1mb STR sp1mb PLUS sp1mb STR sp1mb
-            {
-            printf("double add' %s' '%s' %p\n", $2->var, $6->var, $$);
-            dump_symitem($$);
-
-            char *sum = addstrs($2, $6);
-            //Symbol  *st2 = push_symtab((char*)$2, (char*)$6, sum,  STR, 0);
-            Symbol  *st2 = make_symtab(sum, sum, sum,  STR, 0);
-            $$ = sum;
-            }
-        | sp1mb STR sp1mb PLUS sp1mb strx1 sp1mb
-            {
-            printf("cumm add' %s' '%s'\n", (char*)$2, (char*)$6);
-            char *sum = addstrs($2, $6);
-            Symbol  *st2 = push_symtab((char*)$2, (char*)$6, sum,  STR, 0);
-            $$=st2;
+            //printf("msg add' %s' '%s'\n", (char*)$1->var, (char*)$5->var);
+            char *sum = addstrs($1->var, $5->var);
+            //printf("sum: '%s'\n", sum);
+            Symbol *ss = make_symstr("", sum, STR2);
+            $$ = ss;
             }
 ;
-
-msg1:   MSG strx1
-        {
-        printf("msg1: '%s'\n", (char *)$2);
-        }
+numx1:  expr1 sp1mb
+            {
+            if(config.testpreyacc > 0)
+                printf("{ numx1 expr1 '%s' }\n", $1->var);
+            }
 ;
-        //// Erase quotes
-        //if(hasdefine == 2)
-        //    {
-        //    char *tmp_strx = strdup(((char*)$3) + 1);
-        //    char *last = strrchr(tmp_strx, '\"');
-        //    if(last)
-        //        *last = '\0';
-        //    printf("%s\n", tmp_strx);
-        //    free(tmp_strx);
-        //    }
-        //}
-
-mac1:   MAC sp1b ID sp1b STR sp1m
+msg1:   MSG2 sp1mb strx1
+            {
+            if(config.testpreyacc > 0)
+                printf(" { msg1: '%s' } ", $3->var);
+            printf("%s\n", $3->var);
+            }
+        | MSG2 sp1mb numx1
+            {
+            if(config.testpreyacc > 0)
+                printf(" { msg1: numx '%s' } ", $3->var);
+            printf("%s\n", $3->var);
+            }
+;
+mac1:   MAC2 sp1b ID2 sp1b STR2 sp1m
         {
         // Erase quotes
         char *tmp_strx = strdup(((char*)$5) + 1);
@@ -297,8 +271,8 @@ mac1:   MAC sp1b ID sp1b STR sp1m
 
         free(tmp_strx);
         }
-
-ifdef1:  sp1b IFDEF sp1m ID sp1m misc
+;
+ifdef1:  sp1b IFDEF2 sp1m ID2 sp1m misc
         {
         if(config.testpreyacc > 0)
             printf("{ ifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
@@ -313,8 +287,7 @@ ifdef1:  sp1b IFDEF sp1m ID sp1m misc
             }
         }
 ;
-
-elifdef1:  sp1b ELIFDEF sp1m ID sp1m
+elifdef1:  sp1b ELIFDEF2 sp1m ID2 sp1m
         {
         if(config.testpreyacc > 0)
             printf("{ elifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
@@ -332,16 +305,14 @@ elifdef1:  sp1b ELIFDEF sp1m ID sp1m
             }
         }
 ;
-
-endif1:  sp1b ENDIF sp1m
+endif1:  sp1b ENDIF2 sp1m
         {
         if(config.testpreyacc > 0)
             printf("{ endif1 '%s'}\n", (char*)$2);
         hasdefine = 2;
         }
 ;
-
-else1:  ELSE
+else1:  ELSE2
         {
         if(config.testpreyacc > 0)
             printf("{ else1 '%s'}\n", (char*)$1);
@@ -356,32 +327,24 @@ else1:  ELSE
 // Space combos
 
 sp1b:          {}   /* empty */
-        | SP   {}   /* single */
-        | NL   {}   /* single */
+        | SP2   {}   /* single */
+        | NL2   {}   /* single */
 ;
 
-sp1m:   SP          {}  /* single */
-        | NL        {}
-        | sp1m SP   {}  /* multiple */
-        | sp1m NL   {}
+sp1m:   SP2          {}  /* single */
+        | NL2        {}
+        | sp1m SP2   {}  /* multiple */
+        | sp1m NL2   {}
 ;
 
 sp1mb:              {}  /* empty */
         | sp1m      {}  /* multiple */
 ;
 
-
 ch2:   ch1
       | ch2 ch1
 ;
-
-//ops1:   PLUS
-//     |  MINUS
-//     |  MULT
-//     |  DIV
-//     |  MOD
-
-ch1:   CH
+ch1:   CH2
       {
       //if(config.testpreyacc > 0)
       //      printf(" { CH '%s' }", (char*)$2);
@@ -394,7 +357,7 @@ ch1:   CH
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
-      | SP
+      | SP2
       { if(config.testpreyacc > 0)
             printf("{ SP '%s' }", (char*)$1);
       if(hasdefine == 2)
@@ -406,27 +369,26 @@ ch1:   CH
       //if(hasdefine == 2)
       //      fprintf(ppfp2, "%s", (char*)$1);
       //}
-      | NL
+      | NL2
       { if(config.testpreyacc > 0)
             printf("{ NL '%s' }", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
-      | STR
+      | STR2
       { if(config.testpreyacc > 0)
             printf("{ STR '%s}' ", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
-      | COMMENT
+      | COMMENT2
       { if(config.testpreyacc > 0)
             printf("{ COMMENT '%s}' ", (char*)$1);
       if(hasdefine == 2)
             fprintf(ppfp2, "%s", (char*)$1);
       }
 ;
-
-id1:   ID
+id1:   ID2
     {
     if(config.testpreyacc > 0)
             printf("{ id1 : ID '%s}' ", (char*)$1);
@@ -439,123 +401,126 @@ id1:   ID
     else
         $$ = $1;
     }
-
-num1:   expr1
-        {
-        if(hasdefine == 2)
-            fprintf(ppfp2, "%d", str2int((char*)$1));
-
-        $$ = str2int((char*)$1);
-        }
 ;
-
 expr1:  expr2
-    {
-    }
-    |   expr1 OR expr2
         {
-        int val = str2int((char*)$1) | str2int((char*)$3);
-        sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        //if(config.testpreyacc > 0)
+        //    printf("{ expr1 '%s' } '\n", $1->var);
         }
-    |  expr1 XOR expr2
+    |   expr1 sp1mb OR2 sp1mb expr2
         {
-        int val = str2int((char*)$1) ^ str2int((char*)$3);
+        if(config.testpreyacc > 0)
+            printf("expr1 '%s' OR '%s'\n", $1->var, $5->var);
+        int val = str2int($1->var) | str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr1 AND expr2
+    |  expr1 sp1mb XOR2 sp1mb expr2
         {
-        int val = str2int((char*)$1) & str2int((char*)$3);
+        int val = str2int($1->var) ^ str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr1 RSHIFT expr2
+    |  expr1 sp1mb AND2 sp1mb expr2
         {
-        int val = str2int((char*)$1) >> str2int((char*)$3);
+        int val = str2int($1->var) & str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr1 LSHIFT expr2
+    |  expr1 sp1mb RSHIFT2 sp1mb expr2
         {
-        int val = str2int((char*)$1) << str2int((char*)$3);
+        int val = str2int($1->var) >> str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
+        }
+    |  expr1 sp1mb LSHIFT2 sp1mb expr2
+        {
+        int val = str2int($1->var) << str2int($5->var);
+        sprintf(tmp_str3, "%d", val);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
-
 expr2:   expr3
-    {
-    }
-    |   expr2 PLUS expr3
         {
-        int val = str2int((char*)$1) + str2int((char*)$3);
-        sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        //if(config.testpreyacc > 0)
+        //    printf("{ expr2 '%s'} \n", $1->var);
         }
-    |  expr2 MINUS expr3
+    |   expr2 sp1mb PLUS2 sp1mb expr3
         {
-        int val = str2int((char*)$1) - str2int((char*)$3);
+        //if(config.testpreyacc > 0)
+        //    printf("{ expr2 '%s' PLUS '%s } '\n", $1->var, $5->var);
+        int val = str2int($1->var) + str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
+        }
+    |  expr2  sp1mb MINUS2 sp1mb expr3
+        {
+        //if(config.testpreyacc > 0)
+        //    printf("{ expr2 '%s' MINUS '%s } '\n", $1->var, $5->var);
+        int val = str2int($1->var) - str2int($5->var);
+        sprintf(tmp_str3, "%d", val);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
-
 expr3:  expr4
     {
+    //if(config.testpreyacc > 0)
+    //    printf("{ expr3 '%s' } \n", $1->var);
+    $$=$1;
     }
-    | expr3 MULT expr4
+    | expr3 sp1mb MULT2 sp1mb expr4
         {
-        int val = str2int((char*)$2) * str2int((char*)$2);
+        //if(config.testpreyacc > 0)
+        //    printf("expr3 '%s' MUL '%s'\n", $1->var, $5->var);
+        int val = str2int($1->var) * str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr3 DIV expr4
+    |  expr3 sp1mb DIV2 sp1mb expr4
         {
-        int val = str2int((char*)$1) / str2int((char*)$3);
+        int val = str2int($1->var) / str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr3 MOD expr4
+    |  expr3 sp1mb MOD2 sp1mb expr4
         {
-        int val = str2int((char*)$1) % str2int((char*)$3);
+        int val = str2int($1->var) % str2int($5->var);
         sprintf(tmp_str3, "%d", val);
-        $$ = (void*)strdup(tmp_str3);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
 
 expr4:  expr5
     {
+    //if(config.testpreyacc > 0)
+    //    printf("{ expr4 '%s' } \n", $1->var);
     }
-    | sp1mb PAREN1 sp1mb expr1 sp1mb PAREN2 sp1mb
+    | sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb
         {
-        if(config.testpreyacc > 0)
-            printf("{ paren: expr4 '%s}' ", (char*)$4);
-
-        $$ = $4;
+        //if(config.testpreyacc > 0)
+        //    printf("{ paren: expr4 '%s}' ", (char*)$4);
+        $$ = make_symstr("", $4->var, NUM2);
+        //$$ = $4;
         }
-    | sp1m MINUS sp1m expr5
+    | sp1m MINUS2 sp1mb expr5
         {
-        int val = str2int((char*)$4); val = -val;
-        sprintf(tmp_str3, "%d", val);
-        if(config.testpreyacc > 0)
-            printf("MINUS %d %s\n", val, tmp_str3);
-        $$ = (void*)strdup(tmp_str3);
+        int val = str2int($4->var);
+        sprintf(tmp_str3, "%d", -val);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
-
-expr5:  NUM
+expr5:  NUM2
         {
-         if(config.testpreyacc > 0)
-            printf("expr5 NUM %s\n", (char*)$1);
-        $$ = $1;
+        //if(config.testpreyacc > 0)
+        //    printf("{ expr5 '%s' } \n", $1->var);
+        $$ = make_symstr("", $1->var, NUM2);
+        //$$ = $1;
         }
-
+;
 misc:   {}   /* empty */
 
 ;
 
 %%
-
 
 // EOF
