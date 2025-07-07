@@ -277,7 +277,6 @@
 	label:
 	goto label;
 
-
 Additional language features:
 
 	No duplicate definitions of variables are permitted. This is to
@@ -323,17 +322,21 @@ conflicting vars and func names are allowed either.
 		 Statement list
 	%endmac
 
-	%error    "Message to display"
+	%error  "Message to display"
 
-	%message  "Message to display"
+	%mesg  "Message to display"
 
+    %nl    "Add New line"
 
  The notion of multipass items.
 
     preprocess
-    de-comment -> optional interface file
     compile
     generate assembly
+    assemble
+    link
+
+    comment extraction -> optional interface file
 
 # Compiler studies
 

@@ -78,3 +78,49 @@ expr4:  expr5
         $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
+| MSG2 sp1mb expr1 sp1mb semib
+            {
+            if(config.testpreyacc > 0)
+                printf(" { msg1: numx1 '%s' } ", $3->var);
+            printf("%s\n", $3->var);
+            }
+;
+
+| expr1 sp1mb PLUS2 sp1mb strx1 sp1mb
+            {
+            //printf("msg add' %s' '%s'\n", (char*)$1->var, (char*)$5->var);
+            char *sum = addstrs($1->var, $5->var);
+            //printf("sum: '%s'\n", sum);
+            Symbol *ss = make_symstr("", sum, STR2);
+            $$ = ss;
+            }
+
+ | sp1mb MINUS2 sp1mb expr5
+        {
+        int val = str2int($4->var);
+        sprintf(tmp_str3, "%d", -val);
+        $$ = make_symstr("", strdup(tmp_str3), NUM2);
+        }
+
+| sp1mb
+        {
+        if(config.testpreyacc > 0)
+            printf("{ all2 blank '%s' }\n", (char*)$1->var);
+        }
+
+all2
+        {
+        if(config.testpreyacc > 0)
+            printf(" { all2 root '%s' }\n ", (char*)$1->var);
+        }
+        |
+
+| NL2
+        {
+        if(config.testpreyacc > 0)
+            printf("{ all2 newline '%s' }\n", (char*)$1->var);
+        }
+#%nl
+# %msg 1234 + 1111 %msg " Stand tall." %nl
+# %msg (5+10) * 2 / 4  %msg " Hello" %nl
+

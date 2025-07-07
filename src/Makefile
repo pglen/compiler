@@ -52,8 +52,8 @@ pcomp: $(EXEMAIN) pcomp.y pcomp.f ppre.y ppre.f ${OBJS} ${DEPENDSON}
 	${CC} ${CFLAGS} pmath.c -c -o pmath.o
 	${CC} ${CFLAGS} symtab.c -c -o symtab.o
 	${CC} ${CFLAGS} emalloc.c -c -o emalloc.o
-	${CC} ${CFLAGS} $(EXEMAIN) ${LDFLAGS} parser/pcomp.lex.c parser/ppre.lex.c \
-            ${OBJS} -o pcomp  ${LIBS}
+	${CC} ${CFLAGS} $(EXEMAIN) ${LDFLAGS} parser/pcomp.lex.c \
+                    parser/ppre.lex.c ${OBJS} -o pcomp  ${LIBS}
 
 parser/ppre.lex.c: ppre.f  ppre.y
 	${LEX} -Ppre -oppre.c -o parser/ppre.lex.c ppre.f

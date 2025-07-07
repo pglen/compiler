@@ -1,4 +1,19 @@
+
+u32  bb  =  0;
+u32  dd  =  0;
+u32  ee  =  0;
+
 %define HELLO2
 %ifdef HELLO2
     u32  bb  =  0;
+    u32  dd  =  0;
+    u32  ee  =  0;
+%endif
+
+%undef HELLO2
+
+%ifdef HELLO2
+    u32  bb  =  0;
+    u32  dd  =  0;
+    u32  ee  =  0;
 %endif

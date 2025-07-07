@@ -1,19 +1,19 @@
 	// Error messsage
 
-	#define DEFINE_HERE
+	%define DEFINE_HERE
 
-    //#message ""
-    //#message "   ------- Compiler message from source code ..."
-    //#message ""
+    //%message ""
+    //%message "   ------- Compiler message from source code ..."
+    //%message ""
 
-	#ifdef  DEFINE_HERE
-    //#error "Hello Error"
-    #message ""
-    #message "Define_here OK"
-    #else
+	%ifdef  DEFINE_HERE
+    //%error "Hello Error"
+    %message ""
+    %message "Define_here OK"
+    %else
     // else here
-    #message ""
-    #message "Define_here NOT defined"
-    #error "Error define_here must be #defined"
-    #endif
+    %message ""
+    %message "Define_here NOT defined"
+    %error "Error define_here must be %defined"
+    %endif
 

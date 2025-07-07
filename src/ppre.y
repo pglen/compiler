@@ -37,7 +37,7 @@
 extern  FILE *ppfp, *ppfp2;
 static  char    tmp_str3[128];
 
-int hasdefine = 2;
+int hasdefine = 0;
 
 %}
 
@@ -58,7 +58,7 @@ int hasdefine = 2;
 /* operators */
 %token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2
 %token <sym>   OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
-%token <sym>   PAREN12 PAREN22 SEMI2
+%token <sym>   PAREN12 PAREN22 SEMI2 ENL2
 
 /* laguage elements */
 %token <sym>   CH2 ID2 SP2 NL2 STR2 COMMENT2 NUM2 MAC2
@@ -71,6 +71,7 @@ int hasdefine = 2;
 %type   <sym>   define1
 %type   <sym>   err1
 %type   <sym>   msg1
+%type   <sym>   nl1
 %type   <sym>   mac1
 %type   <sym>   undef1
 %type   <sym>   ifdef1
@@ -89,109 +90,112 @@ int hasdefine = 2;
 %type   <sym>   expr4
 %type   <sym>   expr5
 
-
 %%
 
-all1:   all2
-        {
+all1:   {
         if(config.testpreyacc > 0)
-            printf(" { all2 root '%s' }\n ", (char*)$1->var);
+            printf(" { all1 all2 root none } ");
         }
-        | all1 all2
+       | all1 all2
         {
         if(config.testpreyacc > 0)
-            printf(" { all1 all2 root '%s' '%s'}\n ", $1->var, $2->var);
+            printf(" { all1 all2 root '%s'} ", $2->var);
         }
 ;
 
 all2:   define1
         {
         if(config.testpreyacc > 0)
-            printf(" { all2 define '%s' }\n ", $1->var);
+            printf(" { all2 define '%s' } ", $1->var);
         }
         | undef1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 undef1 x'%s' }\n", $1->var);
+            printf("{ all2 undef1 x'%s' } ", $1->var);
         }
         | err1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 err1 x'%s' }\n", $1->var);
+            printf("{ all2 err1 x'%s' } ", $1->var);
         }
         | msg1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 msg1 '%s' }\n", $1->var);
+            printf("{ all2 msg1 '%s' } ", $1->var);
+        }
+        | nl1
+        {
+        if(config.testpreyacc > 0)
+            printf("{ all2 nl1 '%s' } ", $1->var);
         }
         | mac1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 mac1 x'%s' }\n", $1->var);
+            printf("{ all2 mac1 x'%s' } ", $1->var);
         }
         | ifdef1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 ifdef1 x'%s' }\n", (char*)$1->var);
+            printf("{ all2 ifdef1 x'%s' } ", (char*)$1->var);
         }
         | elifdef1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 elifdef1 x'%s' }\n", (char*)$1->var);
+            printf("{ all2 elifdef1 x'%s' } ", (char*)$1->var);
         }
         | else1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 else1 x'%s' }\n", (char*)$1->var);
+            printf("{ all2 else1 x'%s' } ", (char*)$1->var);
         }
         | endif1
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 endif1 x'%s' }\n", (char*)$1->var);
+            printf("{ all2 endif1 x'%s' } ", (char*)$1->var);
         }
         | COMMENT2
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 comment '%s' }\n", (char*)$1->var);
+            printf("{ all2 comment '%s' } ", (char*)$1->var);
         }
-        | NL2
+        | sp1mb
         {
         if(config.testpreyacc > 0)
-            printf("{ all2 newline '%s' }\n", (char*)$1->var);
+            printf("{ all2 nl / blank '%s' } ", (char*)$1->var);
         }
 ;
 
-define1: sp1b DEF2 sp1m ID2 sp1m expr1 sp1m
+define1: DEF2 sp1mb ID2 sp1mb expr1 sp1mb
         { // Ignore
         if(config.testpreyacc > 0)
-            printf("{ define1 '%s' '%s' '%s'}\n",
-                            (char*)$2, (char*)$4, (char*)$6);
-        Symbol  *st2 = push_symtab((char*)$2, (char*)$4, (char*)$6, DECL_DEFINE, 0);
+            printf("{ define1 '%s' '%s' } ",
+                            $3->var, $5->var);
         //$$ = $2;
+        push_symtab($3->var, $5->var, "", DECL_DEFINE, 0);
         }
-        | sp1b DEF2 sp1m ID2 sp1m
+        | DEF2 sp1mb ID2 sp1mb
         {
         if(config.testpreyacc > 0)
-            printf("{ define1 '%s' '%s'}\n", (char*)$2, (char*)$4);
-        Symbol  *st2 = push_symtab((char*)$2, (char*)$4, "",  DECL_DEFINE, 0);
-        //$$ = $2;
+            printf("{ define1 '%s' } ", $3->var);
+        push_symtab($3->var, "", "", DECL_DEFINE, 0);
         }
 ;
 
-undef1:  sp1b UNDEF2 sp1m ID2 sp1m
+undef1:  UNDEF2 sp1mb ID2
         {
         if(config.testpreyacc > 0)
-            printf("{ undef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
-        Symbol  *st2 = lookup_symtab((char*)$4, DECL_DEFINE);
+            printf("{ undef1 '%s' } ", $3->var);
+        Symbol  *st2 = lookup_symtab($3->var, DECL_DEFINE);
         if(st2)
             {
-            //printf("UNDEF removing %s\n", (char*)$4);
+            printf(" { UNDEF removing %s } ", $3->var);
             st2->name = strdup("");
             }
         else
             {
-            printf("Preprocess Warning: '%s' not defined, cannot undefine.\n",
-                (char *) $4);
+            fprintf(stderr,
+                "Preprocess Warning: %%undef '%s' is not defined\n",
+                    $3->var);
             }
         }
         |  sp1b UNDEF2 sp1m
@@ -217,32 +221,57 @@ err1:   ERR2 sp1b STR2 sp1m
 
 strx1:  STR2 sp1mb
             {
-            //printf("strx1 '%s'\n", $1->var);
-            //Symbol *ss = make_symstr("", $1->var, STR2);
-            //$$->var = $1->var;
-            //$$->var = $1->var;
-            //$$ = $1;
             }
         | STR2 sp1mb PLUS2 sp1mb strx1 sp1mb
             {
-            //printf("msg add' %s' '%s'\n", (char*)$1->var, (char*)$5->var);
+            if(config.testpreyacc > 0)
+                printf("msg str add' %s' '%s'\n", (char*)$1->var, (char*)$5->var);
             char *sum = addstrs($1->var, $5->var);
             //printf("sum: '%s'\n", sum);
             Symbol *ss = make_symstr("", sum, STR2);
             $$ = ss;
             }
-;
-msg1:   MSG2 sp1mb strx1 SEMI2
+        | STR2 sp1mb PLUS2 sp1mb expr1 sp1mb
             {
             if(config.testpreyacc > 0)
-                printf(" { msg1: '%s' } ", $3->var);
-            printf("mmm: %s\n", $3->var);
+                printf("strx1 STR + expr1' %s' '%s'\n", (char*)$1->var, (char*)$5->var);
+            char *sum = addstrs($1->var, $5->var);
+            Symbol *ss = make_symstr("", sum, STR2);
+            $$ = ss;
             }
-        | MSG2 sp1mb expr1 SEMI2
+       | expr1 sp1mb PLUS2 sp1mb STR2 sp1mb
             {
             if(config.testpreyacc > 0)
-                printf(" { msg1: numx1 '%s' } ", $3->var);
-            printf("%s\n", $3->var);
+                printf("strx1 expr1 + str2 '%s' '%s'\n", (char*)$1->var, (char*)$5->var);
+            char *sum = addstrs($1->var, $5->var);
+            Symbol *ss = make_symstr("", sum, STR2);
+            $$ = ss;
+            }
+;
+semib:
+        | NL2
+        | sp1mb NL2
+        | SEMI2
+        | sp1mb SEMI2
+
+nl1:     ENL2 sp1mb
+            {
+            fprintf(stderr, "\n");
+            }
+
+msg1:    MSG2 sp1mb expr1 sp1mb
+            {
+            if(config.testpreyacc > 0)
+                printf(" { msg1: expr1 '%s' } ", $3->var);
+            fprintf(stderr, "%s", $3->var);
+            //to_init_state();
+            }
+         | MSG2 sp1mb strx1 sp1mb semib
+            {
+            if(config.testpreyacc > 0)
+                printf(" { msg1: strx1 '%s' } ", $3->var);
+            fprintf(stderr, "%s", $3->var);
+            //to_init_state();
             }
 ;
 mac1:   MAC2 sp1b ID2 sp1b STR2 sp1m
@@ -265,25 +294,32 @@ mac1:   MAC2 sp1b ID2 sp1b STR2 sp1m
         free(tmp_strx);
         }
 ;
-ifdef1:  sp1b IFDEF2 sp1m ID2 sp1m
+ifdef1:  IFDEF2 sp1mb ID2
         {
+        to_emit_state();
+        //emitprog = 0;
         if(config.testpreyacc > 0)
-            printf("{ ifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
-
-        if(lookup_symtab((char*)$4, DECL_DEFINE) != NULL)
+            printf("{ ifdef1 '%s' } ", $3->var);
+        if(lookup_symtab($3->var, DECL_DEFINE) != NULL)
             {
-            hasdefine = 2;
+            if(config.testpreyacc > 0)
+              printf("{ ifdef1 defined '%s' } ", $3->var);
+            hasdefine = 1;
             }
          else
             {
-            hasdefine = 1;
+            if(config.testpreyacc > 0)
+              printf("{ ifdef1 NOT defined '%s' } ", $3->var);
+            //to_init_state();
+            hasdefine = 0;
             }
+        printf("Has define: %d\n", hasdefine);
         }
 ;
 elifdef1:  sp1b ELIFDEF2 sp1m ID2 sp1m
         {
         if(config.testpreyacc > 0)
-            printf("{ elifdef1 '%s' '%s'}\n", (char*)$2, (char*)$4);
+            printf("{ elifdef1 '%s' '%s'} ", (char*)$2, (char*)$4);
 
         if(hasdefine == 1)
             {
@@ -298,17 +334,18 @@ elifdef1:  sp1b ELIFDEF2 sp1m ID2 sp1m
             }
         }
 ;
-endif1:  sp1b ENDIF2 sp1m
+endif1:  ENDIF2 sp1mb
         {
         if(config.testpreyacc > 0)
-            printf("{ endif1 '%s'}\n", (char*)$2);
-        hasdefine = 2;
+            printf("{ endif1 '%s'} ", (char*)$1->var);
+        hasdefine = 0;
+        printf("Ended define\n");
         }
 ;
 else1:  ELSE2
         {
         if(config.testpreyacc > 0)
-            printf("{ else1 '%s'}\n", (char*)$1);
+            printf("{ else1 '%s'} ", (char*)$1);
 
         if(hasdefine == 1)
             hasdefine = 2;
@@ -316,9 +353,7 @@ else1:  ELSE2
             hasdefine = 1;
         }
 ;
-
 // Space combos
-
 sp1:      SP2   {}   /* single */
         | NL2   {}   /* single */
 ;
@@ -331,18 +366,18 @@ sp1m:     SP2        {}  /* single */
         | sp1m NL2   {}
 ;
 sp1mb:      {  /* empty */
-            printf(" spb ");
+            //printf(" spb ");
             //$$ = make_symstr("", " ", STR2);
             }
         | sp1m  /* multiple */
             {
-            printf(" spm ");
+            //printf(" spm ");
             //$$ = make_symstr("", " ", STR2);
             }
 ;
 expr1:  expr2
         {
-        printf(" { expr1: %s } ", $1->var);
+        //printf(" { expr1: %s } ", $1->var);
         }
     |   expr1 sp1mb OR2 sp1mb expr2
         {
@@ -390,14 +425,13 @@ expr2:   expr3
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
-    |  expr2  sp1mb MINUS2 sp1mb expr3
+    |  expr2 sp1mb MINUS2 sp1mb expr3
         {
         int val = str2int($1->var) - str2int($5->var);
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), NUM2);
         }
 ;
-
 expr3:  expr4
     {
     if(config.testpreyacc > 0)
@@ -427,26 +461,18 @@ expr3:  expr4
 expr4:  expr5
     {
     }
-    | sp1mb PAREN12 sp1mb expr5 sp1mb PAREN22 sp1mb
+    |    sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22  sp1mb
         {
         if(config.testpreyacc > 0)
-            printf(" { paren: expr4 '%s} '", $4->var);
+            printf(" { paren: expr4 '%s' } ", $4->var);
         $$ = make_symstr("", $4->var, NUM2);
         }
-    | sp1mb MINUS2 sp1mb expr5
-        {
-        int val = str2int($4->var);
-        sprintf(tmp_str3, "%d", -val);
-        $$ = make_symstr("", strdup(tmp_str3), NUM2);
-        }
 ;
-
-expr5:  NUM2
+expr5:  sp1mb NUM2 sp1mb
         {
         if(config.testpreyacc > 0)
-            printf(" { expr5 '%s' } ", $1->var);
-        //$$ = make_symstr("", $1->var, NUM2);
-        //$$ = $1;
+            printf(" { expr5 '%s' } ", $2->var);
+        $$ = make_symstr("", $2->var, NUM2);
         }
 ;
 

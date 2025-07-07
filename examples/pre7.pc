@@ -1,3 +1,2 @@
-// Macro definitions
-
 %define HELLO 23
+%define NOVALUE

@@ -278,10 +278,10 @@ int     main (int argc, char **argv)
                compile(argv[optind]);
             optind++;
             }
-        //printf ("\n");
+        //printf ("all\n");
         if(config.dumpsymtab)
             dump_symtab();
-
+        //
         Ts ts2;
         clock_gettime(CLOCK_REALTIME, &ts2);
 

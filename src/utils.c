@@ -176,7 +176,6 @@ int     str2int(char *ptr)
 
 //define TEST
 
-#ifdef TEST
 
 void    hd(char *ptr, int len)
 {
@@ -186,6 +185,8 @@ void    hd(char *ptr, int len)
         }
     printf("\n");
 }
+
+#ifdef TEST
 
 char    test[12], test2[4], test3[4];
 

@@ -1,3 +1,2 @@
-%msg  "Message from Compiler" + ":"
-%msg  "Platform"
-
+%msg 1234  %msg  " "  %msg 6789+1234
+%newlinew

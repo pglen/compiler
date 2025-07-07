@@ -2720,8 +2720,8 @@ int     compile(char *ptr)
 		else
 			printf ("Compiled: '%s' ERR %d sec %d usec\n", ptr, dts, dtu);
 		}
-    //if(!config.noprog)
-	//	printf ("OK\n");
+    if(!config.noprog)
+		printf ("OK\n");
 
 	config.errorcount += ret;
 	if(!config.showcomm)
@@ -2729,7 +2729,7 @@ int     compile(char *ptr)
 		//printf("\n");
 		if(config.dumpsymtab)
 			{
-			dump_symtab();
+			//dump_symtab();
 			//printf("\n");
 			}
 		gen_code();
