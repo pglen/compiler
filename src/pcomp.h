@@ -47,6 +47,7 @@ extern char usetmp[];
 int     getretcode();
 
 int     to_emit_state();
+int     to_init_state();
 int     to_prev_state();
 
 int  translate_type(int type, char **str);

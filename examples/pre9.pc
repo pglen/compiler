@@ -1,2 +1,2 @@
-%msg 1234  %msg  " "  %msg 6789+1234
-%newlinew
+%msg "1234" ;
+%nl

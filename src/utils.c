@@ -238,5 +238,60 @@ double errcheck( double d, char *s)
     return d ;
 }
 
+char    emitline[1024]; // = {0,};
+int     emitprog = 0;
+
+int     addemit(char chh)
+
+{
+    //printf("addemit: '%c'\n", chh);
+    emitline[emitprog] = chh;
+    if(emitprog < sizeof(emitline))
+        emitprog++;
+    emitline[emitprog] = '\0';
+    return emitprog;
+}
+
+char    currline[1024];
+int     currprog = 0;
+
+// Tag a new line at the end of sequence
+
+int     inputx(char *buf, int max_size, FILE *ppfp3)
+
+{
+    //printf(" inputx ");
+
+    static int end = 0;
+    int ret = 1;
+    if(end) {
+        end = 0; ret = 0;
+        //currline[currprog] = '\0';
+        return ret;
+        }
+    int cc = getc(ppfp3);
+    if(cc == EOF)  {
+        buf[0] = '\n';  end = 1;
+        currline[currprog] = '\0';
+        }
+    else {
+        buf[0] = cc;
+        //printf("c='%c'", cc);
+        // Restart
+        if (cc == '\n')
+            {
+            currprog = 0;
+            //currline[currprog] = '\0';
+            }
+        else
+            {
+            currline[currprog] = cc;
+            if (currprog < sizeof(currline))
+                currprog++;
+            currline[currprog] = '\0';
+            }
+        }
+    return ret;
+}
 
 // EOF

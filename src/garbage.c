@@ -124,3 +124,14 @@ all2
 # %msg 1234 + 1111 %msg " Stand tall." %nl
 # %msg (5+10) * 2 / 4  %msg " Hello" %nl
 
+u32  bb  =  0;
+
+#%define HELLO2
+#%ifdef HELLO2
+##    u32  bb  =  0;
+#%endif
+#%undef HELLO2
+#%ifdef HELLO2
+##    u32  ee  =  0;
+#%endif
+

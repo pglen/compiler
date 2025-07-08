@@ -1,2 +1,3 @@
-%define HELLO 23
-%define NOVALUE
+%define DEFINE0
+%define DEFINE1 "str2"
+%define DEFINE2 "str3" + "str4"

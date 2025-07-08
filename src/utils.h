@@ -16,8 +16,16 @@ char    *strpcpy(char *dest, const char *src, size_t nn);
 char    *addstrs(char *str1, char *str2);
 int     str2int(char *ptr);
 void    hd(char *ptr, int len);
-//int     main (int argc, char **argv);
 double  errcheck( double d, char *s);
 void    execerror(char * str, char *str2);
+int     addemit(char chh);
+int     inputx(char *buf, int max_size, FILE *ppfp3);
+void    preerror(const char *str);
+
+extern  int     emitprog;
+extern  char    emitline[1024];
+
+extern  char    currline[1024];
+extern  int     currprog ;
 
 // EOF
