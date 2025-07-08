@@ -1,6 +1,0 @@
-%message "--------------------------------------" %nl
-%msg     "   Strings and numbers: " %msg (3 + 2) * (2 + 2) + 2
-%msg     " Hello" %nl
-%msg     "--------------------------------------" %nl
-%newline
-%msg 444 / 4  %msg  " -> "  %msg 6789 + 1234 %nl %nl

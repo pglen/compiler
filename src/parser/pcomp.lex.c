@@ -2617,22 +2617,21 @@ int     compile(char *ptr)
 
 	if(stat(ptr, &buf) < 0)
 		{
-		printf("Cannot stat file '%s'.\n", ptr);
+		fprintf(stderr, "Cannot stat file '%s'.\n", ptr);
 		//if(config.debuglevel > 0)
 		//	syslog(LOG_DEBUG, "log: cannot stat file %s\n", ptr);
-		return 0;
-		}
-	if(S_ISDIR(buf.st_mode))
-		{
-		printf("Cannot operate on directory '%s'.\n", ptr);
-		//if(config.debuglevel > 0)
-		//	syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
-		return 0;
-		}
+    	if(S_ISDIR(buf.st_mode))
+    		{
+    		fprintf(stderr, "Cannot operate on directory '%s'.\n", ptr);
+    		//if(config.debuglevel > 0)
+    		//	syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
+    		return 0;
+    		}
+        }
 	infp = fopen(ppfile2, "r");
 	if(!infp)
 		{
-		printf("Cannot open file '%s'.\n", ptr);
+		fprintf(stderr, "Cannot open file '%s'\n", ptr);
 		//if(config.debuglevel > 0)
 		//	syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
 		return 0;

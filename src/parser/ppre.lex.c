@@ -623,20 +623,20 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[109] =
+static const flex_int16_t yy_accept[110] =
     {   0,
-        0,    0,    0,    0,    0,    0,   46,   44,   22,   35,
-       34,   14,   36,   44,   11,   13,   16,   17,    9,    7,
-        8,   10,   18,   18,   21,   44,   44,   44,   15,   12,
-       43,   45,   42,   43,   40,   38,   40,   39,    0,    3,
-        0,   18,    0,    0,    0,   20,   19,    1,   41,    0,
-        0,    0,    0,    0,    0,   39,    0,    2,    4,    5,
-        6,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-       25,    0,   27,    0,    0,    0,    0,    0,   24,    0,
-       26,    0,    0,    0,    0,   31,    0,    0,    0,    0,
-        0,    0,    0,    0,    0,   32,   23,   29,   24,    0,
+        0,    0,    0,    0,    0,    0,   46,   27,   22,   25,
+       24,   14,   26,   11,   13,   16,   17,    9,    7,    8,
+       10,   18,   18,   21,   27,   27,   27,   27,   15,   12,
+       44,   45,   43,   44,   41,   39,   41,   41,   41,   18,
+        0,    0,    0,   20,   19,   40,    1,   42,    0,    3,
+        0,    0,    0,    0,    0,    0,    0,    4,    5,    6,
+        0,    0,    0,    0,    0,    0,    0,    0,    0,   30,
+        0,    0,    2,   32,    0,    0,    0,    0,    0,   29,
+        0,   31,    0,    0,    0,    0,   36,    0,    0,    0,
+        0,    0,    0,    0,    0,    0,   37,   28,   34,   29,
 
-        0,   28,   27,    0,    0,    0,   30,    0
+        0,    0,   33,   32,    0,    0,    0,   35,    0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -680,100 +680,92 @@ static const YY_CHAR yy_meta[46] =
         3,    3,    3,    3,    1
     } ;
 
-static const flex_int16_t yy_base[114] =
+static const flex_int16_t yy_base[116] =
     {   0,
-        0,    0,   43,   44,   69,    0,  197,  198,  198,  198,
-      198,  198,  198,  193,  198,  198,  198,  198,  198,  198,
-      198,  180,   99,   35,  198,  173,  171,  189,  198,  198,
-      198,  198,  198,  188,  198,  198,   26,    0,  187,  198,
-      186,  103,    0,   47,   41,  198,  198,  198,  198,  158,
-       89,  156,   99,   94,  150,    0,  182,  198,    0,  114,
-      117,  153,  106,  154,  144,  152,  152,  140,  146,  136,
-      198,  147,  142,  143,  143,  139,  134,  140,  131,  129,
-      198,  133,  136,  129,  135,  198,  132,  124,  130,  123,
-      132,  125,  126,  114,  110,  198,  198,  198,  198,  105,
+        0,    0,   43,   44,   45,   48,  163,  164,  164,  164,
+      164,  164,  164,  164,  164,  164,  164,  164,  164,  164,
+      164,   54,   48,  164,  141,  139,    0,  157,  164,  164,
+      164,  164,  164,  156,  164,  164,  155,   45,  142,   70,
+        0,   41,   45,  164,  164,    0,  164,  164,  153,  164,
+      125,   56,  123,   52,   65,  117,  149,    0,   84,   60,
+      120,   70,  121,  111,  119,  119,  107,  113,  103,  164,
+      114,  139,  164,  108,  109,  109,  105,  100,  106,   97,
+       95,  164,   99,  102,   95,  101,  164,   98,   90,   96,
+       89,   98,   91,   77,   77,   76,  164,  164,  164,  164,
 
-      100,  198,  198,  104,   37,   30,  198,  198,  145,  148,
-      150,  153,   46
+       73,   68,  164,  164,   62,   54,   53,  164,  164,  109,
+      112,  114,  117,   52,  120
     } ;
 
-static const flex_int16_t yy_def[114] =
+static const flex_int16_t yy_def[116] =
     {   0,
-      108,    1,  109,  109,  108,    5,  108,  108,  108,  108,
-      108,  108,  108,  110,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  111,  110,  108,
-      112,  108,  113,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  111,  112,  108,  113,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
+      109,    1,  110,  110,  111,  111,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  112,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  113,  109,  109,  109,
+      114,  109,  109,  109,  109,  112,  109,  109,  113,  109,
+      109,  109,  109,  109,  109,  109,  115,  114,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  115,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
 
-      108,  108,  108,  108,  108,  108,  108,    0,  108,  108,
-      108,  108,  108
+      109,  109,  109,  109,  109,  109,  109,  109,    0,  109,
+      109,  109,  109,  109,  109
     } ;
 
-static const flex_int16_t yy_nxt[244] =
+static const flex_int16_t yy_nxt[210] =
     {   0,
-        8,    9,   10,   11,   12,   13,   14,   15,   16,   17,
-       18,   19,   20,   21,   22,   23,   24,   24,   24,   25,
-       26,   27,    8,    8,   28,   29,    8,    8,    8,    8,
-        8,    8,    8,    8,    8,    8,    8,    8,    8,    8,
-        8,    8,    8,    8,   30,   32,   32,   59,   33,   33,
-       42,   42,   42,   42,   50,   51,   61,   61,   52,   71,
-       53,   54,   60,   60,   60,   55,   81,   34,   34,   35,
-       35,   36,   35,   35,   35,   35,   37,   35,   35,   35,
-       35,   35,   35,   35,   35,   35,   35,   35,   35,   35,
-       35,   38,   38,   35,   35,   38,   38,   38,   38,   38,
+        8,    9,   10,   11,   12,   13,    8,   14,   15,   16,
+       17,   18,   19,   20,   21,   22,   23,   23,   23,   24,
+       25,   26,   27,   27,   28,   29,   27,   27,   27,   27,
+       27,   27,   27,   27,   27,   27,   27,   27,   27,   27,
+       27,   27,   27,   27,   30,   32,   32,   36,   33,   33,
+       36,   37,   38,   58,   37,   38,   59,   59,   59,   39,
+       60,   60,   39,   40,   40,   40,   40,   34,   34,   40,
+       40,   40,   40,   51,   52,   60,   60,   53,   66,   54,
+       55,   67,   70,   82,   56,   40,   40,   40,   40,   62,
+       68,   63,  108,   64,   69,   41,   42,   43,   70,   59,
 
-       38,   38,   38,   38,   38,   38,   38,   38,   38,   38,
-       38,   38,   38,   35,   42,   42,   42,   42,   42,   42,
-       42,   42,   63,   70,   64,   67,   65,   71,   68,   60,
-       60,   60,   61,   61,  107,  106,  105,   69,   74,  104,
-       43,   44,   45,  103,   75,   31,   31,   31,   39,   39,
-       39,   56,   56,   57,   57,   57,  102,  101,  100,   99,
-       98,   97,   96,   95,   94,   93,   92,   91,   90,   89,
-       88,   87,   86,   85,   84,   83,   82,   81,   80,   79,
-       78,   77,   76,   73,   58,   72,   66,   62,   58,   40,
-       49,   48,   47,   46,   41,   40,  108,    7,  108,  108,
+       59,   59,   75,  107,  106,  105,  104,  103,   76,   31,
+       31,   31,   35,   35,   35,   46,   46,   49,   49,   49,
+       72,   72,   72,  102,  101,  100,   99,   98,   97,   96,
+       95,   94,   93,   92,   91,   90,   89,   88,   87,   86,
+       85,   73,   84,   83,   82,   81,   80,   79,   78,   77,
+       74,   73,   71,   65,   61,   50,   57,   50,   48,   47,
+       45,   44,  109,    7,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
 
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108
+      109,  109,  109,  109,  109,  109,  109,  109,  109
     } ;
 
-static const flex_int16_t yy_chk[244] =
+static const flex_int16_t yy_chk[210] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    3,    4,  113,    3,    4,
-       24,   24,   24,   24,   37,   37,   45,   45,   37,  106,
-       37,   37,   44,   44,   44,   37,  105,    3,    4,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
+        1,    1,    1,    1,    1,    3,    4,    5,    3,    4,
+        6,    5,    5,  114,    6,    6,   42,   42,   42,    5,
+       43,   43,    6,   23,   23,   23,   23,    3,    4,   22,
+       22,   22,   22,   38,   38,   60,   60,   38,   54,   38,
+       38,   54,  107,  106,   38,   40,   40,   40,   40,   52,
+       54,   52,  105,   52,   55,   22,   22,   22,   55,   59,
 
-        5,    5,    5,    5,    5,    5,    5,    5,    5,    5,
-        5,    5,    5,    5,   23,   23,   23,   23,   42,   42,
-       42,   42,   51,   54,   51,   53,   51,   54,   53,   60,
-       60,   60,   61,   61,  104,  101,  100,   53,   63,   95,
-       23,   23,   23,   94,   63,  109,  109,  109,  110,  110,
-      110,  111,  111,  112,  112,  112,   93,   92,   91,   90,
-       89,   88,   87,   85,   84,   83,   82,   80,   79,   78,
-       77,   76,   75,   74,   73,   72,   70,   69,   68,   67,
-       66,   65,   64,   62,   57,   55,   52,   50,   41,   39,
-       34,   28,   27,   26,   22,   14,    7,  108,  108,  108,
+       59,   59,   62,  102,  101,   96,   95,   94,   62,  110,
+      110,  110,  111,  111,  111,  112,  112,  113,  113,  113,
+      115,  115,  115,   93,   92,   91,   90,   89,   88,   86,
+       85,   84,   83,   81,   80,   79,   78,   77,   76,   75,
+       74,   72,   71,   69,   68,   67,   66,   65,   64,   63,
+       61,   57,   56,   53,   51,   49,   39,   37,   34,   28,
+       26,   25,    7,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
+      109,  109,  109,  109,  109,  109,  109,  109,  109,  109,
 
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108,  108,  108,  108,  108,  108,  108,  108,
-      108,  108,  108
+      109,  109,  109,  109,  109,  109,  109,  109,  109
     } ;
 
 static yy_state_type yy_last_accepting_state;
@@ -821,14 +813,14 @@ FILE    *ppfp3, *ppfp2;
 
 #define DEBUGLEX
 
-// Just to silence C compiler
+// Just to silence the C compiler
 int     prelex();
 
 #include "ppre.yacc.c"
 
-#line 830 "parser/ppre.lex.c"
+#line 822 "parser/ppre.lex.c"
 
-#line 832 "parser/ppre.lex.c"
+#line 824 "parser/ppre.lex.c"
 
 #define INITIAL 0
 #define STRSTATE 1
@@ -1060,7 +1052,7 @@ YY_DECL
 #line 46 "ppre.f"
 
 
-#line 1064 "parser/ppre.lex.c"
+#line 1056 "parser/ppre.lex.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1087,13 +1079,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 109 )
+				if ( yy_current_state >= 110 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 198 );
+		while ( yy_base[yy_current_state] != 164 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -1166,7 +1158,7 @@ YY_RULE_SETUP
 #line 80 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf("[NUM] '%s' ", yytext); fflush(stdout); }
+                             { printf("[xNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), NUM2);
                          return(NUM2);
@@ -1177,7 +1169,7 @@ YY_RULE_SETUP
 #line 87 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf("[NUM] '%s' ", yytext); fflush(stdout); }
+                             { printf("[yNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), NUM2);
 
@@ -1189,7 +1181,7 @@ YY_RULE_SETUP
 #line 95 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf("[NUM] '%s' ", yytext); fflush(stdout); }
+                             { printf("[zNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), NUM2);
 
@@ -1201,7 +1193,7 @@ YY_RULE_SETUP
 #line 103 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [PLUS] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [PLUS2] '%s' ", yytext); fflush(stdout); }
                           yylval.sym = make_symstr("", strdup(yytext), PLUS2);
                          return(PLUS2);
                          }
@@ -1211,7 +1203,7 @@ YY_RULE_SETUP
 #line 109 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [MINUS] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [MINUS2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), MINUS2);
                          return(MINUS2);
@@ -1222,7 +1214,7 @@ YY_RULE_SETUP
 #line 116 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [MULT] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [MULT2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), MULT2);
                          return(MULT2);
@@ -1233,7 +1225,7 @@ YY_RULE_SETUP
 #line 123 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [DIV] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [DIV2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), DIV2);
                          return(DIV2);
@@ -1244,7 +1236,7 @@ YY_RULE_SETUP
 #line 130 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [MOD] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [MOD2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), MOD2);
                          return(MOD2);
@@ -1255,7 +1247,7 @@ YY_RULE_SETUP
 #line 137 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [OR] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [OR2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), OR2);
                          return(OR2);
@@ -1266,7 +1258,7 @@ YY_RULE_SETUP
 #line 144 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [AND] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [AND2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), AND2);
                          return(AND2);
@@ -1285,7 +1277,7 @@ YY_RULE_SETUP
 #line 155 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf(" [XOR] '%s' ", yytext); fflush(stdout); }
+                             { printf(" [XOR2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), XOR2);
                          return(XOR2);
@@ -1318,7 +1310,7 @@ YY_RULE_SETUP
 #line 177 "ppre.f"
 {
                          if(config.testpreflex)
-                             { printf("[NUM] '%s' ", (char*)yytext); fflush(stdout); }
+                             { printf("[NUM2] '%s' ", (char*)yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), NUM2);
 
@@ -1373,124 +1365,15 @@ case 23:
 YY_RULE_SETUP
 #line 215 "ppre.f"
 {
-                         if(config.testpreflex)
-                             { printf(" [error] '%s' ", yytext); fflush(stdout); }
-
-                         yylval.sym = make_symstr("", strdup(yytext), ERR2);
-                         return ERR2;
-                         }
-	YY_BREAK
-case 24:
-YY_RULE_SETUP
-#line 223 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [mmacro] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), MAC2);
-                                return MAC2;
-                                }
-	YY_BREAK
-case 25:
-YY_RULE_SETUP
-#line 231 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [e nl] '%s' ", yytext); fflush(stdout); }
-                                yylval.sym = make_symstr("", strdup(yytext), MSG2);
-                                return ENL2;
-                                }
-	YY_BREAK
-case 26:
-YY_RULE_SETUP
-#line 237 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [message] '%s' ", yytext); fflush(stdout); }
-                                to_init_state();
-                                yylval.sym = make_symstr("", strdup(yytext), MSG2);
-                                return MSG2;
-                                }
-	YY_BREAK
-case 27:
-YY_RULE_SETUP
-#line 244 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [define] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), DEF2);
-                                return DEF2;
-                                }
-	YY_BREAK
-case 28:
-YY_RULE_SETUP
-#line 252 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [undef] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), UNDEF2);
-                                return UNDEF2;
-                                }
-	YY_BREAK
-case 29:
-YY_RULE_SETUP
-#line 260 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), IFDEF2);
-                                return IFDEF2;
-                                }
-	YY_BREAK
-case 30:
-YY_RULE_SETUP
-#line 268 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [elifdef] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), ELIFDEF2);
-                                return ELIFDEF2;
-                                }
-	YY_BREAK
-case 31:
-YY_RULE_SETUP
-#line 276 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [else] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), ELSE2);
-                                return ELSE2;
-                                }
-	YY_BREAK
-case 32:
-YY_RULE_SETUP
-#line 284 "ppre.f"
-{
-                                if(config.testpreflex)
-                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), ENDIF2);
-                                return ENDIF2;
-                                }
-	YY_BREAK
-case 33:
-YY_RULE_SETUP
-#line 292 "ppre.f"
-{
                                 if(config.testpreflex)
                                     { printf(" [SP2] '%s' ", yytext); fflush(stdout); }
                                 yylval.sym = make_symstr("", strdup(yytext), SP2);
                                 return SP2;
                                 }
 	YY_BREAK
-case 34:
+case 24:
 YY_RULE_SETUP
-#line 299 "ppre.f"
+#line 222 "ppre.f"
 {
                                 // Ignore
                                 if(config.testpreflex)
@@ -1500,10 +1383,10 @@ YY_RULE_SETUP
                                 return NL2;
                                 }
 	YY_BREAK
-case 35:
-/* rule 35 can match eol */
+case 25:
+/* rule 25 can match eol */
 YY_RULE_SETUP
-#line 308 "ppre.f"
+#line 231 "ppre.f"
 {
                                 if(config.testpreflex)
                                     { printf(" [NL] '%d' ", yytext[0]); fflush(stdout); }
@@ -1513,22 +1396,142 @@ YY_RULE_SETUP
                                 return NL2;
                                 }
 	YY_BREAK
-case 36:
+case 26:
 YY_RULE_SETUP
-#line 317 "ppre.f"
+#line 240 "ppre.f"
 {              /* begin quote */
-                                //BEGIN(STRSTATE);
-                                yy_push_state(STRSTATE);
-                                //if(config.testpreflex)
-                                //    printf(" str<<<");
-
+                                to_new_state(STRSTATE);
+                                if(config.testpreflex < 0)
+                                    printf(" str<<<");
                                 prog = 0; backslash  = 0;
                                 //tmp_str2[prog++] = yytext[0];
                                 }
 	YY_BREAK
+case 27:
+YY_RULE_SETUP
+#line 247 "ppre.f"
+{  // default character
+                                if(config.testpreflex)
+                                    { printf(" [CH2] '%s' ", yytext); fflush(stdout); }
+                                yylval.sym = make_symstr("", strdup(yytext), CH2);
+                                return CH2;
+                                }
+	YY_BREAK
+case 28:
+YY_RULE_SETUP
+#line 254 "ppre.f"
+{
+                         if(config.testpreflex)
+                             { printf(" [error] '%s' ", yytext); fflush(stdout); }
+                        to_new_state(INITIAL);
+                        yylval.sym = make_symstr("", strdup(yytext), ERR2);
+                         return ERR2;
+                         }
+	YY_BREAK
+case 29:
+YY_RULE_SETUP
+#line 262 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [mmacro] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), MAC2);
+                                return MAC2;
+                                }
+	YY_BREAK
+case 30:
+YY_RULE_SETUP
+#line 270 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [enl] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), MSG2);
+                                return ENL2;
+                                }
+	YY_BREAK
+case 31:
+YY_RULE_SETUP
+#line 277 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [MSG2] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), MSG2);
+                                return MSG2;
+                                }
+	YY_BREAK
+case 32:
+YY_RULE_SETUP
+#line 284 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" \n[DEF2] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), DEF2);
+                                return DEF2;
+                                }
+	YY_BREAK
+case 33:
+YY_RULE_SETUP
+#line 291 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [undef] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), UNDEF2);
+                                return UNDEF2;
+                                }
+	YY_BREAK
+case 34:
+YY_RULE_SETUP
+#line 299 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), IFDEF2);
+                                return IFDEF2;
+                                }
+	YY_BREAK
+case 35:
+YY_RULE_SETUP
+#line 307 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [elifdef] '%s' ", yytext); fflush(stdout); }
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), ELIFDEF2);
+                                return ELIFDEF2;
+                                }
+	YY_BREAK
+case 36:
+YY_RULE_SETUP
+#line 314 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [else] '%s' ", yytext); fflush(stdout); }
+
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), ELSE2);
+                                return ELSE2;
+                                }
+	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 327 "ppre.f"
+#line 322 "ppre.f"
+{
+                                if(config.testpreflex)
+                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
+
+                                to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), ENDIF2);
+                                return ENDIF2;
+                                }
+	YY_BREAK
+case 38:
+YY_RULE_SETUP
+#line 330 "ppre.f"
 {
                                 printf("%s", " [ %endif ] ");
                                 printf("emit: '%s'\n", emitline);
@@ -1537,10 +1540,10 @@ YY_RULE_SETUP
                                 BEGIN(INITIAL);
                                 }
 	YY_BREAK
-case 38:
-/* rule 38 can match eol */
+case 39:
+/* rule 39 can match eol */
 YY_RULE_SETUP
-#line 334 "ppre.f"
+#line 337 "ppre.f"
 {
                                 //printf("emit newline");
                                 if(hasdefine)
@@ -1549,9 +1552,9 @@ YY_RULE_SETUP
                                     }
                                 }
 	YY_BREAK
-case 39:
+case 40:
 YY_RULE_SETUP
-#line 341 "ppre.f"
+#line 344 "ppre.f"
 {
                                 if(config.testpreflex)
                                     { printf(" [ID] '%s' ", yytext); fflush(stdout); }
@@ -1560,9 +1563,9 @@ YY_RULE_SETUP
                                 return ID2;
                                 }
 	YY_BREAK
-case 40:
+case 41:
 YY_RULE_SETUP
-#line 348 "ppre.f"
+#line 351 "ppre.f"
 {
                                 // default emit charater
                                 if(config.testpreflex > 1)
@@ -1575,26 +1578,26 @@ YY_RULE_SETUP
                                     }
                                 }
 	YY_BREAK
-case 41:
+case 42:
 *yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 359 "ppre.f"
+#line 362 "ppre.f"
 {
                                 if(config.testpreflex)
                                     { printf("[STRSTATE BSL EOL] '%s", yytext); fflush(stdout); }
                                 // Skipping ...
                                 }
 	YY_BREAK
-case 42:
+case 43:
 YY_RULE_SETUP
-#line 365 "ppre.f"
+#line 368 "ppre.f"
 {              /* end quote */
                                 if( (backslash % 2) == 0) /* odd backslash */
                                      {
                                      //BEGIN(INITIAL);
-                                     yy_pop_state();
+                                     to_prev_state();
 
                                      //tmp_str2[prog++] = yytext[0];
                                      tmp_str2[prog] = '\0';
@@ -1603,9 +1606,8 @@ YY_RULE_SETUP
                                      if(config.testpreflex)
                                         {
                                         //dump_symitem(yylval.sym);
-                                        printf("\n[STR] '%s'", yylval.sym->var); fflush(stdout);
+                                        printf("[STR2] '%s' ", yylval.sym->var); fflush(stdout);
                                         }
-                                     //printf("STR2 %d\n", STR2);
                                      return(STR2);
                                      }
                                   else
@@ -1614,9 +1616,9 @@ YY_RULE_SETUP
                                       }
                                 }
 	YY_BREAK
-case 43:
+case 44:
 YY_RULE_SETUP
-#line 388 "ppre.f"
+#line 390 "ppre.f"
 {   // default string charater
                                 backslash  = 0;
 
@@ -1626,24 +1628,12 @@ YY_RULE_SETUP
                                 tmp_str2[prog++] = yytext[0];
                                 }
 	YY_BREAK
-case 44:
-YY_RULE_SETUP
-#line 396 "ppre.f"
-{  // default character
-
-                                if(config.testpreflex)
-                                    { printf(" [char] '%s' ", yytext); fflush(stdout); }
-
-                                yylval.sym = make_symstr("", strdup(yytext), CH2);
-                                return CH2;
-                                }
-	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 404 "ppre.f"
+#line 398 "ppre.f"
 ECHO;
 	YY_BREAK
-#line 1647 "parser/ppre.lex.c"
+#line 1637 "parser/ppre.lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STRSTATE):
 case YY_STATE_EOF(EMITSTATE):
@@ -1942,7 +1932,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 109 )
+			if ( yy_current_state >= 110 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1970,11 +1960,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 109 )
+		if ( yy_current_state >= 110 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 108);
+	yy_is_jam = (yy_current_state == 109);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -2696,33 +2686,24 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 404 "ppre.f"
+#line 398 "ppre.f"
 
 
 /* ========================= End of LEX ================================ */
 
-int     to_emit_state()
+int     to_new_state(int state)
 {
-    //printf("states %d %d %d\n", INITIAL, STRSTATE, EMITSTATE);
-    //printf("start state %d\n", YY_START);
-    yy_push_state(EMITSTATE);
-    //printf("new state %d\n", YY_START);
-    return 0;
-}
-
-int     to_init_state()
-{
-    //printf("states %d %d %d\n", INITIAL, STRSTATE, EMITSTATE);
-    //printf("start state %d\n", YY_START);
-    yy_push_state(INITIAL);
-    printf("to_init_state %d\n", YY_START);
+    int old = YY_START;
+    yy_push_state(state);
+    //printf("new state from %d to %d\n", old, YY_START);
     return 0;
 }
 
 int     to_prev_state()
 {
+    int old = YY_START;
     yy_pop_state();
-    printf("rset old state %d\n", YY_START);
+    //printf("reset state from %d to %d\n", old, YY_START);
     return 0;
 }
 
@@ -2737,30 +2718,30 @@ int     preprocess(char *ptr)
     // re - initialize preprocessor
     num_lines = 1;
 
-    to_emit_state();
+    //printf("states %d %d %d\n", INITIAL, STRSTATE, EMITSTATE);
+    to_new_state(EMITSTATE);
 
-    if(stat(ptr, &buf) < 0)
+    if(stat(ptr, &buf) >= 0)
         {
-        printf("Cannot stat file '%s'.\n", ptr);
+        //fprintf(stderr, "Cannot stat file '%s'\n", ptr);
         //if(config.debuglevel > 0)
         //    syslog(LOG_DEBUG, "Cannot stat file %s\n", ptr);
-        return 0;
+        if(S_ISDIR(buf.st_mode))
+            {
+            fprintf(stderr, "Cannot operate on directory '%s'.\n", ptr);
+            //if(config.debuglevel > 0)
+            //    syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
+            //return 0;
+            }
         }
-    if(S_ISDIR(buf.st_mode))
-        {
-        //printf("Cannot operate on directory '%s'.\n", ptr);
-        //if(config.debuglevel > 0)
-        //    syslog(LOG_DEBUG, "cannot operate on dir %s\n", ptr);
-        return 0;
-        }
-
     ppfp3 = fopen(ptr, "r");
     if(!ppfp3)
         {
-        printf("Cannot open file '%s'.\n", ptr);
+        fprintf(stderr, "Cannot open file: '%s'.\n", ptr);
         //if(config.debuglevel > 0)
         //    syslog(LOG_DEBUG, "Cannot open file %s\n", ptr);
-        return 0;
+        //return 0;
+        exit(1);
         }
     char outdir[MAX_VARLEN];
     strcpy(outdir, ptr);
@@ -2804,7 +2785,7 @@ int     preprocess(char *ptr)
     ppfp2 = fopen(ppfile2, "w");
     if(!ppfp2)
         {
-        printf("Cannot create file '%s'.\n", ppfile);
+        fprintf(stderr, "Cannot create file '%s'.\n", ppfile);
         //syslog(LOG_DEBUG, "pcomp: Cannot create preprocessed file.\n");
         return 0;
         }
@@ -2863,22 +2844,37 @@ void    preerror(const char *str)
         ppp++;
         }
     currline[ppp] = '\0';
-    fprintf(stderr, "Line: '%s'\n      ", currline);
-    for(int aa = 0; aa < currprog; aa++)
-        {
-        fprintf(stderr, "-");
-        }
-    fprintf(stderr, "^");
-    for(int aa = currprog; aa < strlen(currline); aa++)
-        {
-        fprintf(stderr, "-");
-        }
-    fprintf(stderr, "\n");
-    fprintf(stderr, "emitline: '%s'\n", emitline);
 
-    //hd(currline, 200);
+    // Is term?
+    //printf("isatty(stdout) %d", isatty(stdout));
+    if(isatty(stderr) > 0)
+        {
+        fprintf(stderr, "\033[31;1mERROR\033[0m ");
+        }
+    else
+        {
+        //fprintf(stderr, "ERROR ");
+        fprintf(stderr, "\033[31;1mERROR\033[0m ");
+        }
+    if(strlen(currline))
+        {
+        fprintf(stderr, "Line: '%s'\n             ", currline);
+        for(int aa = 0; aa < currprog; aa++)
+            {
+            fprintf(stderr, "-");
+            }
+        fprintf(stderr, "^");
+        for(int aa = currprog; aa < strlen(currline)-1; aa++)
+            {
+            fprintf(stderr, "-");
+            }
+        fprintf(stderr, "\n");
+
+        //hd(currline, 200);
+        }
+    fprintf(stderr, "emitline: '%s'\n", emitline);
     fseek(ppfp3, pos, SEEK_SET);
-    if(count > 5)
+    //if(count > 5)
         exit(0);
 }
 

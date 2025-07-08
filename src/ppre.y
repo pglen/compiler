@@ -91,12 +91,14 @@ int hasdefine = 0;
 %type   <sym>   expr5
 %type   <sym>   semib
 %type   <sym>   semibm
+%type   <sym>   def1args
 
 %%
 
 all1:   {
         if(config.testpreyacc > 0)
-            { printf(" { all1 all2 root none } "); fflush(stdout); }
+            { //printf(" { all1 all2 root none } "); fflush(stdout);
+            }
         }
        | all1 all2
         {
@@ -106,86 +108,87 @@ all1:   {
 ;
 
 all2:   define1
-        {
-        if(config.testpreyacc > 0)
-            { printf(" { all2 define '%s' } ", $1->var); fflush(stdout); }
-        }
-        | undef1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 undef1 x'%s' } ", $1->var); fflush(stdout); }
-        }
-        | err1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 err1 x'%s' } ", $1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf(" { all2 define '%s' } ", $1->var); fflush(stdout); }
+            }
         | msg1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 msg1 '%s' } ", $1->var); fflush(stdout); }
-        //to_prev_state();
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 msg1 '%s' } ", $1->var); fflush(stdout); }
+            //to_prev_state();
+            }
+        | undef1
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 undef1 x'%s' } ", $1->var); fflush(stdout); }
+            }
+        | err1
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 err1 x'%s' } ", $1->var); fflush(stdout); }
+            }
         | nl1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 nl1 '%s' } ", $1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 nl1 '%s' } ", $1->var); fflush(stdout); }
+            }
         | mac1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 mac1 x'%s' } ", $1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 mac1 x'%s' } ", $1->var); fflush(stdout); }
+            }
         | ifdef1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 ifdef1 x'%s' } ", (char*)$1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 ifdef1 x'%s' } ", (char*)$1->var); fflush(stdout); }
+            }
         | elifdef1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 elifdef1 x'%s' } ", (char*)$1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 elifdef1 x'%s' } ", (char*)$1->var); fflush(stdout); }
+            }
         | else1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 else1 x'%s' } ", (char*)$1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 else1 x'%s' } ", (char*)$1->var); fflush(stdout); }
+            }
         | endif1
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 endif1 x'%s' } ", (char*)$1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 endif1 x'%s' } ", (char*)$1->var); fflush(stdout); }
+            }
         | COMMENT2
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 comment '%s' } ", (char*)$1->var); fflush(stdout); }
-        }
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ all2 comment '%s' } ", (char*)$1->var); fflush(stdout); }
+            }
         | sp1mb
-        {
-        if(config.testpreyacc > 0)
-            { printf("{ all2 nl / blank '%s' } ", (char*)$1->var); fflush(stdout); }
-        }
-;
-idd1:   ID2     { printf("{ idd1 ID2 } ");fflush(stdout);}
-        | NUM2  { printf("{ idd1 NUM2 } ");fflush(stdout);}
-        | strx1 { printf("{ idd1 strx1 } ");fflush(stdout);}
-;
-define1: DEF2 sp1mb idd1 sp1mb idd1 sp1mb
             {
             if(config.testpreyacc > 0)
-                { printf("{ define1 '%s' '%s' } ",
-                                $3->var, $5->var); fflush(stdout); }
-            push_symtab($3->var, $5->var, "", DECL_DEFINE, 0);
-            }
-        | DEF2 sp1mb idd1 sp1mb
-            {
-            if(config.testpreyacc > 0)
-                { printf("{ define1 '%s' } ", $3->var); fflush(stdout); }
-            push_symtab($3->var, "", "", DECL_DEFINE, 0);
+                { printf("{ all2 nl / blank '%s' } ", (char*)$1->var); fflush(stdout); }
             }
 ;
-
+idd1:   strx1       { printf("{ idd1 strx1 } ");fflush(stdout); }
+        | expr1     { printf("{ idd1 expr1 } ");fflush(stdout); }
+;
+define1: DEF2 sp1mb idd1 sp1mb semibm
+            {
+            if(config.testpreyacc > 0)
+                {
+                printf("{ define1 '%s' } ", $3->var);
+                fflush(stdout);
+                }
+            push_symtab("", $3->var, "", DECL_DEFINE, 0);
+            }
+        | DEF2 sp1mb idd1 sp1mb idd1 sp1mb semibm
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ define1 '%s' arg: %s } ", $3->var, $5->var);
+                    fflush(stdout); }
+            push_symtab("", $3->var, $5->var, DECL_DEFINE, 0);
+            }
+;
 undef1:  UNDEF2 sp1mb ID2
         {
         if(config.testpreyacc > 0)
@@ -207,7 +210,6 @@ undef1:  UNDEF2 sp1mb ID2
         { // Ignore
         }
 ;
-
 err1:   ERR2 sp1b STR2 sp1m
     {
         // Erase quotes
@@ -223,8 +225,10 @@ err1:   ERR2 sp1b STR2 sp1m
         exit(1);
     }
 ;
-
 strx1:  STR2 sp1mb
+            {
+            }
+        | ID2 sp1mb
             {
             }
         | STR2 sp1mb PLUS2 sp1mb strx1 sp1mb
@@ -266,27 +270,22 @@ semib:
         | sp1mb NL2
         | SEMI2
         | sp1mb SEMI2
-
+;
 semibm: semib   {
                 printf(" { semibm '%s' } ", $1->var); fflush(stdout);
                 to_prev_state();
                 }
-
-nl1:     ENL2 sp1mb
+;
+nl1:     ENL2 sp1mb semibm
             {
             fprintf(stderr, "\n");
+            //to_prev_state();
             }
-
-msg1:    MSG2 sp1mb expr1 sp1mb semibm
+;
+msg1:    MSG2 sp1mb idd1 sp1mb semibm
             {
             if(config.testpreyacc > 0)
                 { printf(" { msg1: expr1 '%s' } ", $3->var); }
-            fprintf(stderr, "%s", $3->var);
-            }
-         | MSG2 sp1mb strx1 sp1mb semibm
-            {
-            if(config.testpreyacc > 0)
-                { printf(" { msg1: strx1 '%s' } ", $3->var); }
             fprintf(stderr, "%s", $3->var);
             }
 ;
@@ -377,9 +376,7 @@ sp1b:           {}   /* empty */
         | sp1   {}
 ;
 sp1m:     SP2        {}  /* single */
-        | NL2        {}
         | sp1m SP2   {}  /* multiple */
-        | sp1m NL2   {}
 ;
 sp1mb:      {  /* empty */
             //printf(" spb ");

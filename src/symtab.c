@@ -137,8 +137,8 @@ void  dump_symitem(Symbol *sp)
     //printf("'%s' [%d] %s(%d)  '%s' [%d]  -> '%s' [%d] ", sp->name, sp->con_name,
     //                    opstr,  sp->type, sp->var, sp->con_var,
     //                        sp->res, sp->con_res);
-    printf("name: '%s' op: '%s' (%d) var: '%s' ",
-                    sp->name, opstr, sp->type, sp->var);
+    printf("name: '%s' op: '%s' (%d) var: '%s' res: '%s' ",
+                    sp->name, opstr, sp->type, sp->var, sp->res);
     //printf("ret: '%s' \n", sp->res);
     //printf("'%s'  %s(%d)  '%s'  -> '%s'  ",
     //                    sp->name, opstr,  sp->type,

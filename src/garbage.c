@@ -135,3 +135,8 @@ u32  bb  =  0;
 ##    u32  ee  =  0;
 #%endif
 
+        /*| ID2       { printf("{ idd1 ID2 } ");fflush(stdout);}
+        | NUM2      { printf("{ idd1 NUM2 } ");fflush(stdout);}
+        | STR2      { printf("{ idd1 STR2 } ");fflush(stdout);}
+        */
+
