@@ -1,4 +1,5 @@
 // Macro definitions
 u32 cc1 = 2000;
-%mac hello ( 123 ) 345
+%mac hello ( aa ) abcd 345 + 678 910
+
 # EOF

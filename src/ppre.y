@@ -192,11 +192,16 @@ all2:   define1
                 }
             }
 ;
-idd1:   strx1       { if(config.testpreyacc > 1)
+idd1:   strx1      { if(config.testpreyacc > 1)
                         printf("{ idd1 strx1 } ");fflush(stdout); }
-        | expr1     { if(config.testpreyacc > 1)
-                        printf("{ idd1 expr1 } ");fflush(stdout); }
+        | idd1 strx1    { if(config.testpreyacc > 0)
+                        printf("{ idd1 strx1 %s } ", $2->var);fflush(stdout); }
+        | expr1    { if(config.testpreyacc > 0)
+                        printf("{ idd1 expr1 %s } ", $1->var);fflush(stdout); }
+        | idd1 expr1    { if(config.testpreyacc > 0)
+                        printf("{ idd1 expr1 %s } ", $2->var);fflush(stdout); }
 ;
+
 define1: DEF2 sp1mb idd1 sp1mb semibm
             {
             if(config.testpreyacc > 0)
@@ -322,7 +327,8 @@ msg1:    MSG2 sp1mb idd1 sp1mb semibm
                 fprintf(stderr, "%s", $3->var);
             }
 ;
-mac1:   MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
+mac1:   MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1
+                sp1mb PAREN22 sp1mb idd1 sp1mb semibm
         {
         if(config.testpreyacc > 0)
             { printf(" { mac1: idd1 '%s' ( '%s' ) '%s' } ",
@@ -442,12 +448,12 @@ expr1:  expr2
 ;
 expr2:   expr3
         {
-        if(config.testpreyacc > 0)
+        if(config.testpreyacc > 1)
             { printf("{ expr2 '%s'} ", $1->var); }
         }
     |   expr2 sp1mb PLUS2 sp1mb expr3
         {
-        if(config.testpreyacc > 0)
+        if(config.testpreyacc > 1)
            { printf(" { expr2 '%s' PLUS '%s } ", $1->var, $5->var); }
         int val = str2int($1->var) + str2int($5->var);
         sprintf(tmp_str3, "%d", val);
@@ -462,7 +468,7 @@ expr2:   expr3
 ;
 expr3:  expr4
     {
-    if(config.testpreyacc > 0)
+    if(config.testpreyacc > 1)
         { printf("{ expr3 '%s' } ", $1->var); }
     }
     | expr3 sp1mb MULT2 sp1mb expr4
@@ -498,7 +504,7 @@ expr4:  expr5
 ;
 expr5:  sp1mb NUM2 sp1mb
         {
-        if(config.testpreyacc > 0)
+        if(config.testpreyacc > 1)
             { printf(" { expr5 '%s' } ", $2->var); }
         $$ = make_symstr("", $2->var, NUM2);
         }
