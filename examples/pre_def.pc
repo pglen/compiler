@@ -1,5 +1,5 @@
 %define DEFINE0
 %define DEFINE1  name
-%define DEFINE2 "hello"
+%define "DEFINE2" "hello"
 %define DEFINE3 "str2"
 %define DEFINE4 "str3" + "str4"

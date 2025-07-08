@@ -72,7 +72,7 @@ int print_emalloc();
 
 /* -------- Symtab ------------------------------------------------------ */
 
-typedef struct Symbol {    /* symbol table entry */
+typedef struct _Symbol {    /* symbol table entry */
          int        magic;
          short      type ;      /* VAR, BLTIN, UNDEF  */
          char       *name ;
@@ -91,7 +91,8 @@ typedef struct Symbol {    /* symbol table entry */
                int        (*func)();
          } u ;
 
-      struct Symbol *next ;
+      struct _Symbol *prev ;
+      struct _Symbol *next ;
 } Symbol ;
 
 // List of symbol entries as parsed
@@ -101,11 +102,10 @@ typedef struct Symcoll {
     int     magic;
     int        optype;
 
-      struct Symbol left;
-      struct Symbol right;
-      struct Symbol outp;
-
-      struct Symcoll *next ;
+      struct _Symbol left;
+      struct _Symbol right;
+      struct _Symbol outp;
+      struct _Symcoll *next ;
 
 } Symcoll;
 
@@ -118,6 +118,9 @@ int        if_func(int type);
 
 void    init_symtab(void);
 void    dump_symtab(void);
+void    revdump_symtab(void);
+void    delitem_symtab(Symbol  *sp);
+void    empty_symtab();
 
 Symbol  *make_symstr(char *name, char *var, int type);
 Symbol  *make_symtab(char *name, char *var, char *res, int type, double d);
@@ -125,8 +128,6 @@ Symbol  *lookup_res_symtab(char *var, int type);
 Symbol  *lookup_symtab(char *s, int type);
 Symbol  *pop_symtab(char *name, char *var, char *res, int *type, double *d);
 Symbol  *push_symtab(char *name, char *var, char *res, int type, double d);
-void    empty_symtab();
-double  errcheck( double d, char *s);
 
 /* -------- If Stack: ---------------------------------------------------- */
 
@@ -152,7 +153,7 @@ typedef struct outstr {
         char *line;
         void *ptr;
         int      state;
-          struct outstr *next ;
+        struct outstr *next ;
 } outstr;
 
 int     print_ddata(outstr *root);
@@ -171,7 +172,6 @@ ifstack *peek_ifstack(char *name, char *ifname, char *elname, int *val);
 
 int     create_unique(char *str, char *prefix);
 int     create_unique2(char *str, char *prefix, char *str1, char *str2);
-void    execerror(char * str, char *str2);
 
 /* -------- Definitions: ------------------------------------------------- */
 

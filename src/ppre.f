@@ -67,7 +67,7 @@ FNN  [\~_a-zA-Z0-9]
 <EMITSTATE>#.*\n                { /* comment */
                          num_lines++;
 
-                         if(config.testpreflex)
+                         if(config.testpreflex > 1)
                              { printf("[hash_comment] '%s", yytext); fflush(stdout); }
 
                          if(config.showcomm)
@@ -304,14 +304,14 @@ FNN  [\~_a-zA-Z0-9]
                                 return IFDEF2;
                                 }
 
-<EMITSTATE>%elifdef                           {
+<EMITSTATE>%elifdef             {
                                 if(config.testpreflex)
                                     { printf(" [elifdef] '%s' ", yytext); fflush(stdout); }
                                 to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), ELIFDEF2);
                                 return ELIFDEF2;
                                 }
-<EMITSTATE>%else                           {
+<EMITSTATE>%else                {
                                 if(config.testpreflex)
                                     { printf(" [else] '%s' ", yytext); fflush(stdout); }
 
@@ -319,7 +319,7 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.sym = make_symstr("", strdup(yytext), ELSE2);
                                 return ELSE2;
                                 }
-<EMITSTATE>%endif                          {
+<EMITSTATE>%endif               {
                                 if(config.testpreflex)
                                     { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
 

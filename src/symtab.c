@@ -17,8 +17,9 @@
 #include "emalloc.h"
 
 Symbol  *symlist = (Symbol *) 0 ;
-Symcoll *symcoll = (Symcoll *) 0 ;
+Symbol  *symend = (Symbol *) 0 ;
 
+Symcoll *symcoll = (Symcoll *) 0 ;
 ifstack *ifcoll = (ifstack *)0;
 
 typedef struct
@@ -107,20 +108,6 @@ void    init_symtab(void)
         }
 }
 
-//////////////////////////////////////////////////////////////////////////
-
-void    dump_symtab(void)
-
-{
-    Symbol *sp;
-    printf("Dumping symtab:\n");
-    for (sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
-        {
-        dump_symitem(sp);
-        }
-    printf("\n");
-}
-
 // Dump symtab item
 
 void  dump_symitem(Symbol *sp)
@@ -137,17 +124,51 @@ void  dump_symitem(Symbol *sp)
     //printf("'%s' [%d] %s(%d)  '%s' [%d]  -> '%s' [%d] ", sp->name, sp->con_name,
     //                    opstr,  sp->type, sp->var, sp->con_var,
     //                        sp->res, sp->con_res);
-    printf("name: '%s' op: '%s' (%d) var: '%s' res: '%s' ",
-                    sp->name, opstr, sp->type, sp->var, sp->res);
+    printf("name: '%s' op: '%s' (%d) var: '%s' res: '%s' type: %d ",
+                    sp->name, opstr, sp->type, sp->var, sp->res, sp->type);
     //printf("ret: '%s' \n", sp->res);
     //printf("'%s'  %s(%d)  '%s'  -> '%s'  ",
     //                    sp->name, opstr,  sp->type,
     //                            sp->var, sp->res);
-    //if(sp->u.dval != 0)
+    if(sp->u.dval != 0)
         {
         printf("dval: %.2f", sp->u.dval);
         }
     printf("\n");
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void    dump_symtab(void)
+
+{
+    Symbol *sp;
+    if (!symlist)
+        {
+        printf("Empty symtab\n"); return;
+        }
+    printf("Dumping symtab:\n");
+    for (sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
+        {
+        dump_symitem(sp);
+        }
+    //printf("\n");
+}
+
+void    revdump_symtab(void)
+
+{
+    Symbol *sp;
+    if (!symend)
+        {
+        printf("Empty symtab\n"); return;
+        }
+    printf("Reverse dumping symtab:\n");
+    for (sp = symend ; sp != (Symbol *) 0 ; sp = sp->prev)
+        {
+        dump_symitem(sp);
+        }
+    //printf("\n");
 }
 
 /*
@@ -175,21 +196,23 @@ Symbol *lookup_res_symtab(char *var, int type)
 Symbol  *lookup_symtab(char *str, int type)
 
 {
-    Symbol *sp ;
-
-    //printf("lookup_symtab '%s'", str);
-
-    for (sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
+    Symbol *retsp = NULL;
+    //printf("lookup_symtab '%s' ... ", str);
+    for (Symbol *sp = symlist ; sp != (Symbol *) 0 ; sp = sp->next)
+        {
         if(sp->type == type)
-          if (strcmp(sp->name, str) == 0)
             {
-            //printf("%s %p\n", sp->var, sp);
-            return sp ;                                 /* found  */
+            //printf("type of: %s ", sp->name);
+            if (strcmp(sp->var, str) == 0)
+                {
+                //printf("Found: %s %p\n", sp->var, sp);
+                retsp = sp ;    /* found  */
+                break;
+                }
             }
-
+        }
     //printf("\n");
-
-    return (Symbol *) 0 ;                               /* symbol not found */
+    return retsp;
 }
 
 Symbol  *make_symstr(char *name, char *var, int type)
@@ -210,17 +233,15 @@ Symbol  *make_symtab(char *name, char *var, char *res, int type, double d)
 {
     Symbol *sp = (Symbol *) emalloc2( sizeof( Symbol), __LINE__, __FILE__) ;
     //sp = (Symbol *) emalloc( sizeof( Symbol)) ;
-
+    memset(sp, '\0', sizeof(Symbol));
     sp->magic = SYMTAB_MAGIC;
-
     sp->name = estrdup2(name, __LINE__, __FILE__);
     sp->var = estrdup2(var, __LINE__, __FILE__);
     sp->res = estrdup2(res, __LINE__, __FILE__);
-
     sp->type = type;
     sp->u.dval = d;
-    sp->next = NULL;
-
+    //sp->prev = NULL;        // Already set by memset
+    //sp->next = NULL;
     return sp;
 }
 
@@ -250,8 +271,63 @@ Symbol  *push_symtab(char *name, char *var, char *res, int type, double d)
             {
             }
         sp2->next = sp;
+        sp->prev  = sp2;
         }
+    symend = sp ;
     return sp ;
+}
+
+// -----------------------------------------------------------------------
+//  curr  ^next
+//  prev   curr  ^next
+//         prev   curr  ^next
+
+void    delitem_symtab(Symbol  *sp)
+
+{
+    Symbol *last = symlist;
+
+    if(sp == NULL)
+        return;
+    if(last == NULL)
+        return;
+    if(sp->magic != SYMTAB_MAGIC)
+        {
+        printf("sp->magic != SYMTAB_MAGIC\r\n");
+        return;
+        }
+    Symbol  *prev = sp->prev;
+    Symbol  *next = sp->next;
+    // Effected terminals?
+    if (sp == symlist)
+        {
+        if (next)
+            {
+            symlist = next;
+            next->prev = NULL;
+            }
+        else
+            {
+            symlist = NULL;
+            symend = NULL;
+            }
+        }
+   else if (sp == symend)
+        {
+        if(prev)
+            {
+            symend = prev;
+            prev->next = NULL;
+            }
+        else
+            symend = NULL;
+        }
+    else
+        {// Unlink from chain
+        prev->next = sp->next;
+        next->prev = prev;
+        }
+    efree(sp);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -275,8 +351,11 @@ Symbol  *pop_symtab(char *name, char *var, char *res, int *type, double *d)
     strcpy(var, symlist->var);
     strcpy(res, symlist->res);
 
-    *type = symlist->type;
-    *d = symlist->u.dval;
+    if(type)
+        *type = symlist->type;
+
+    if(d)
+        *d = symlist->u.dval;
 
     efree(symlist->name);
     efree(symlist->var);
@@ -509,15 +588,15 @@ int peek_ddef_ptr(outstr **root, void **ptr)
 int print_ddata(outstr *root)
 
 {
+    #ifndef TEST
     outstr *sp2;
-
     //  printf("print data %p\n", root);
-
     for(sp2 = root; sp2 != NULL; sp2 = sp2->next)
         {
         if(sp2->line)
             fprintf(asmfp, "%s", sp2->line);
         }
+    #endif
     return 0;
 }
 
@@ -593,6 +672,7 @@ int     parse_line(char *str, char **ptr1, char **ptr2, char **ptr3)
 int print_ddcode(outstr *root)
 
 {
+    #ifndef TEST
     outstr *sp2; int opt = 0;
     char *prev = 0, *ptr1, *ptr2, *ptr3;
     char *ptr11, *ptr12, *ptr13;
@@ -651,6 +731,7 @@ int print_ddcode(outstr *root)
         fprintf(asmfp, "%s", prev);
         free(prev);
         }
+    #endif
 
     return 0;
 }
@@ -690,5 +771,69 @@ int     create_unique2(char *str, char *prefix, char *str1, char *str2)
 
 ///////////////////////////////////////////////////////////////////////////
 
+#ifdef TEST
 
+void execerror(char *str, char *str2)
+{
 
+}
+
+int translate_type(int, char **pstr)
+{
+    return 0;
+}
+
+double integer(double)
+{
+    return 0;
+}
+
+int main(int argc, char *argv[])
+
+{
+    printf("test symtab\n");
+    for (int aa = 0 ; aa < 3; aa ++)
+        {
+        char strx[24];
+        snprintf(strx, sizeof(strx), "hello_%d", aa);
+        //printf("%s", strx);
+        push_symtab("", strx, "", DECL_DEFINE, 0);
+        }
+    Symbol  *st2 = lookup_symtab("1234", DECL_DEFINE);
+    if (st2) printf("found %s\n", st2->var);
+
+    Symbol  *st3 = lookup_symtab("hello", DECL_DEFINE);
+    //if (st3) printf("found: %s\n", st3->var);
+
+    dump_symtab();
+    revdump_symtab();
+
+    Symbol  *st4 = lookup_symtab("hello_0", DECL_DEFINE);
+    //if (st4) printf("found: %s\n", st4->var);
+    delitem_symtab(st4);
+
+    dump_symtab();
+    revdump_symtab();
+
+    Symbol  *st5 = lookup_symtab("hello_2", DECL_DEFINE);
+    //if (st5) printf("found: %s\n", st5->var);
+    delitem_symtab(st5);
+
+    dump_symtab();
+    revdump_symtab();
+
+    Symbol  *st6 = lookup_symtab("hello_1", DECL_DEFINE);
+    //if (st6) printf("found: %s\n", st6->var);
+    delitem_symtab(st6);
+
+    dump_symtab();
+    revdump_symtab();
+
+    //empty_symtab();
+    //dump_symtab();
+
+    //print_emalloc();
+    //print_estrdup();
+}
+
+#endif

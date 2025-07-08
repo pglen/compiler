@@ -1,1 +1,15 @@
- %define DEFINE hello
+%define DEFINE
+%ifdef DEFINE
+    %msg " pre1234 " ;%nl
+%else
+    %msg " pre3456 " ; %nl
+%endif
+
+%undef DEFINE
+%ifdef DEFINE
+    %msg " aft1234 " ; %nl
+%else
+    %msg " aft3456 " ; %nl
+
+%endif
+

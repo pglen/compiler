@@ -1143,7 +1143,7 @@ YY_RULE_SETUP
 { /* comment */
                          num_lines++;
 
-                         if(config.testpreflex)
+                         if(config.testpreflex > 1)
                              { printf("[hash_comment] '%s", yytext); fflush(stdout); }
 
                          if(config.showcomm)

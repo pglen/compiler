@@ -73,6 +73,8 @@ clean:
 tests: pcomp
 	./pcomp ../tests/comment.pc
 
+test_symtab:  symtab.c emalloc.c
+	gcc -DTEST symtab.c emalloc.c -lm -o test_symtab
 
 
 

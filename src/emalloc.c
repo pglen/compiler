@@ -17,18 +17,12 @@
 #include <malloc.h>
 #include <string.h>
 
+#include "pcomp.h"
+#include "utils.h"
 #include "emalloc.h"
 #include "symtab.h"
 
 #define	EMALLOC_MAGIC 0x32345654
-
-typedef struct meminf {
-		int 	magic;
-		int	 	line;
-		void 	*ptr;
-		char 	file[24];
-  		struct meminf *next ;
-} meminf;
 
 #define MNULL  (meminf*)0
 #define CNULL  (char*)0
@@ -94,16 +88,15 @@ void	efree(void *ptr)
 
         if(ptr == sp2->ptr)
         	{
-        	//printf("found %p\n", ptr);
+        	//printf("found edup: %p\n", ptr);
 			//*((char*)sp2->ptr) = 'x';
 
 			if(sp2 == emalloc_info)
 				prev->next = MNULL, free(prev), emalloc_info = NULL;
 			else
         		prev->next = sp2->next, free(sp2);
-
             found = 1;
-        	break;
+        	//break;
         	}
         prev = sp2;
    		}
@@ -115,7 +108,7 @@ void	efree(void *ptr)
 
         if(ptr == sp2->ptr)
         	{
-        	//printf("found strdup %p\n", ptr);
+        	//printf("found strdup %p '%s'\n", ptr, ptr);
 			//*((char*)sp2->ptr) = 'x';
 
 			if(sp2 == strdup_info)
@@ -124,11 +117,10 @@ void	efree(void *ptr)
         		prev->next = sp2->next,  free(sp2);
 
             found = 1;
-        	break;
+        	//break;
         	}
         prev = sp2;
    		}
-
    	if(found)
 		free(ptr);
 }
@@ -291,4 +283,4 @@ int print_estrdup()
     return 0;
 }
 
-
+// EOF
