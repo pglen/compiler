@@ -7,6 +7,7 @@ Terminals unused in grammar
 State 1 conflicts: 14 shift/reduce, 2 reduce/reduce
 State 3 conflicts: 1 shift/reduce
 State 5 conflicts: 2 reduce/reduce
+State 8 conflicts: 1 shift/reduce
 State 9 conflicts: 1 shift/reduce
 State 10 conflicts: 1 shift/reduce
 State 11 conflicts: 1 shift/reduce
@@ -16,27 +17,30 @@ State 14 conflicts: 1 shift/reduce
 State 15 conflicts: 1 shift/reduce
 State 29 conflicts: 1 shift/reduce
 State 32 conflicts: 3 shift/reduce, 1 reduce/reduce
+State 35 conflicts: 3 shift/reduce, 1 reduce/reduce
 State 36 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 37 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 51 conflicts: 1 shift/reduce
-State 52 conflicts: 1 shift/reduce
-State 53 conflicts: 1 shift/reduce
+State 49 conflicts: 1 shift/reduce
+State 50 conflicts: 1 shift/reduce
+State 54 conflicts: 1 shift/reduce
+State 55 conflicts: 1 shift/reduce, 1 reduce/reduce
 State 56 conflicts: 1 shift/reduce
-State 57 conflicts: 1 shift/reduce, 1 reduce/reduce
-State 58 conflicts: 1 shift/reduce
+State 59 conflicts: 1 shift/reduce
+State 62 conflicts: 1 shift/reduce
 State 63 conflicts: 1 shift/reduce
 State 64 conflicts: 1 shift/reduce
 State 65 conflicts: 1 shift/reduce
-State 66 conflicts: 1 shift/reduce
-State 68 conflicts: 1 shift/reduce
-State 74 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 75 conflicts: 1 shift/reduce
-State 76 conflicts: 1 shift/reduce
+State 67 conflicts: 1 shift/reduce
+State 73 conflicts: 1 shift/reduce
+State 74 conflicts: 1 shift/reduce
+State 78 conflicts: 3 shift/reduce, 1 reduce/reduce
+State 79 conflicts: 3 shift/reduce, 1 reduce/reduce
 State 80 conflicts: 3 shift/reduce, 1 reduce/reduce
 State 81 conflicts: 3 shift/reduce, 1 reduce/reduce
 State 82 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 83 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 86 conflicts: 1 shift/reduce
+State 84 conflicts: 1 shift/reduce
+State 85 conflicts: 1 shift/reduce
+State 89 conflicts: 1 shift/reduce
+State 90 conflicts: 1 shift/reduce
 State 91 conflicts: 1 shift/reduce
 State 92 conflicts: 1 shift/reduce
 State 93 conflicts: 1 shift/reduce
@@ -45,15 +49,12 @@ State 95 conflicts: 1 shift/reduce
 State 96 conflicts: 1 shift/reduce
 State 97 conflicts: 1 shift/reduce
 State 98 conflicts: 1 shift/reduce
-State 99 conflicts: 1 shift/reduce
 State 100 conflicts: 1 shift/reduce
-State 101 conflicts: 1 shift/reduce
-State 107 conflicts: 1 shift/reduce
-State 108 conflicts: 1 shift/reduce
-State 122 conflicts: 3 shift/reduce, 1 reduce/reduce
-State 123 conflicts: 1 shift/reduce, 20 reduce/reduce
+State 106 conflicts: 1 shift/reduce
+State 121 conflicts: 3 shift/reduce, 1 reduce/reduce
+State 122 conflicts: 1 shift/reduce, 21 reduce/reduce
+State 123 conflicts: 1 shift/reduce
 State 124 conflicts: 1 shift/reduce
-State 125 conflicts: 1 shift/reduce
 State 127 conflicts: 1 shift/reduce
 State 128 conflicts: 1 shift/reduce, 1 reduce/reduce
 State 129 conflicts: 1 shift/reduce, 1 reduce/reduce
@@ -62,7 +63,10 @@ State 131 conflicts: 1 shift/reduce, 1 reduce/reduce
 State 132 conflicts: 1 shift/reduce, 1 reduce/reduce
 State 133 conflicts: 1 shift/reduce
 State 134 conflicts: 1 shift/reduce
-State 141 conflicts: 1 shift/reduce
+State 142 conflicts: 1 shift/reduce
+State 144 conflicts: 1 shift/reduce
+State 147 conflicts: 1 shift/reduce
+State 148 conflicts: 3 shift/reduce, 1 reduce/reduce
 
 
 Grammar
@@ -116,7 +120,7 @@ Grammar
 
    36 msg1: MSG2 sp1mb idd1 sp1mb semibm
 
-   37 mac1: MAC2 sp1b ID2 sp1b STR2 sp1m
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
    38 ifdef1: IFDEF2 sp1mb idd1 sp1mb semibm
 
@@ -175,16 +179,16 @@ Terminals, with rules where they appear
     NOT2 <sym> (266)
     LSHIFT2 <sym> (267) 55
     RSHIFT2 <sym> (268) 54
-    PAREN12 <sym> (269) 64
-    PAREN22 <sym> (270) 64
+    PAREN12 <sym> (269) 37 64
+    PAREN22 <sym> (270) 37 64
     SEMI2 <sym> (271) 32 33
     ENL2 <sym> (272) 35
     CH2 <sym> (273)
-    ID2 <sym> (274) 24 37 39
+    ID2 <sym> (274) 24 39
     ID3 <sym> (275) 15
     SP2 <sym> (276) 42 46 47
     NL2 <sym> (277) 30 31 43
-    STR2 <sym> (278) 23 25 26 27 28 37
+    STR2 <sym> (278) 23 25 26 27 28
     COMMENT2 <sym> (279) 13
     NUM2 <sym> (280) 65
     MAC2 <sym> (281) 37
@@ -210,7 +214,7 @@ Nonterminals, with rules where they appear
         on right: 2
     idd1 <sym> (38)
         on left: 16 17
-        on right: 18 19 20 22 36 38
+        on right: 18 19 20 22 36 37 38
     define1 <sym> (39)
         on left: 18 19
         on right: 3
@@ -228,7 +232,7 @@ Nonterminals, with rules where they appear
         on right: 34
     semibm <sym> (44)
         on left: 34
-        on right: 18 19 20 22 35 36 38 40 41
+        on right: 18 19 20 22 35 36 37 38 40 41
     nl1 <sym> (45)
         on left: 35
         on right: 7
@@ -255,13 +259,13 @@ Nonterminals, with rules where they appear
         on right: 45
     sp1b <sym> (53)
         on left: 44 45
-        on right: 21 37 39
+        on right: 21 39
     sp1m <sym> (54)
         on left: 46 47
-        on right: 21 37 39 47 49
+        on right: 21 39 47 49
     sp1mb <sym> (55)
         on left: 48 49
-        on right: 14 18 19 20 22 23 24 25 26 27 28 31 33 35 36 38 40 41 51 52 53 54 55 57 58 60 61 62 64 65
+        on right: 14 18 19 20 22 23 24 25 26 27 28 31 33 35 36 37 38 40 41 51 52 53 54 55 57 58 60 61 62 64 65
     expr1 <sym> (56)
         on left: 50 51 52 53 54 55
         on right: 17 26 27 51 52 53 54 55 64
@@ -399,15 +403,15 @@ State 7
 
 State 8
 
-   37 mac1: MAC2 • sp1b ID2 sp1b STR2 sp1m
+   37 mac1: MAC2 • sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
-    SP2  shift, and go to state 33
-    NL2  shift, and go to state 6
+    SP2  shift, and go to state 31
 
-    $default  reduce using rule 44 (sp1b)
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
 
-    sp1   go to state 27
-    sp1b  go to state 34
+    sp1m   go to state 29
+    sp1mb  go to state 33
 
 
 State 9
@@ -420,7 +424,7 @@ State 9
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 35
+    sp1mb  go to state 34
 
 
 State 10
@@ -433,7 +437,7 @@ State 10
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 36
+    sp1mb  go to state 35
 
 
 State 11
@@ -446,7 +450,7 @@ State 11
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 37
+    sp1mb  go to state 36
 
 
 State 12
@@ -460,7 +464,7 @@ State 12
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 38
+    sp1mb  go to state 37
 
 
 State 13
@@ -473,7 +477,7 @@ State 13
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 39
+    sp1mb  go to state 38
 
 
 State 14
@@ -486,7 +490,7 @@ State 14
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 40
+    sp1mb  go to state 39
 
 
 State 15
@@ -499,7 +503,7 @@ State 15
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 41
+    sp1mb  go to state 40
 
 
 State 16
@@ -591,8 +595,8 @@ State 28
    21 undef1: sp1b • UNDEF2 sp1m
    39 elifdef1: sp1b • ELIFDEF2 sp1m ID2 sp1m
 
-    ELIFDEF2  shift, and go to state 42
-    UNDEF2    shift, and go to state 43
+    ELIFDEF2  shift, and go to state 41
+    UNDEF2    shift, and go to state 42
 
 
 State 29
@@ -600,7 +604,7 @@ State 29
    47 sp1m: sp1m • SP2
    49 sp1mb: sp1m •
 
-    SP2  shift, and go to state 44
+    SP2  shift, and go to state 43
 
     SP2       [reduce using rule 49 (sp1mb)]
     $default  reduce using rule 49 (sp1mb)
@@ -624,9 +628,9 @@ State 32
 
    35 nl1: ENL2 sp1mb • semibm
 
-    SEMI2  shift, and go to state 45
+    SEMI2  shift, and go to state 44
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    NL2    shift, and go to state 45
 
     SEMI2     [reduce using rule 48 (sp1mb)]
     SP2       [reduce using rule 29 (semib)]
@@ -634,54 +638,81 @@ State 32
     NL2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 29 (semib)
 
-    semib   go to state 47
-    semibm  go to state 48
+    semib   go to state 46
+    semibm  go to state 47
     sp1m    go to state 29
-    sp1mb   go to state 49
+    sp1mb   go to state 48
 
 
 State 33
 
-   42 sp1: SP2 •
+   37 mac1: MAC2 sp1mb • idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
-    $default  reduce using rule 42 (sp1)
+    ID2   shift, and go to state 49
+    SP2   shift, and go to state 31
+    STR2  shift, and go to state 50
+
+    $default  reduce using rule 48 (sp1mb)
+
+    idd1   go to state 51
+    strx1  go to state 52
+    sp1m   go to state 29
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 34
 
-   37 mac1: MAC2 sp1b • ID2 sp1b STR2 sp1m
+   38 ifdef1: IFDEF2 sp1mb • idd1 sp1mb semibm
 
-    ID2  shift, and go to state 50
+    ID2   shift, and go to state 49
+    SP2   shift, and go to state 31
+    STR2  shift, and go to state 50
+
+    $default  reduce using rule 48 (sp1mb)
+
+    idd1   go to state 59
+    strx1  go to state 52
+    sp1m   go to state 29
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 35
 
-   38 ifdef1: IFDEF2 sp1mb • idd1 sp1mb semibm
+   40 endif1: ENDIF2 sp1mb • semibm
 
-    ID2   shift, and go to state 51
-    SP2   shift, and go to state 31
-    STR2  shift, and go to state 52
+    SEMI2  shift, and go to state 44
+    SP2    shift, and go to state 31
+    NL2    shift, and go to state 45
 
-    $default  reduce using rule 48 (sp1mb)
+    SEMI2     [reduce using rule 48 (sp1mb)]
+    SP2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 29 (semib)
 
-    idd1   go to state 53
-    strx1  go to state 54
-    sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 56
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    semib   go to state 46
+    semibm  go to state 60
+    sp1m    go to state 29
+    sp1mb   go to state 48
 
 
 State 36
 
-   40 endif1: ENDIF2 sp1mb • semibm
+   41 else1: ELSE2 sp1mb • semibm
 
-    SEMI2  shift, and go to state 45
+    SEMI2  shift, and go to state 44
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    NL2    shift, and go to state 45
 
     SEMI2     [reduce using rule 48 (sp1mb)]
     SP2       [reduce using rule 29 (semib)]
@@ -689,120 +720,109 @@ State 36
     NL2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 29 (semib)
 
-    semib   go to state 47
+    semib   go to state 46
     semibm  go to state 61
     sp1m    go to state 29
-    sp1mb   go to state 49
+    sp1mb   go to state 48
 
 
 State 37
 
-   41 else1: ELSE2 sp1mb • semibm
+   18 define1: DEF2 sp1mb • idd1 sp1mb semibm
+   19        | DEF2 sp1mb • idd1 sp1mb idd1 sp1mb semibm
 
-    SEMI2  shift, and go to state 45
-    SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    ID2   shift, and go to state 49
+    SP2   shift, and go to state 31
+    STR2  shift, and go to state 50
 
-    SEMI2     [reduce using rule 48 (sp1mb)]
-    SP2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 48 (sp1mb)]
-    $default  reduce using rule 29 (semib)
+    $default  reduce using rule 48 (sp1mb)
 
-    semib   go to state 47
-    semibm  go to state 62
-    sp1m    go to state 29
-    sp1mb   go to state 49
+    idd1   go to state 62
+    strx1  go to state 52
+    sp1m   go to state 29
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 38
 
-   18 define1: DEF2 sp1mb • idd1 sp1mb semibm
-   19        | DEF2 sp1mb • idd1 sp1mb idd1 sp1mb semibm
+   20 undef1: UNDEF2 sp1mb • idd1 sp1mb semibm
 
-    ID2   shift, and go to state 51
+    ID2   shift, and go to state 49
     SP2   shift, and go to state 31
-    STR2  shift, and go to state 52
+    STR2  shift, and go to state 50
 
     $default  reduce using rule 48 (sp1mb)
 
     idd1   go to state 63
-    strx1  go to state 54
+    strx1  go to state 52
     sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 56
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 39
 
-   20 undef1: UNDEF2 sp1mb • idd1 sp1mb semibm
+   22 err1: ERR2 sp1mb • idd1 sp1mb semibm
 
-    ID2   shift, and go to state 51
+    ID2   shift, and go to state 49
     SP2   shift, and go to state 31
-    STR2  shift, and go to state 52
+    STR2  shift, and go to state 50
 
     $default  reduce using rule 48 (sp1mb)
 
     idd1   go to state 64
-    strx1  go to state 54
+    strx1  go to state 52
     sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 56
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 40
 
-   22 err1: ERR2 sp1mb • idd1 sp1mb semibm
+   36 msg1: MSG2 sp1mb • idd1 sp1mb semibm
 
-    ID2   shift, and go to state 51
+    ID2   shift, and go to state 49
     SP2   shift, and go to state 31
-    STR2  shift, and go to state 52
+    STR2  shift, and go to state 50
 
     $default  reduce using rule 48 (sp1mb)
 
     idd1   go to state 65
-    strx1  go to state 54
+    strx1  go to state 52
     sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 56
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
 State 41
 
-   36 msg1: MSG2 sp1mb • idd1 sp1mb semibm
+   39 elifdef1: sp1b ELIFDEF2 • sp1m ID2 sp1m
 
-    ID2   shift, and go to state 51
-    SP2   shift, and go to state 31
-    STR2  shift, and go to state 52
+    SP2  shift, and go to state 31
 
-    $default  reduce using rule 48 (sp1mb)
-
-    idd1   go to state 66
-    strx1  go to state 54
-    sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 56
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1m  go to state 66
 
 
 State 42
 
-   39 elifdef1: sp1b ELIFDEF2 • sp1m ID2 sp1m
+   21 undef1: sp1b UNDEF2 • sp1m
 
     SP2  shift, and go to state 31
 
@@ -811,71 +831,49 @@ State 42
 
 State 43
 
-   21 undef1: sp1b UNDEF2 • sp1m
-
-    SP2  shift, and go to state 31
-
-    sp1m  go to state 68
-
-
-State 44
-
    47 sp1m: sp1m SP2 •
 
     $default  reduce using rule 47 (sp1m)
 
 
-State 45
+State 44
 
    32 semib: SEMI2 •
 
     $default  reduce using rule 32 (semib)
 
 
-State 46
+State 45
 
    30 semib: NL2 •
 
     $default  reduce using rule 30 (semib)
 
 
-State 47
+State 46
 
    34 semibm: semib •
 
     $default  reduce using rule 34 (semibm)
 
 
-State 48
+State 47
 
    35 nl1: ENL2 sp1mb semibm •
 
     $default  reduce using rule 35 (nl1)
 
 
-State 49
+State 48
 
    31 semib: sp1mb • NL2
    33      | sp1mb • SEMI2
 
-    SEMI2  shift, and go to state 69
-    NL2    shift, and go to state 70
+    SEMI2  shift, and go to state 68
+    NL2    shift, and go to state 69
 
 
-State 50
-
-   37 mac1: MAC2 sp1b ID2 • sp1b STR2 sp1m
-
-    SP2  shift, and go to state 33
-    NL2  shift, and go to state 6
-
-    $default  reduce using rule 44 (sp1b)
-
-    sp1   go to state 27
-    sp1b  go to state 71
-
-
-State 51
+State 49
 
    24 strx1: ID2 • sp1mb
 
@@ -885,10 +883,10 @@ State 51
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 72
+    sp1mb  go to state 70
 
 
-State 52
+State 50
 
    23 strx1: STR2 • sp1mb
    25      | STR2 • sp1mb PLUS2 sp1mb strx1 sp1mb
@@ -901,39 +899,38 @@ State 52
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 73
+    sp1mb  go to state 71
 
 
-State 53
+State 51
 
-   38 ifdef1: IFDEF2 sp1mb idd1 • sp1mb semibm
+   37 mac1: MAC2 sp1mb idd1 • sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
     SP2  shift, and go to state 31
 
-    SP2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 74
+    sp1mb  go to state 72
 
 
-State 54
+State 52
 
    16 idd1: strx1 •
 
     $default  reduce using rule 16 (idd1)
 
 
-State 55
+State 53
 
    64 expr4: sp1mb • PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb
    65 expr5: sp1mb • NUM2 sp1mb
 
-    PAREN12  shift, and go to state 75
-    NUM2     shift, and go to state 76
+    PAREN12  shift, and go to state 73
+    NUM2     shift, and go to state 74
 
 
-State 56
+State 54
 
    17 idd1: expr1 •
    27 strx1: expr1 • sp1mb PLUS2 sp1mb STR2 sp1mb
@@ -955,10 +952,10 @@ State 56
     $default  reduce using rule 17 (idd1)
 
     sp1m   go to state 29
-    sp1mb  go to state 77
+    sp1mb  go to state 75
 
 
-State 57
+State 55
 
    50 expr1: expr2 •
    57 expr2: expr2 • sp1mb PLUS2 sp1mb expr3
@@ -973,10 +970,10 @@ State 57
     $default  reduce using rule 50 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
-State 58
+State 56
 
    56 expr2: expr3 •
    60 expr3: expr3 • sp1mb MULT2 sp1mb expr4
@@ -992,41 +989,67 @@ State 58
     $default  reduce using rule 56 (expr2)
 
     sp1m   go to state 29
-    sp1mb  go to state 79
+    sp1mb  go to state 77
 
 
-State 59
+State 57
 
    59 expr3: expr4 •
 
     $default  reduce using rule 59 (expr3)
 
 
-State 60
+State 58
 
    63 expr4: expr5 •
 
     $default  reduce using rule 63 (expr4)
 
 
-State 61
+State 59
+
+   38 ifdef1: IFDEF2 sp1mb idd1 • sp1mb semibm
+
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 78
+
+
+State 60
 
    40 endif1: ENDIF2 sp1mb semibm •
 
     $default  reduce using rule 40 (endif1)
 
 
-State 62
+State 61
 
    41 else1: ELSE2 sp1mb semibm •
 
     $default  reduce using rule 41 (else1)
 
 
-State 63
+State 62
 
    18 define1: DEF2 sp1mb idd1 • sp1mb semibm
    19        | DEF2 sp1mb idd1 • sp1mb idd1 sp1mb semibm
+
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 79
+
+
+State 63
+
+   20 undef1: UNDEF2 sp1mb idd1 • sp1mb semibm
 
     SP2  shift, and go to state 31
 
@@ -1039,7 +1062,7 @@ State 63
 
 State 64
 
-   20 undef1: UNDEF2 sp1mb idd1 • sp1mb semibm
+   22 err1: ERR2 sp1mb idd1 • sp1mb semibm
 
     SP2  shift, and go to state 31
 
@@ -1052,7 +1075,7 @@ State 64
 
 State 65
 
-   22 err1: ERR2 sp1mb idd1 • sp1mb semibm
+   36 msg1: MSG2 sp1mb idd1 • sp1mb semibm
 
     SP2  shift, and go to state 31
 
@@ -1065,98 +1088,65 @@ State 65
 
 State 66
 
-   36 msg1: MSG2 sp1mb idd1 • sp1mb semibm
+   39 elifdef1: sp1b ELIFDEF2 sp1m • ID2 sp1m
+   47 sp1m: sp1m • SP2
 
-    SP2  shift, and go to state 31
-
-    SP2       [reduce using rule 48 (sp1mb)]
-    $default  reduce using rule 48 (sp1mb)
-
-    sp1m   go to state 29
-    sp1mb  go to state 83
+    ID2  shift, and go to state 83
+    SP2  shift, and go to state 43
 
 
 State 67
 
-   39 elifdef1: sp1b ELIFDEF2 sp1m • ID2 sp1m
-   47 sp1m: sp1m • SP2
-
-    ID2  shift, and go to state 84
-    SP2  shift, and go to state 44
-
-
-State 68
-
    21 undef1: sp1b UNDEF2 sp1m •
    47 sp1m: sp1m • SP2
 
-    SP2  shift, and go to state 44
+    SP2  shift, and go to state 43
 
     SP2       [reduce using rule 21 (undef1)]
     $default  reduce using rule 21 (undef1)
 
 
-State 69
+State 68
 
    33 semib: sp1mb SEMI2 •
 
     $default  reduce using rule 33 (semib)
 
 
-State 70
+State 69
 
    31 semib: sp1mb NL2 •
 
     $default  reduce using rule 31 (semib)
 
 
-State 71
-
-   37 mac1: MAC2 sp1b ID2 sp1b • STR2 sp1m
-
-    STR2  shift, and go to state 85
-
-
-State 72
+State 70
 
    24 strx1: ID2 sp1mb •
 
     $default  reduce using rule 24 (strx1)
 
 
-State 73
+State 71
 
    23 strx1: STR2 sp1mb •
    25      | STR2 sp1mb • PLUS2 sp1mb strx1 sp1mb
    26      | STR2 sp1mb • PLUS2 sp1mb expr1 sp1mb
    28      | STR2 sp1mb • PLUS2 sp1mb STR2
 
-    PLUS2  shift, and go to state 86
+    PLUS2  shift, and go to state 84
 
     $default  reduce using rule 23 (strx1)
 
 
-State 74
+State 72
 
-   38 ifdef1: IFDEF2 sp1mb idd1 sp1mb • semibm
+   37 mac1: MAC2 sp1mb idd1 sp1mb • PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
-    SEMI2  shift, and go to state 45
-    SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
-
-    SEMI2     [reduce using rule 48 (sp1mb)]
-    SP2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 48 (sp1mb)]
-    $default  reduce using rule 29 (semib)
-
-    semib   go to state 47
-    semibm  go to state 87
-    sp1m    go to state 29
-    sp1mb   go to state 49
+    PAREN12  shift, and go to state 85
 
 
-State 75
+State 73
 
    64 expr4: sp1mb PAREN12 • sp1mb expr1 sp1mb PAREN22 sp1mb
 
@@ -1166,10 +1156,10 @@ State 75
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 88
+    sp1mb  go to state 86
 
 
-State 76
+State 74
 
    65 expr5: sp1mb NUM2 • sp1mb
 
@@ -1179,10 +1169,10 @@ State 76
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 89
+    sp1mb  go to state 87
 
 
-State 77
+State 75
 
    27 strx1: expr1 sp1mb • PLUS2 sp1mb STR2 sp1mb
    51 expr1: expr1 sp1mb • OR2 sp1mb expr2
@@ -1191,44 +1181,64 @@ State 77
    54      | expr1 sp1mb • RSHIFT2 sp1mb expr2
    55      | expr1 sp1mb • LSHIFT2 sp1mb expr2
 
-    PLUS2    shift, and go to state 90
-    OR2      shift, and go to state 91
-    AND2     shift, and go to state 92
-    XOR2     shift, and go to state 93
-    LSHIFT2  shift, and go to state 94
-    RSHIFT2  shift, and go to state 95
+    PLUS2    shift, and go to state 88
+    OR2      shift, and go to state 89
+    AND2     shift, and go to state 90
+    XOR2     shift, and go to state 91
+    LSHIFT2  shift, and go to state 92
+    RSHIFT2  shift, and go to state 93
 
 
-State 78
+State 76
 
    57 expr2: expr2 sp1mb • PLUS2 sp1mb expr3
    58      | expr2 sp1mb • MINUS2 sp1mb expr3
 
-    PLUS2   shift, and go to state 96
-    MINUS2  shift, and go to state 97
+    PLUS2   shift, and go to state 94
+    MINUS2  shift, and go to state 95
 
 
-State 79
+State 77
 
    60 expr3: expr3 sp1mb • MULT2 sp1mb expr4
    61      | expr3 sp1mb • DIV2 sp1mb expr4
    62      | expr3 sp1mb • MOD2 sp1mb expr4
 
-    MULT2  shift, and go to state 98
-    DIV2   shift, and go to state 99
-    MOD2   shift, and go to state 100
+    MULT2  shift, and go to state 96
+    DIV2   shift, and go to state 97
+    MOD2   shift, and go to state 98
 
 
-State 80
+State 78
+
+   38 ifdef1: IFDEF2 sp1mb idd1 sp1mb • semibm
+
+    SEMI2  shift, and go to state 44
+    SP2    shift, and go to state 31
+    NL2    shift, and go to state 45
+
+    SEMI2     [reduce using rule 48 (sp1mb)]
+    SP2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 29 (semib)
+
+    semib   go to state 46
+    semibm  go to state 99
+    sp1m    go to state 29
+    sp1mb   go to state 48
+
+
+State 79
 
    18 define1: DEF2 sp1mb idd1 sp1mb • semibm
    19        | DEF2 sp1mb idd1 sp1mb • idd1 sp1mb semibm
 
-    SEMI2  shift, and go to state 45
-    ID2    shift, and go to state 51
+    SEMI2  shift, and go to state 44
+    ID2    shift, and go to state 49
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
-    STR2   shift, and go to state 52
+    NL2    shift, and go to state 45
+    STR2   shift, and go to state 50
 
     PAREN12   reduce using rule 48 (sp1mb)
     SEMI2     [reduce using rule 48 (sp1mb)]
@@ -1238,26 +1248,46 @@ State 80
     NUM2      reduce using rule 48 (sp1mb)
     $default  reduce using rule 29 (semib)
 
-    idd1    go to state 101
-    strx1   go to state 54
-    semib   go to state 47
-    semibm  go to state 102
+    idd1    go to state 100
+    strx1   go to state 52
+    semib   go to state 46
+    semibm  go to state 101
     sp1m    go to state 29
-    sp1mb   go to state 103
-    expr1   go to state 56
-    expr2   go to state 57
-    expr3   go to state 58
-    expr4   go to state 59
-    expr5   go to state 60
+    sp1mb   go to state 102
+    expr1   go to state 54
+    expr2   go to state 55
+    expr3   go to state 56
+    expr4   go to state 57
+    expr5   go to state 58
+
+
+State 80
+
+   20 undef1: UNDEF2 sp1mb idd1 sp1mb • semibm
+
+    SEMI2  shift, and go to state 44
+    SP2    shift, and go to state 31
+    NL2    shift, and go to state 45
+
+    SEMI2     [reduce using rule 48 (sp1mb)]
+    SP2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 29 (semib)
+
+    semib   go to state 46
+    semibm  go to state 103
+    sp1m    go to state 29
+    sp1mb   go to state 48
 
 
 State 81
 
-   20 undef1: UNDEF2 sp1mb idd1 sp1mb • semibm
+   22 err1: ERR2 sp1mb idd1 sp1mb • semibm
 
-    SEMI2  shift, and go to state 45
+    SEMI2  shift, and go to state 44
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    NL2    shift, and go to state 45
 
     SEMI2     [reduce using rule 48 (sp1mb)]
     SP2       [reduce using rule 29 (semib)]
@@ -1265,19 +1295,19 @@ State 81
     NL2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 29 (semib)
 
-    semib   go to state 47
+    semib   go to state 46
     semibm  go to state 104
     sp1m    go to state 29
-    sp1mb   go to state 49
+    sp1mb   go to state 48
 
 
 State 82
 
-   22 err1: ERR2 sp1mb idd1 sp1mb • semibm
+   36 msg1: MSG2 sp1mb idd1 sp1mb • semibm
 
-    SEMI2  shift, and go to state 45
+    SEMI2  shift, and go to state 44
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    NL2    shift, and go to state 45
 
     SEMI2     [reduce using rule 48 (sp1mb)]
     SP2       [reduce using rule 29 (semib)]
@@ -1285,51 +1315,22 @@ State 82
     NL2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 29 (semib)
 
-    semib   go to state 47
+    semib   go to state 46
     semibm  go to state 105
     sp1m    go to state 29
-    sp1mb   go to state 49
+    sp1mb   go to state 48
 
 
 State 83
-
-   36 msg1: MSG2 sp1mb idd1 sp1mb • semibm
-
-    SEMI2  shift, and go to state 45
-    SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
-
-    SEMI2     [reduce using rule 48 (sp1mb)]
-    SP2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 29 (semib)]
-    NL2       [reduce using rule 48 (sp1mb)]
-    $default  reduce using rule 29 (semib)
-
-    semib   go to state 47
-    semibm  go to state 106
-    sp1m    go to state 29
-    sp1mb   go to state 49
-
-
-State 84
 
    39 elifdef1: sp1b ELIFDEF2 sp1m ID2 • sp1m
 
     SP2  shift, and go to state 31
 
-    sp1m  go to state 107
+    sp1m  go to state 106
 
 
-State 85
-
-   37 mac1: MAC2 sp1b ID2 sp1b STR2 • sp1m
-
-    SP2  shift, and go to state 31
-
-    sp1m  go to state 108
-
-
-State 86
+State 84
 
    25 strx1: STR2 sp1mb PLUS2 • sp1mb strx1 sp1mb
    26      | STR2 sp1mb PLUS2 • sp1mb expr1 sp1mb
@@ -1341,17 +1342,23 @@ State 86
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 109
+    sp1mb  go to state 107
 
 
-State 87
+State 85
 
-   38 ifdef1: IFDEF2 sp1mb idd1 sp1mb semibm •
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 • sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
 
-    $default  reduce using rule 38 (ifdef1)
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 108
 
 
-State 88
+State 86
 
    64 expr4: sp1mb PAREN12 sp1mb • expr1 sp1mb PAREN22 sp1mb
 
@@ -1360,22 +1367,22 @@ State 88
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 110
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1mb  go to state 53
+    expr1  go to state 109
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 89
+State 87
 
    65 expr5: sp1mb NUM2 sp1mb •
 
     $default  reduce using rule 65 (expr5)
 
 
-State 90
+State 88
 
    27 strx1: expr1 sp1mb PLUS2 • sp1mb STR2 sp1mb
 
@@ -1384,12 +1391,25 @@ State 90
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
+    sp1mb  go to state 110
+
+
+State 89
+
+   51 expr1: expr1 sp1mb OR2 • sp1mb expr2
+
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
     sp1mb  go to state 111
 
 
-State 91
+State 90
 
-   51 expr1: expr1 sp1mb OR2 • sp1mb expr2
+   53 expr1: expr1 sp1mb AND2 • sp1mb expr2
 
     SP2  shift, and go to state 31
 
@@ -1400,9 +1420,9 @@ State 91
     sp1mb  go to state 112
 
 
-State 92
+State 91
 
-   53 expr1: expr1 sp1mb AND2 • sp1mb expr2
+   52 expr1: expr1 sp1mb XOR2 • sp1mb expr2
 
     SP2  shift, and go to state 31
 
@@ -1413,9 +1433,9 @@ State 92
     sp1mb  go to state 113
 
 
-State 93
+State 92
 
-   52 expr1: expr1 sp1mb XOR2 • sp1mb expr2
+   55 expr1: expr1 sp1mb LSHIFT2 • sp1mb expr2
 
     SP2  shift, and go to state 31
 
@@ -1426,9 +1446,9 @@ State 93
     sp1mb  go to state 114
 
 
-State 94
+State 93
 
-   55 expr1: expr1 sp1mb LSHIFT2 • sp1mb expr2
+   54 expr1: expr1 sp1mb RSHIFT2 • sp1mb expr2
 
     SP2  shift, and go to state 31
 
@@ -1439,9 +1459,9 @@ State 94
     sp1mb  go to state 115
 
 
-State 95
+State 94
 
-   54 expr1: expr1 sp1mb RSHIFT2 • sp1mb expr2
+   57 expr2: expr2 sp1mb PLUS2 • sp1mb expr3
 
     SP2  shift, and go to state 31
 
@@ -1452,9 +1472,9 @@ State 95
     sp1mb  go to state 116
 
 
-State 96
+State 95
 
-   57 expr2: expr2 sp1mb PLUS2 • sp1mb expr3
+   58 expr2: expr2 sp1mb MINUS2 • sp1mb expr3
 
     SP2  shift, and go to state 31
 
@@ -1465,9 +1485,9 @@ State 96
     sp1mb  go to state 117
 
 
-State 97
+State 96
 
-   58 expr2: expr2 sp1mb MINUS2 • sp1mb expr3
+   60 expr3: expr3 sp1mb MULT2 • sp1mb expr4
 
     SP2  shift, and go to state 31
 
@@ -1478,9 +1498,9 @@ State 97
     sp1mb  go to state 118
 
 
-State 98
+State 97
 
-   60 expr3: expr3 sp1mb MULT2 • sp1mb expr4
+   61 expr3: expr3 sp1mb DIV2 • sp1mb expr4
 
     SP2  shift, and go to state 31
 
@@ -1491,9 +1511,9 @@ State 98
     sp1mb  go to state 119
 
 
-State 99
+State 98
 
-   61 expr3: expr3 sp1mb DIV2 • sp1mb expr4
+   62 expr3: expr3 sp1mb MOD2 • sp1mb expr4
 
     SP2  shift, and go to state 31
 
@@ -1504,9 +1524,16 @@ State 99
     sp1mb  go to state 120
 
 
+State 99
+
+   38 ifdef1: IFDEF2 sp1mb idd1 sp1mb semibm •
+
+    $default  reduce using rule 38 (ifdef1)
+
+
 State 100
 
-   62 expr3: expr3 sp1mb MOD2 • sp1mb expr4
+   19 define1: DEF2 sp1mb idd1 sp1mb idd1 • sp1mb semibm
 
     SP2  shift, and go to state 31
 
@@ -1519,103 +1546,100 @@ State 100
 
 State 101
 
-   19 define1: DEF2 sp1mb idd1 sp1mb idd1 • sp1mb semibm
-
-    SP2  shift, and go to state 31
-
-    SP2       [reduce using rule 48 (sp1mb)]
-    $default  reduce using rule 48 (sp1mb)
-
-    sp1m   go to state 29
-    sp1mb  go to state 122
-
-
-State 102
-
    18 define1: DEF2 sp1mb idd1 sp1mb semibm •
 
     $default  reduce using rule 18 (define1)
 
 
-State 103
+State 102
 
    31 semib: sp1mb • NL2
    33      | sp1mb • SEMI2
    64 expr4: sp1mb • PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb
    65 expr5: sp1mb • NUM2 sp1mb
 
-    PAREN12  shift, and go to state 75
-    SEMI2    shift, and go to state 69
-    NL2      shift, and go to state 70
-    NUM2     shift, and go to state 76
+    PAREN12  shift, and go to state 73
+    SEMI2    shift, and go to state 68
+    NL2      shift, and go to state 69
+    NUM2     shift, and go to state 74
 
 
-State 104
+State 103
 
    20 undef1: UNDEF2 sp1mb idd1 sp1mb semibm •
 
     $default  reduce using rule 20 (undef1)
 
 
-State 105
+State 104
 
    22 err1: ERR2 sp1mb idd1 sp1mb semibm •
 
     $default  reduce using rule 22 (err1)
 
 
-State 106
+State 105
 
    36 msg1: MSG2 sp1mb idd1 sp1mb semibm •
 
     $default  reduce using rule 36 (msg1)
 
 
-State 107
+State 106
 
    39 elifdef1: sp1b ELIFDEF2 sp1m ID2 sp1m •
    47 sp1m: sp1m • SP2
 
-    SP2  shift, and go to state 44
+    SP2  shift, and go to state 43
 
     SP2       [reduce using rule 39 (elifdef1)]
     $default  reduce using rule 39 (elifdef1)
 
 
-State 108
-
-   37 mac1: MAC2 sp1b ID2 sp1b STR2 sp1m •
-   47 sp1m: sp1m • SP2
-
-    SP2  shift, and go to state 44
-
-    SP2       [reduce using rule 37 (mac1)]
-    $default  reduce using rule 37 (mac1)
-
-
-State 109
+State 107
 
    25 strx1: STR2 sp1mb PLUS2 sp1mb • strx1 sp1mb
    26      | STR2 sp1mb PLUS2 sp1mb • expr1 sp1mb
    28      | STR2 sp1mb PLUS2 sp1mb • STR2
 
-    ID2   shift, and go to state 51
+    ID2   shift, and go to state 49
     SP2   shift, and go to state 31
-    STR2  shift, and go to state 123
+    STR2  shift, and go to state 122
 
     $default  reduce using rule 48 (sp1mb)
 
-    strx1  go to state 124
+    strx1  go to state 123
     sp1m   go to state 29
-    sp1mb  go to state 55
-    expr1  go to state 125
-    expr2  go to state 57
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    sp1mb  go to state 53
+    expr1  go to state 124
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 110
+State 108
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb • idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
+
+    ID2   shift, and go to state 49
+    SP2   shift, and go to state 31
+    STR2  shift, and go to state 50
+
+    $default  reduce using rule 48 (sp1mb)
+
+    idd1   go to state 125
+    strx1  go to state 52
+    sp1m   go to state 29
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
+
+
+State 109
 
    51 expr1: expr1 • sp1mb OR2 sp1mb expr2
    52      | expr1 • sp1mb XOR2 sp1mb expr2
@@ -1632,14 +1656,14 @@ State 110
     sp1mb  go to state 126
 
 
-State 111
+State 110
 
    27 strx1: expr1 sp1mb PLUS2 sp1mb • STR2 sp1mb
 
     STR2  shift, and go to state 127
 
 
-State 112
+State 111
 
    51 expr1: expr1 sp1mb OR2 sp1mb • expr2
 
@@ -1648,14 +1672,14 @@ State 112
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr2  go to state 128
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 113
+State 112
 
    53 expr1: expr1 sp1mb AND2 sp1mb • expr2
 
@@ -1664,14 +1688,14 @@ State 113
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr2  go to state 129
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 114
+State 113
 
    52 expr1: expr1 sp1mb XOR2 sp1mb • expr2
 
@@ -1680,14 +1704,14 @@ State 114
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr2  go to state 130
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 115
+State 114
 
    55 expr1: expr1 sp1mb LSHIFT2 sp1mb • expr2
 
@@ -1696,14 +1720,14 @@ State 115
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr2  go to state 131
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 116
+State 115
 
    54 expr1: expr1 sp1mb RSHIFT2 sp1mb • expr2
 
@@ -1712,14 +1736,14 @@ State 116
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr2  go to state 132
-    expr3  go to state 58
-    expr4  go to state 59
-    expr5  go to state 60
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 117
+State 116
 
    57 expr2: expr2 sp1mb PLUS2 sp1mb • expr3
 
@@ -1728,13 +1752,13 @@ State 117
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr3  go to state 133
-    expr4  go to state 59
-    expr5  go to state 60
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 118
+State 117
 
    58 expr2: expr2 sp1mb MINUS2 sp1mb • expr3
 
@@ -1743,13 +1767,13 @@ State 118
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr3  go to state 134
-    expr4  go to state 59
-    expr5  go to state 60
+    expr4  go to state 57
+    expr5  go to state 58
 
 
-State 119
+State 118
 
    60 expr3: expr3 sp1mb MULT2 sp1mb • expr4
 
@@ -1758,12 +1782,12 @@ State 119
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr4  go to state 135
-    expr5  go to state 60
+    expr5  go to state 58
 
 
-State 120
+State 119
 
    61 expr3: expr3 sp1mb DIV2 sp1mb • expr4
 
@@ -1772,12 +1796,12 @@ State 120
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr4  go to state 136
-    expr5  go to state 60
+    expr5  go to state 58
 
 
-State 121
+State 120
 
    62 expr3: expr3 sp1mb MOD2 sp1mb • expr4
 
@@ -1786,18 +1810,18 @@ State 121
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 55
+    sp1mb  go to state 53
     expr4  go to state 137
-    expr5  go to state 60
+    expr5  go to state 58
 
 
-State 122
+State 121
 
    19 define1: DEF2 sp1mb idd1 sp1mb idd1 sp1mb • semibm
 
-    SEMI2  shift, and go to state 45
+    SEMI2  shift, and go to state 44
     SP2    shift, and go to state 31
-    NL2    shift, and go to state 46
+    NL2    shift, and go to state 45
 
     SEMI2     [reduce using rule 48 (sp1mb)]
     SP2       [reduce using rule 29 (semib)]
@@ -1805,13 +1829,13 @@ State 122
     NL2       [reduce using rule 48 (sp1mb)]
     $default  reduce using rule 29 (semib)
 
-    semib   go to state 47
+    semib   go to state 46
     semibm  go to state 138
     sp1m    go to state 29
-    sp1mb   go to state 49
+    sp1mb   go to state 48
 
 
-State 123
+State 122
 
    23 strx1: STR2 • sp1mb
    25      | STR2 • sp1mb PLUS2 sp1mb strx1 sp1mb
@@ -1826,6 +1850,8 @@ State 123
     PLUS2     reduce using rule 48 (sp1mb)
     PAREN12   reduce using rule 28 (strx1)
     PAREN12   [reduce using rule 48 (sp1mb)]
+    PAREN22   reduce using rule 28 (strx1)
+    PAREN22   [reduce using rule 48 (sp1mb)]
     SEMI2     reduce using rule 28 (strx1)
     SEMI2     [reduce using rule 48 (sp1mb)]
     ENL2      reduce using rule 28 (strx1)
@@ -1865,10 +1891,10 @@ State 123
     $default  reduce using rule 28 (strx1)
 
     sp1m   go to state 29
-    sp1mb  go to state 73
+    sp1mb  go to state 71
 
 
-State 124
+State 123
 
    25 strx1: STR2 sp1mb PLUS2 sp1mb strx1 • sp1mb
 
@@ -1881,7 +1907,7 @@ State 124
     sp1mb  go to state 139
 
 
-State 125
+State 124
 
    26 strx1: STR2 sp1mb PLUS2 sp1mb expr1 • sp1mb
    27      | expr1 • sp1mb PLUS2 sp1mb STR2 sp1mb
@@ -1900,6 +1926,18 @@ State 125
     sp1mb  go to state 140
 
 
+State 125
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 • sp1mb PAREN22 sp1mb idd1 sp1mb semibm
+
+    SP2  shift, and go to state 31
+
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 141
+
+
 State 126
 
    51 expr1: expr1 sp1mb • OR2 sp1mb expr2
@@ -1909,12 +1947,12 @@ State 126
    55      | expr1 sp1mb • LSHIFT2 sp1mb expr2
    64 expr4: sp1mb PAREN12 sp1mb expr1 sp1mb • PAREN22 sp1mb
 
-    OR2      shift, and go to state 91
-    AND2     shift, and go to state 92
-    XOR2     shift, and go to state 93
-    LSHIFT2  shift, and go to state 94
-    RSHIFT2  shift, and go to state 95
-    PAREN22  shift, and go to state 141
+    OR2      shift, and go to state 89
+    AND2     shift, and go to state 90
+    XOR2     shift, and go to state 91
+    LSHIFT2  shift, and go to state 92
+    RSHIFT2  shift, and go to state 93
+    PAREN22  shift, and go to state 142
 
 
 State 127
@@ -1927,7 +1965,7 @@ State 127
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 142
+    sp1mb  go to state 143
 
 
 State 128
@@ -1945,7 +1983,7 @@ State 128
     $default  reduce using rule 51 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
 State 129
@@ -1963,7 +2001,7 @@ State 129
     $default  reduce using rule 53 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
 State 130
@@ -1981,7 +2019,7 @@ State 130
     $default  reduce using rule 52 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
 State 131
@@ -1999,7 +2037,7 @@ State 131
     $default  reduce using rule 55 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
 State 132
@@ -2017,7 +2055,7 @@ State 132
     $default  reduce using rule 54 (expr1)
 
     sp1m   go to state 29
-    sp1mb  go to state 78
+    sp1mb  go to state 76
 
 
 State 133
@@ -2036,7 +2074,7 @@ State 133
     $default  reduce using rule 57 (expr2)
 
     sp1m   go to state 29
-    sp1mb  go to state 79
+    sp1mb  go to state 77
 
 
 State 134
@@ -2055,7 +2093,7 @@ State 134
     $default  reduce using rule 58 (expr2)
 
     sp1m   go to state 29
-    sp1mb  go to state 79
+    sp1mb  go to state 77
 
 
 State 135
@@ -2103,17 +2141,24 @@ State 140
    54      | expr1 sp1mb • RSHIFT2 sp1mb expr2
    55      | expr1 sp1mb • LSHIFT2 sp1mb expr2
 
-    PLUS2    shift, and go to state 90
-    OR2      shift, and go to state 91
-    AND2     shift, and go to state 92
-    XOR2     shift, and go to state 93
-    LSHIFT2  shift, and go to state 94
-    RSHIFT2  shift, and go to state 95
+    PLUS2    shift, and go to state 88
+    OR2      shift, and go to state 89
+    AND2     shift, and go to state 90
+    XOR2     shift, and go to state 91
+    LSHIFT2  shift, and go to state 92
+    RSHIFT2  shift, and go to state 93
 
     $default  reduce using rule 26 (strx1)
 
 
 State 141
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb • PAREN22 sp1mb idd1 sp1mb semibm
+
+    PAREN22  shift, and go to state 144
+
+
+State 142
 
    64 expr4: sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22 • sp1mb
 
@@ -2123,18 +2168,92 @@ State 141
     $default  reduce using rule 48 (sp1mb)
 
     sp1m   go to state 29
-    sp1mb  go to state 143
+    sp1mb  go to state 145
 
 
-State 142
+State 143
 
    27 strx1: expr1 sp1mb PLUS2 sp1mb STR2 sp1mb •
 
     $default  reduce using rule 27 (strx1)
 
 
-State 143
+State 144
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 • sp1mb idd1 sp1mb semibm
+
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 146
+
+
+State 145
 
    64 expr4: sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb •
 
     $default  reduce using rule 64 (expr4)
+
+
+State 146
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb • idd1 sp1mb semibm
+
+    ID2   shift, and go to state 49
+    SP2   shift, and go to state 31
+    STR2  shift, and go to state 50
+
+    $default  reduce using rule 48 (sp1mb)
+
+    idd1   go to state 147
+    strx1  go to state 52
+    sp1m   go to state 29
+    sp1mb  go to state 53
+    expr1  go to state 54
+    expr2  go to state 55
+    expr3  go to state 56
+    expr4  go to state 57
+    expr5  go to state 58
+
+
+State 147
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 • sp1mb semibm
+
+    SP2  shift, and go to state 31
+
+    SP2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 48 (sp1mb)
+
+    sp1m   go to state 29
+    sp1mb  go to state 148
+
+
+State 148
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb • semibm
+
+    SEMI2  shift, and go to state 44
+    SP2    shift, and go to state 31
+    NL2    shift, and go to state 45
+
+    SEMI2     [reduce using rule 48 (sp1mb)]
+    SP2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 29 (semib)]
+    NL2       [reduce using rule 48 (sp1mb)]
+    $default  reduce using rule 29 (semib)
+
+    semib   go to state 46
+    semibm  go to state 149
+    sp1m    go to state 29
+    sp1mb   go to state 48
+
+
+State 149
+
+   37 mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm •
+
+    $default  reduce using rule 37 (mac1)

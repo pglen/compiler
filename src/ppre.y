@@ -181,17 +181,16 @@ all2:   define1
                 Symbol  *st2 = lookup_symtab($1->var, DECL_DEFINE);
                 if(st2)
                     {
-                    printf("added %s=%s", st2->var, st2->res);
+                    //printf("added %s=%s", st2->var, st2->res);
                     addemitstr(st2->res);
                     }
                 else
                     {
-                    printf("added: '%s'", $1->var);
+                    //printf("added: '%s'", $1->var);
                     addemitstr($1->var);
                     }
                 }
             }
-
 ;
 idd1:   strx1       { if(config.testpreyacc > 1)
                         printf("{ idd1 strx1 } ");fflush(stdout); }
@@ -225,9 +224,9 @@ undef1:  UNDEF2 sp1mb idd1 sp1mb semibm
         if(st2)
             {
             printf(" { UNDEF removing %s } ", $3->var); fflush(stdout);
-            dump_symtab();
+            //dump_symtab();
             delitem_symtab(st2);
-            dump_symtab();
+            //dump_symtab();
             }
         else
             {
@@ -323,24 +322,11 @@ msg1:    MSG2 sp1mb idd1 sp1mb semibm
                 fprintf(stderr, "%s", $3->var);
             }
 ;
-mac1:   MAC2 sp1b ID2 sp1b STR2 sp1m
+mac1:   MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm
         {
-        // Erase quotes
-        char *tmp_strx = strdup(((char*)$5) + 1);
-        char *last = strrchr(tmp_strx, '\"');
-        if(last)
-            *last = '\0';
-
-        Symbol  *st = lookup_symtab((char*)$3, DECL_MACRO);
-        if(st)   // replace
-            {
-            if(st->var) free(st->var);
-            st->var = strdup(tmp_strx);
-            }
-        else
-            push_symtab((char*)$3, tmp_strx, "",  DECL_MACRO, 0);
-
-        free(tmp_strx);
+        if(config.testpreyacc > 0)
+            { printf(" { mac1: idd1 '%s' ( '%s' ) '%s' } ",
+                            $3->var, $7->var, $11->var); }
         }
 ;
 ifdef1:  IFDEF2 sp1mb idd1 sp1mb semibm

@@ -597,7 +597,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  2
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   187
+#define YYLAST   202
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  35
@@ -606,7 +606,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  66
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  144
+#define YYNSTATES  150
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   289
@@ -659,12 +659,12 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int16 yyrline[] =
 {
        0,    99,    99,   105,   114,   119,   125,   130,   135,   140,
-     145,   150,   155,   160,   165,   170,   175,   196,   198,   201,
-     211,   220,   239,   243,   259,   262,   265,   274,   282,   290,
-     299,   300,   301,   302,   303,   305,   311,   318,   326,   346,
-     368,   386,   393,   401,   402,   404,   405,   407,   408,   410,
-     414,   420,   424,   432,   438,   444,   450,   457,   462,   470,
-     477,   482,   490,   496,   503,   506,   513
+     145,   150,   155,   160,   165,   170,   175,   195,   197,   200,
+     210,   219,   238,   242,   258,   261,   264,   273,   281,   289,
+     298,   299,   300,   301,   302,   304,   310,   317,   325,   332,
+     354,   372,   379,   387,   388,   390,   391,   393,   394,   396,
+     400,   406,   410,   418,   424,   430,   436,   443,   448,   456,
+     463,   468,   476,   482,   489,   492,   499
 };
 #endif
 
@@ -697,7 +697,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-84)
+#define YYPACT_NINF (-86)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -711,21 +711,21 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-     -84,   117,   -84,    21,   -84,    -5,   -84,   -84,    16,    21,
-      21,    21,    21,    21,    21,    21,   -84,   -84,   -84,   -84,
-     -84,   -84,   -84,   -84,   -84,   -84,   -84,   -84,    29,    56,
-     -84,   -84,    18,   -84,     1,    83,    18,    18,    83,    83,
-      83,    83,    21,    21,   -84,   -84,   -84,   -84,   -84,    25,
-      16,    21,    21,    21,   -84,     7,   144,     3,    23,   -84,
-     -84,   -84,   -84,    21,    21,    21,    21,    67,    56,   -84,
-     -84,    60,   -84,    98,    18,    21,    21,   158,    45,    65,
-      91,    18,    18,    18,    21,    21,    21,   -84,    21,   -84,
-      21,    21,    21,    21,    21,    21,    21,    21,    21,    21,
-      21,    21,   -84,    62,   -84,   -84,   -84,    56,    56,   139,
-      21,    80,    21,    21,    21,    21,    21,    21,    21,    21,
-      21,    21,    18,    12,    21,    21,   164,    21,     3,     3,
-       3,     3,     3,    23,    23,   -84,   -84,   -84,   -84,   -84,
-     158,    21,   -84,   -84
+     -86,   134,   -86,   -16,   -86,   -11,   -86,   -86,   -16,   -16,
+     -16,   -16,   -16,   -16,   -16,   -16,   -86,   -86,   -86,   -86,
+     -86,   -86,   -86,   -86,   -86,   -86,   -86,   -86,   108,     7,
+     -86,   -86,    30,    84,    84,    30,    30,    84,    84,    84,
+      84,   -16,   -16,   -86,   -86,   -86,   -86,   -86,    43,   -16,
+     -16,   -16,   -86,    -8,    17,    12,    95,   -86,   -86,   -16,
+     -86,   -86,   -16,   -16,   -16,   -16,    98,     7,   -86,   -86,
+     -86,    29,    25,   -16,   -16,   176,    53,    69,    30,   155,
+      30,    30,    30,   -16,   -16,   -16,   -16,   -86,   -16,   -16,
+     -16,   -16,   -16,   -16,   -16,   -16,   -16,   -16,   -16,   -86,
+     -16,   -86,    90,   -86,   -86,   -86,     7,   116,    84,   -16,
+      21,   -16,   -16,   -16,   -16,   -16,   -16,   -16,   -16,   -16,
+     -16,    30,    15,   -16,   -16,   -16,   182,   -16,    12,    12,
+      12,    12,    12,    95,    95,   -86,   -86,   -86,   -86,   -86,
+     176,    32,   -16,   -86,   -16,   -86,    84,   -16,    30,   -86
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -733,37 +733,37 @@ static const yytype_int16 yypact[] =
    means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       2,    45,     1,    49,    16,    47,    44,    14,    45,    49,
+       2,    45,     1,    49,    16,    47,    44,    14,    49,    49,
       49,    49,    49,    49,    49,    49,     3,     4,     6,     7,
        8,     5,     9,    10,    11,    13,    12,    46,     0,    50,
-      15,    47,    30,    43,     0,    49,    30,    30,    49,    49,
-      49,    49,     0,     0,    48,    33,    31,    35,    36,     0,
-      45,    49,    49,    49,    17,     0,    18,    51,    57,    60,
-      64,    41,    42,    49,    49,    49,    49,     0,    22,    34,
-      32,     0,    25,    24,    30,    49,    49,     0,     0,     0,
-      30,    30,    30,    30,     0,     0,    49,    39,    49,    66,
-      49,    49,    49,    49,    49,    49,    49,    49,    49,    49,
-      49,    49,    19,     0,    21,    23,    37,    40,    38,    49,
-      49,     0,    49,    49,    49,    49,    49,    49,    49,    49,
-      49,    49,    30,    29,    49,    49,     0,    49,    52,    54,
+      15,    47,    30,    49,    49,    30,    30,    49,    49,    49,
+      49,     0,     0,    48,    33,    31,    35,    36,     0,    49,
+      49,    49,    17,     0,    18,    51,    57,    60,    64,    49,
+      41,    42,    49,    49,    49,    49,     0,    22,    34,    32,
+      25,    24,     0,    49,    49,     0,     0,     0,    30,    30,
+      30,    30,    30,     0,    49,    49,    49,    66,    49,    49,
+      49,    49,    49,    49,    49,    49,    49,    49,    49,    39,
+      49,    19,     0,    21,    23,    37,    40,    49,    49,    49,
+       0,    49,    49,    49,    49,    49,    49,    49,    49,    49,
+      49,    30,    29,    49,    49,    49,     0,    49,    52,    54,
       53,    56,    55,    58,    59,    61,    62,    63,    20,    26,
-      27,    49,    28,    65
+      27,     0,    49,    28,    49,    65,    49,    49,    30,    38
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -84,   -84,   -84,   -22,   -84,   -84,   -84,     2,   -84,   -14,
-     -84,   -84,   -84,   -84,   -84,   -84,   -84,   -84,    -7,   -39,
-      -1,   -83,    68,   -64,    66,   -84
+     -86,   -86,   -86,     3,   -86,   -86,   -86,   -47,   -86,   -12,
+     -86,   -86,   -86,   -86,   -86,   -86,   -86,   -86,   -86,   -38,
+      -1,   -85,    87,   -31,    63,   -86
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     1,    16,    53,    17,    18,    19,    54,    47,    48,
+       0,     1,    16,    51,    17,    18,    19,    52,    46,    47,
       20,    21,    22,    23,    24,    25,    26,    27,    28,    29,
-      55,    56,    57,    58,    59,    60
+      53,    54,    55,    56,    57,    58
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -771,48 +771,52 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int16 yytable[] =
 {
-      30,    34,    32,    67,    68,   110,   -49,   -49,    35,    36,
-      37,    38,    39,    40,    41,   -49,    63,    64,    65,    66,
-      50,    75,    61,    62,    31,   -43,   125,   -43,   -49,   -49,
-     -49,    49,    76,    31,    45,    49,    49,    33,     6,    31,
-      46,    69,    31,    71,    31,   107,   108,    70,    96,    97,
-      72,    73,    74,   133,   134,    77,    78,    79,   101,    42,
-      87,    43,    80,    81,    82,    83,   102,   104,   105,   106,
-      98,    99,   100,    49,    88,    89,    75,    44,    69,   103,
-      49,    49,    49,    85,    70,   109,    84,    76,    44,   111,
-     112,   113,   114,   115,   116,   117,   118,   119,   120,   121,
-     122,    86,    51,   127,    31,   -49,    52,    45,   138,   126,
-      51,   124,    31,    46,    52,     0,   -49,     2,     0,     0,
-       0,    49,    73,   139,   140,     0,   142,    78,    78,    78,
-      78,    78,    79,    79,     3,     0,     0,     4,     5,     6,
-     143,     7,     0,     8,     9,    10,    11,   -49,    12,    13,
-      14,    15,   -49,   -49,   -49,     0,   -49,   -49,    51,     0,
-      31,    90,   123,     0,     0,    31,    91,    92,    93,     0,
-      94,    95,    91,    92,    93,     0,    94,    95,     0,   141,
-     128,   129,   130,   131,   132,   135,   136,   137
+      30,   109,    32,    66,    67,    31,    73,    33,    34,    35,
+      36,    37,    38,    39,    40,   -49,   -49,    74,   -49,   -43,
+     -49,   -43,   124,    60,    61,   -49,   -49,   -49,    43,   -49,
+     -49,    48,    84,    31,    48,    48,    31,    59,    31,    85,
+      62,    63,    64,    65,   127,   106,    44,   144,    70,    71,
+      72,    31,    45,    75,    76,    77,    94,    95,    78,    68,
+     123,    79,    80,    81,    82,    69,    99,   101,   103,   104,
+     105,     0,    86,    87,    96,    97,    98,    48,   102,    48,
+      48,    48,   100,   107,   108,   133,   134,   110,   111,   112,
+     113,   114,   115,   116,   117,   118,   119,   120,     0,   121,
+     -49,   -49,   -49,    49,    73,    31,    68,    50,   126,   138,
+       0,   125,    69,     0,     0,    74,    31,    83,     0,    43,
+      48,    71,   139,   140,   141,     0,   143,    76,    76,    76,
+      76,    76,    77,    77,     2,    49,   149,    31,    41,   122,
+      42,   145,     0,   146,     0,     0,   148,    48,     0,   147,
+       0,     3,     0,     0,     4,     5,     6,     0,     7,     0,
+       8,     9,    10,    11,     0,    12,    13,    14,    15,   -49,
+       0,    44,     0,     0,    49,     0,    31,    45,    50,    88,
+     -49,   135,   136,   137,    89,    90,    91,     0,    92,    93,
+      89,    90,    91,     0,    92,    93,     0,   142,   128,   129,
+     130,   131,   132
 };
 
 static const yytype_int16 yycheck[] =
 {
-       1,     8,     3,    42,    43,    88,     3,     4,     9,    10,
-      11,    12,    13,    14,    15,     3,    38,    39,    40,    41,
-      19,    14,    36,    37,    21,    30,   109,    32,     5,     6,
-       7,    32,    25,    21,    16,    36,    37,    21,    22,    21,
-      22,    16,    21,    50,    21,    84,    85,    22,     3,     4,
-      51,    52,    53,   117,   118,    56,    57,    58,    80,    30,
-      74,    32,    63,    64,    65,    66,    80,    81,    82,    83,
-       5,     6,     7,    74,    75,    76,    14,    21,    16,    80,
-      81,    82,    83,    23,    22,    86,    19,    25,    21,    90,
-      91,    92,    93,    94,    95,    96,    97,    98,    99,   100,
-     101,     3,    19,    23,    21,    14,    23,    16,   122,   110,
-      19,   109,    21,    22,    23,    -1,    25,     0,    -1,    -1,
-      -1,   122,   123,   124,   125,    -1,   127,   128,   129,   130,
-     131,   132,   133,   134,    17,    -1,    -1,    20,    21,    22,
-     141,    24,    -1,    26,    27,    28,    29,     3,    31,    32,
-      33,    34,     8,     9,    10,    -1,    12,    13,    19,    -1,
-      21,     3,    23,    -1,    -1,    21,     8,     9,    10,    -1,
-      12,    13,     8,     9,    10,    -1,    12,    13,    -1,    15,
-     112,   113,   114,   115,   116,   119,   120,   121
+       1,    86,     3,    41,    42,    21,    14,     8,     9,    10,
+      11,    12,    13,    14,    15,     3,     4,    25,     3,    30,
+       3,    32,   107,    35,    36,     8,     9,    10,    21,    12,
+      13,    32,     3,    21,    35,    36,    21,    34,    21,    14,
+      37,    38,    39,    40,    23,    83,    16,    15,    49,    50,
+      51,    21,    22,    54,    55,    56,     3,     4,    59,    16,
+     107,    62,    63,    64,    65,    22,    78,    79,    80,    81,
+      82,    -1,    73,    74,     5,     6,     7,    78,    79,    80,
+      81,    82,    79,    84,    85,   116,   117,    88,    89,    90,
+      91,    92,    93,    94,    95,    96,    97,    98,    -1,   100,
+       5,     6,     7,    19,    14,    21,    16,    23,   109,   121,
+      -1,   108,    22,    -1,    -1,    25,    21,    19,    -1,    21,
+     121,   122,   123,   124,   125,    -1,   127,   128,   129,   130,
+     131,   132,   133,   134,     0,    19,   148,    21,    30,    23,
+      32,   142,    -1,   144,    -1,    -1,   147,   148,    -1,   146,
+      -1,    17,    -1,    -1,    20,    21,    22,    -1,    24,    -1,
+      26,    27,    28,    29,    -1,    31,    32,    33,    34,    14,
+      -1,    16,    -1,    -1,    19,    -1,    21,    22,    23,     3,
+      25,   118,   119,   120,     8,     9,    10,    -1,    12,    13,
+       8,     9,    10,    -1,    12,    13,    -1,    15,   111,   112,
+     113,   114,   115
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -822,18 +826,18 @@ static const yytype_int8 yystos[] =
        0,    36,     0,    17,    20,    21,    22,    24,    26,    27,
       28,    29,    31,    32,    33,    34,    37,    39,    40,    41,
       45,    46,    47,    48,    49,    50,    51,    52,    53,    54,
-      55,    21,    55,    21,    53,    55,    55,    55,    55,    55,
-      55,    55,    30,    32,    21,    16,    22,    43,    44,    55,
-      19,    19,    23,    38,    42,    55,    56,    57,    58,    59,
-      60,    44,    44,    38,    38,    38,    38,    54,    54,    16,
-      22,    53,    55,    55,    55,    14,    25,    55,    55,    55,
-      55,    55,    55,    55,    19,    23,     3,    44,    55,    55,
-       3,     8,     9,    10,    12,    13,     3,     4,     5,     6,
-       7,    38,    44,    55,    44,    44,    44,    54,    54,    55,
-      56,    55,    55,    55,    55,    55,    55,    55,    55,    55,
-      55,    55,    55,    23,    42,    56,    55,    23,    57,    57,
+      55,    21,    55,    55,    55,    55,    55,    55,    55,    55,
+      55,    30,    32,    21,    16,    22,    43,    44,    55,    19,
+      23,    38,    42,    55,    56,    57,    58,    59,    60,    38,
+      44,    44,    38,    38,    38,    38,    54,    54,    16,    22,
+      55,    55,    55,    14,    25,    55,    55,    55,    55,    55,
+      55,    55,    55,    19,     3,    14,    55,    55,     3,     8,
+       9,    10,    12,    13,     3,     4,     5,     6,     7,    44,
+      38,    44,    55,    44,    44,    44,    54,    55,    55,    56,
+      55,    55,    55,    55,    55,    55,    55,    55,    55,    55,
+      55,    55,    23,    42,    56,    38,    55,    23,    57,    57,
       57,    57,    57,    58,    58,    59,    59,    59,    44,    55,
-      55,    15,    55,    55
+      55,    55,    15,    55,    15,    55,    55,    38,    55,    44
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -854,7 +858,7 @@ static const yytype_int8 yyr2[] =
        0,     2,     0,     2,     1,     1,     1,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     1,     1,     5,
        7,     5,     3,     5,     2,     2,     6,     6,     6,     5,
-       0,     1,     2,     1,     2,     1,     3,     5,     6,     5,
+       0,     1,     2,     1,     2,     1,     3,     5,    13,     5,
        5,     3,     3,     1,     1,     0,     1,     1,     2,     0,
        1,     1,     5,     5,     5,     5,     5,     1,     5,     5,
        1,     5,     5,     5,     1,     7,     3
@@ -1328,7 +1332,7 @@ yyreduce:
             printf(" { all1 all2 root none } "); fflush(stdout);
             }
         }
-#line 1332 "parser/ppre.yacc.c"
+#line 1336 "parser/ppre.yacc.c"
     break;
 
   case 3: /* all1: all1 all2  */
@@ -1339,7 +1343,7 @@ yyreduce:
             printf(" { all1 all2 root '%s'} ", (yyvsp[0].sym)->var); fflush(stdout);
             }
         }
-#line 1343 "parser/ppre.yacc.c"
+#line 1347 "parser/ppre.yacc.c"
     break;
 
   case 4: /* all2: define1  */
@@ -1348,7 +1352,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf(" { all2 define '%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1352 "parser/ppre.yacc.c"
+#line 1356 "parser/ppre.yacc.c"
     break;
 
   case 5: /* all2: msg1  */
@@ -1358,7 +1362,7 @@ yyreduce:
                 { printf("{ all2 msg1 '%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             //to_prev_state();
             }
-#line 1362 "parser/ppre.yacc.c"
+#line 1366 "parser/ppre.yacc.c"
     break;
 
   case 6: /* all2: undef1  */
@@ -1367,7 +1371,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 undef1 x'%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1371 "parser/ppre.yacc.c"
+#line 1375 "parser/ppre.yacc.c"
     break;
 
   case 7: /* all2: err1  */
@@ -1376,7 +1380,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 err1 x'%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1380 "parser/ppre.yacc.c"
+#line 1384 "parser/ppre.yacc.c"
     break;
 
   case 8: /* all2: nl1  */
@@ -1385,7 +1389,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 nl1 '%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1389 "parser/ppre.yacc.c"
+#line 1393 "parser/ppre.yacc.c"
     break;
 
   case 9: /* all2: mac1  */
@@ -1394,7 +1398,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 mac1 x'%s' } ", (yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1398 "parser/ppre.yacc.c"
+#line 1402 "parser/ppre.yacc.c"
     break;
 
   case 10: /* all2: ifdef1  */
@@ -1403,7 +1407,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 ifdef1 x'%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1407 "parser/ppre.yacc.c"
+#line 1411 "parser/ppre.yacc.c"
     break;
 
   case 11: /* all2: elifdef1  */
@@ -1412,7 +1416,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 elifdef1 x'%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1416 "parser/ppre.yacc.c"
+#line 1420 "parser/ppre.yacc.c"
     break;
 
   case 12: /* all2: else1  */
@@ -1421,7 +1425,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 else1 x'%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1425 "parser/ppre.yacc.c"
+#line 1429 "parser/ppre.yacc.c"
     break;
 
   case 13: /* all2: endif1  */
@@ -1430,7 +1434,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 endif1 x'%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1434 "parser/ppre.yacc.c"
+#line 1438 "parser/ppre.yacc.c"
     break;
 
   case 14: /* all2: COMMENT2  */
@@ -1439,7 +1443,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 comment '%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1443 "parser/ppre.yacc.c"
+#line 1447 "parser/ppre.yacc.c"
     break;
 
   case 15: /* all2: sp1mb  */
@@ -1448,7 +1452,7 @@ yyreduce:
             if(config.testpreyacc > 1)
                 { printf("{ all2 nl / blank '%s' } ", (char*)(yyvsp[0].sym)->var); fflush(stdout); }
             }
-#line 1452 "parser/ppre.yacc.c"
+#line 1456 "parser/ppre.yacc.c"
     break;
 
   case 16: /* all2: ID3  */
@@ -1461,35 +1465,35 @@ yyreduce:
                 Symbol  *st2 = lookup_symtab((yyvsp[0].sym)->var, DECL_DEFINE);
                 if(st2)
                     {
-                    printf("added %s=%s", st2->var, st2->res);
+                    //printf("added %s=%s", st2->var, st2->res);
                     addemitstr(st2->res);
                     }
                 else
                     {
-                    printf("added: '%s'", (yyvsp[0].sym)->var);
+                    //printf("added: '%s'", $1->var);
                     addemitstr((yyvsp[0].sym)->var);
                     }
                 }
             }
-#line 1475 "parser/ppre.yacc.c"
+#line 1479 "parser/ppre.yacc.c"
     break;
 
   case 17: /* idd1: strx1  */
-#line 196 "ppre.y"
+#line 195 "ppre.y"
                     { if(config.testpreyacc > 1)
                         printf("{ idd1 strx1 } ");fflush(stdout); }
-#line 1482 "parser/ppre.yacc.c"
+#line 1486 "parser/ppre.yacc.c"
     break;
 
   case 18: /* idd1: expr1  */
-#line 198 "ppre.y"
+#line 197 "ppre.y"
                     { if(config.testpreyacc > 1)
                         printf("{ idd1 expr1 } ");fflush(stdout); }
-#line 1489 "parser/ppre.yacc.c"
+#line 1493 "parser/ppre.yacc.c"
     break;
 
   case 19: /* define1: DEF2 sp1mb idd1 sp1mb semibm  */
-#line 202 "ppre.y"
+#line 201 "ppre.y"
             {
             if(config.testpreyacc > 0)
                 {
@@ -1499,11 +1503,11 @@ yyreduce:
             if(hasdefine)
                 push_symtab("", (yyvsp[-2].sym)->var, "", DECL_DEFINE, 0);
             }
-#line 1503 "parser/ppre.yacc.c"
+#line 1507 "parser/ppre.yacc.c"
     break;
 
   case 20: /* define1: DEF2 sp1mb idd1 sp1mb idd1 sp1mb semibm  */
-#line 212 "ppre.y"
+#line 211 "ppre.y"
             {
             if(config.testpreyacc > 0)
                 { printf("{ define1 '%s' arg: %s } ", (yyvsp[-4].sym)->var, (yyvsp[-2].sym)->var);
@@ -1511,11 +1515,11 @@ yyreduce:
             if(hasdefine)
                 push_symtab("", (yyvsp[-4].sym)->var, (yyvsp[-2].sym)->var, DECL_DEFINE, 0);
             }
-#line 1515 "parser/ppre.yacc.c"
+#line 1519 "parser/ppre.yacc.c"
     break;
 
   case 21: /* undef1: UNDEF2 sp1mb idd1 sp1mb semibm  */
-#line 221 "ppre.y"
+#line 220 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf("{ undef1 '%s' } ", (yyvsp[-2].sym)->var); fflush(stdout); }
@@ -1523,9 +1527,9 @@ yyreduce:
         if(st2)
             {
             printf(" { UNDEF removing %s } ", (yyvsp[-2].sym)->var); fflush(stdout);
-            dump_symtab();
+            //dump_symtab();
             delitem_symtab(st2);
-            dump_symtab();
+            //dump_symtab();
             }
         else
             {
@@ -1534,18 +1538,18 @@ yyreduce:
                     (yyvsp[-2].sym)->var); fflush(stdout);
             }
         }
-#line 1538 "parser/ppre.yacc.c"
+#line 1542 "parser/ppre.yacc.c"
     break;
 
   case 22: /* undef1: sp1b UNDEF2 sp1m  */
-#line 240 "ppre.y"
+#line 239 "ppre.y"
         { // Ignore
         }
-#line 1545 "parser/ppre.yacc.c"
+#line 1549 "parser/ppre.yacc.c"
     break;
 
   case 23: /* err1: ERR2 sp1mb idd1 sp1mb semibm  */
-#line 244 "ppre.y"
+#line 243 "ppre.y"
             {
             printf(" { err1 %s } ", (yyvsp[-2].sym)->var); fflush(stdout);
             if(hasdefine == 1)
@@ -1560,25 +1564,25 @@ yyreduce:
                 exit(1);
                 }
             }
-#line 1564 "parser/ppre.yacc.c"
+#line 1568 "parser/ppre.yacc.c"
     break;
 
   case 24: /* strx1: STR2 sp1mb  */
-#line 260 "ppre.y"
+#line 259 "ppre.y"
             {
             }
-#line 1571 "parser/ppre.yacc.c"
+#line 1575 "parser/ppre.yacc.c"
     break;
 
   case 25: /* strx1: ID2 sp1mb  */
-#line 263 "ppre.y"
+#line 262 "ppre.y"
             {
             }
-#line 1578 "parser/ppre.yacc.c"
+#line 1582 "parser/ppre.yacc.c"
     break;
 
   case 26: /* strx1: STR2 sp1mb PLUS2 sp1mb strx1 sp1mb  */
-#line 266 "ppre.y"
+#line 265 "ppre.y"
             {
             if(config.testpreyacc > 0)
                 { printf("msg str add' %s' '%s'\n", (char*)(yyvsp[-5].sym)->var, (char*)(yyvsp[-1].sym)->var); fflush(stdout); }
@@ -1587,11 +1591,11 @@ yyreduce:
             Symbol *ss = make_symstr("", sum, STR2);
             (yyval.sym) = ss;
             }
-#line 1591 "parser/ppre.yacc.c"
+#line 1595 "parser/ppre.yacc.c"
     break;
 
   case 27: /* strx1: STR2 sp1mb PLUS2 sp1mb expr1 sp1mb  */
-#line 275 "ppre.y"
+#line 274 "ppre.y"
             {
             if(config.testpreyacc > 2)
                 { printf("strx1 STR + expr1' %s' '%s'\n", (char*)(yyvsp[-5].sym)->var, (char*)(yyvsp[-1].sym)->var); fflush(stdout); fflush(stdout); fflush(stdout); fflush(stdout); fflush(stdout); }
@@ -1599,11 +1603,11 @@ yyreduce:
             Symbol *ss = make_symstr("", sum, STR2);
             (yyval.sym) = ss;
             }
-#line 1603 "parser/ppre.yacc.c"
+#line 1607 "parser/ppre.yacc.c"
     break;
 
   case 28: /* strx1: expr1 sp1mb PLUS2 sp1mb STR2 sp1mb  */
-#line 283 "ppre.y"
+#line 282 "ppre.y"
             {
             if(config.testpreyacc > 2)
                 { printf("strx1 expr1 + str2 '%s' '%s'\n", (char*)(yyvsp[-5].sym)->var, (char*)(yyvsp[-1].sym)->var); }
@@ -1611,11 +1615,11 @@ yyreduce:
             Symbol *ss = make_symstr("", sum, STR2);
             (yyval.sym) = ss;
             }
-#line 1615 "parser/ppre.yacc.c"
+#line 1619 "parser/ppre.yacc.c"
     break;
 
   case 29: /* strx1: STR2 sp1mb PLUS2 sp1mb STR2  */
-#line 291 "ppre.y"
+#line 290 "ppre.y"
             {
             if(config.testpreyacc > 2)
                 { printf("strx1 expr1 + str2 '%s' '%s'\n", (char*)(yyvsp[-4].sym)->var, (char*)(yyvsp[0].sym)->var); }
@@ -1623,65 +1627,52 @@ yyreduce:
             Symbol *ss = make_symstr("", sum, STR2);
             (yyval.sym) = ss;
             }
-#line 1627 "parser/ppre.yacc.c"
+#line 1631 "parser/ppre.yacc.c"
     break;
 
   case 35: /* semibm: semib  */
-#line 305 "ppre.y"
+#line 304 "ppre.y"
                 {
                 if(config.testpreyacc > 0)
                     printf(" { semibm '%s' } ", (yyvsp[0].sym)->var); fflush(stdout);
                 to_prev_state();
                 }
-#line 1637 "parser/ppre.yacc.c"
+#line 1641 "parser/ppre.yacc.c"
     break;
 
   case 36: /* nl1: ENL2 sp1mb semibm  */
-#line 312 "ppre.y"
+#line 311 "ppre.y"
             {
             if(hasdefine == 1)
                 fprintf(stderr, "\n");
             //to_prev_state();
             }
-#line 1647 "parser/ppre.yacc.c"
+#line 1651 "parser/ppre.yacc.c"
     break;
 
   case 37: /* msg1: MSG2 sp1mb idd1 sp1mb semibm  */
-#line 319 "ppre.y"
+#line 318 "ppre.y"
             {
             if(config.testpreyacc > 0)
                 { printf(" { msg1: expr1 '%s' } ", (yyvsp[-2].sym)->var); }
             if(hasdefine)
                 fprintf(stderr, "%s", (yyvsp[-2].sym)->var);
             }
-#line 1658 "parser/ppre.yacc.c"
+#line 1662 "parser/ppre.yacc.c"
     break;
 
-  case 38: /* mac1: MAC2 sp1b ID2 sp1b STR2 sp1m  */
-#line 327 "ppre.y"
+  case 38: /* mac1: MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1 sp1mb PAREN22 sp1mb idd1 sp1mb semibm  */
+#line 326 "ppre.y"
         {
-        // Erase quotes
-        char *tmp_strx = strdup(((char*)(yyvsp[-1].sym)) + 1);
-        char *last = strrchr(tmp_strx, '\"');
-        if(last)
-            *last = '\0';
-
-        Symbol  *st = lookup_symtab((char*)(yyvsp[-3].sym), DECL_MACRO);
-        if(st)   // replace
-            {
-            if(st->var) free(st->var);
-            st->var = strdup(tmp_strx);
-            }
-        else
-            push_symtab((char*)(yyvsp[-3].sym), tmp_strx, "",  DECL_MACRO, 0);
-
-        free(tmp_strx);
+        if(config.testpreyacc > 0)
+            { printf(" { mac1: idd1 '%s' ( '%s' ) '%s' } ",
+                            (yyvsp[-10].sym)->var, (yyvsp[-6].sym)->var, (yyvsp[-2].sym)->var); }
         }
-#line 1681 "parser/ppre.yacc.c"
+#line 1672 "parser/ppre.yacc.c"
     break;
 
   case 39: /* ifdef1: IFDEF2 sp1mb idd1 sp1mb semibm  */
-#line 347 "ppre.y"
+#line 333 "ppre.y"
         {
         //to_emit_state();
         //emitprog = 0;
@@ -1702,11 +1693,11 @@ yyreduce:
             }
         printf("Has define: %d\n", hasdefine);
         }
-#line 1706 "parser/ppre.yacc.c"
+#line 1697 "parser/ppre.yacc.c"
     break;
 
   case 40: /* elifdef1: sp1b ELIFDEF2 sp1m ID2 sp1m  */
-#line 369 "ppre.y"
+#line 355 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf("{ elifdef1 '%s' '%s'} ", (char*)(yyvsp[-3].sym), (char*)(yyvsp[-1].sym)); }
@@ -1723,93 +1714,93 @@ yyreduce:
             hasdefine = 0;
             }
         }
-#line 1727 "parser/ppre.yacc.c"
+#line 1718 "parser/ppre.yacc.c"
     break;
 
   case 41: /* endif1: ENDIF2 sp1mb semibm  */
-#line 387 "ppre.y"
+#line 373 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf("{ endif1 '%s'} ", (char*)(yyvsp[-2].sym)->var); }
         hasdefine = 1;
         }
-#line 1737 "parser/ppre.yacc.c"
+#line 1728 "parser/ppre.yacc.c"
     break;
 
   case 42: /* else1: ELSE2 sp1mb semibm  */
-#line 394 "ppre.y"
+#line 380 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf("{ else1 '%s'} ", (char*)(yyvsp[-2].sym)); }
         hasdefine = !hasdefine;
         }
-#line 1747 "parser/ppre.yacc.c"
+#line 1738 "parser/ppre.yacc.c"
     break;
 
   case 43: /* sp1: SP2  */
-#line 401 "ppre.y"
+#line 387 "ppre.y"
                 {}
-#line 1753 "parser/ppre.yacc.c"
+#line 1744 "parser/ppre.yacc.c"
     break;
 
   case 44: /* sp1: NL2  */
-#line 402 "ppre.y"
+#line 388 "ppre.y"
                 {}
-#line 1759 "parser/ppre.yacc.c"
+#line 1750 "parser/ppre.yacc.c"
     break;
 
   case 45: /* sp1b: %empty  */
-#line 404 "ppre.y"
+#line 390 "ppre.y"
                 {}
-#line 1765 "parser/ppre.yacc.c"
+#line 1756 "parser/ppre.yacc.c"
     break;
 
   case 46: /* sp1b: sp1  */
-#line 405 "ppre.y"
+#line 391 "ppre.y"
                 {}
-#line 1771 "parser/ppre.yacc.c"
+#line 1762 "parser/ppre.yacc.c"
     break;
 
   case 47: /* sp1m: SP2  */
-#line 407 "ppre.y"
+#line 393 "ppre.y"
                      {}
-#line 1777 "parser/ppre.yacc.c"
+#line 1768 "parser/ppre.yacc.c"
     break;
 
   case 48: /* sp1m: sp1m SP2  */
-#line 408 "ppre.y"
+#line 394 "ppre.y"
                      {}
-#line 1783 "parser/ppre.yacc.c"
+#line 1774 "parser/ppre.yacc.c"
     break;
 
   case 49: /* sp1mb: %empty  */
-#line 410 "ppre.y"
+#line 396 "ppre.y"
             {  /* empty */
             //printf(" spb ");
+            //$$ = make_symstr("", " ", STR2);
+            }
+#line 1783 "parser/ppre.yacc.c"
+    break;
+
+  case 50: /* sp1mb: sp1m  */
+#line 401 "ppre.y"
+            {
+            //printf(" spm ");
             //$$ = make_symstr("", " ", STR2);
             }
 #line 1792 "parser/ppre.yacc.c"
     break;
 
-  case 50: /* sp1mb: sp1m  */
-#line 415 "ppre.y"
-            {
-            //printf(" spm ");
-            //$$ = make_symstr("", " ", STR2);
-            }
-#line 1801 "parser/ppre.yacc.c"
-    break;
-
   case 51: /* expr1: expr2  */
-#line 421 "ppre.y"
+#line 407 "ppre.y"
         {
         //printf(" { expr1: %s } ", $1->var);
         }
-#line 1809 "parser/ppre.yacc.c"
+#line 1800 "parser/ppre.yacc.c"
     break;
 
   case 52: /* expr1: expr1 sp1mb OR2 sp1mb expr2  */
-#line 425 "ppre.y"
+#line 411 "ppre.y"
         {
         if(config.testpreyacc > 1)
             { printf("expr1 '%s' OR '%s'\n", (yyvsp[-4].sym)->var, (yyvsp[0].sym)->var); }
@@ -1817,60 +1808,60 @@ yyreduce:
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1821 "parser/ppre.yacc.c"
+#line 1812 "parser/ppre.yacc.c"
     break;
 
   case 53: /* expr1: expr1 sp1mb XOR2 sp1mb expr2  */
-#line 433 "ppre.y"
+#line 419 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) ^ str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1831 "parser/ppre.yacc.c"
+#line 1822 "parser/ppre.yacc.c"
     break;
 
   case 54: /* expr1: expr1 sp1mb AND2 sp1mb expr2  */
-#line 439 "ppre.y"
+#line 425 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) & str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1841 "parser/ppre.yacc.c"
+#line 1832 "parser/ppre.yacc.c"
     break;
 
   case 55: /* expr1: expr1 sp1mb RSHIFT2 sp1mb expr2  */
-#line 445 "ppre.y"
+#line 431 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) >> str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1851 "parser/ppre.yacc.c"
+#line 1842 "parser/ppre.yacc.c"
     break;
 
   case 56: /* expr1: expr1 sp1mb LSHIFT2 sp1mb expr2  */
-#line 451 "ppre.y"
+#line 437 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) << str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1861 "parser/ppre.yacc.c"
+#line 1852 "parser/ppre.yacc.c"
     break;
 
   case 57: /* expr2: expr3  */
-#line 458 "ppre.y"
+#line 444 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf("{ expr2 '%s'} ", (yyvsp[0].sym)->var); }
         }
-#line 1870 "parser/ppre.yacc.c"
+#line 1861 "parser/ppre.yacc.c"
     break;
 
   case 58: /* expr2: expr2 sp1mb PLUS2 sp1mb expr3  */
-#line 463 "ppre.y"
+#line 449 "ppre.y"
         {
         if(config.testpreyacc > 0)
            { printf(" { expr2 '%s' PLUS '%s } ", (yyvsp[-4].sym)->var, (yyvsp[0].sym)->var); }
@@ -1878,30 +1869,30 @@ yyreduce:
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1882 "parser/ppre.yacc.c"
+#line 1873 "parser/ppre.yacc.c"
     break;
 
   case 59: /* expr2: expr2 sp1mb MINUS2 sp1mb expr3  */
-#line 471 "ppre.y"
+#line 457 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) - str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1892 "parser/ppre.yacc.c"
+#line 1883 "parser/ppre.yacc.c"
     break;
 
   case 60: /* expr3: expr4  */
-#line 478 "ppre.y"
+#line 464 "ppre.y"
     {
     if(config.testpreyacc > 0)
         { printf("{ expr3 '%s' } ", (yyvsp[0].sym)->var); }
     }
-#line 1901 "parser/ppre.yacc.c"
+#line 1892 "parser/ppre.yacc.c"
     break;
 
   case 61: /* expr3: expr3 sp1mb MULT2 sp1mb expr4  */
-#line 483 "ppre.y"
+#line 469 "ppre.y"
         {
         //if(config.testpreyacc > 1)
         //  {  printf("expr3 '%s' MUL '%s'\n", $1->var, $5->var); }
@@ -1909,58 +1900,58 @@ yyreduce:
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1913 "parser/ppre.yacc.c"
+#line 1904 "parser/ppre.yacc.c"
     break;
 
   case 62: /* expr3: expr3 sp1mb DIV2 sp1mb expr4  */
-#line 491 "ppre.y"
+#line 477 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) / str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1923 "parser/ppre.yacc.c"
+#line 1914 "parser/ppre.yacc.c"
     break;
 
   case 63: /* expr3: expr3 sp1mb MOD2 sp1mb expr4  */
-#line 497 "ppre.y"
+#line 483 "ppre.y"
         {
         int val = str2int((yyvsp[-4].sym)->var) % str2int((yyvsp[0].sym)->var);
         sprintf(tmp_str3, "%d", val);
         (yyval.sym) = make_symstr("", strdup(tmp_str3), NUM2);
         }
-#line 1933 "parser/ppre.yacc.c"
+#line 1924 "parser/ppre.yacc.c"
     break;
 
   case 64: /* expr4: expr5  */
-#line 504 "ppre.y"
+#line 490 "ppre.y"
     {
     }
-#line 1940 "parser/ppre.yacc.c"
+#line 1931 "parser/ppre.yacc.c"
     break;
 
   case 65: /* expr4: sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22 sp1mb  */
-#line 507 "ppre.y"
+#line 493 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf(" { paren: expr4 '%s' } ", (yyvsp[-3].sym)->var); }
         (yyval.sym) = make_symstr("", (yyvsp[-3].sym)->var, NUM2);
         }
-#line 1950 "parser/ppre.yacc.c"
+#line 1941 "parser/ppre.yacc.c"
     break;
 
   case 66: /* expr5: sp1mb NUM2 sp1mb  */
-#line 514 "ppre.y"
+#line 500 "ppre.y"
         {
         if(config.testpreyacc > 0)
             { printf(" { expr5 '%s' } ", (yyvsp[-1].sym)->var); }
         (yyval.sym) = make_symstr("", (yyvsp[-1].sym)->var, NUM2);
         }
-#line 1960 "parser/ppre.yacc.c"
+#line 1951 "parser/ppre.yacc.c"
     break;
 
 
-#line 1964 "parser/ppre.yacc.c"
+#line 1955 "parser/ppre.yacc.c"
 
       default: break;
     }
@@ -2153,7 +2144,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 521 "ppre.y"
+#line 507 "ppre.y"
 
 
 // EOF

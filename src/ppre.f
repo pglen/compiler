@@ -37,6 +37,7 @@ int     prelex();
 %}
 
 %x STRSTATE
+%x XTRSTATE
 %x EMITSTATE
 
 %option noyywrap stack
@@ -238,9 +239,16 @@ FNN  [\~_a-zA-Z0-9]
                                 return NL2;
                                 }
 
+\'                              {              /* begin quote */
+                                to_new_state(XTRSTATE);
+                                if(config.testpreflex > 1)
+                                    printf(" xtr<<<");
+                                prog = 0; backslash  = 0;
+                                //tmp_str2[prog++] = yytext[0];
+                                }
 \"                              {              /* begin quote */
                                 to_new_state(STRSTATE);
-                                if(config.testpreflex < 0)
+                                if(config.testpreflex > 1)
                                     printf(" str<<<");
                                 prog = 0; backslash  = 0;
                                 //tmp_str2[prog++] = yytext[0];
@@ -368,7 +376,7 @@ FNN  [\~_a-zA-Z0-9]
                                     addemit(yytext[0]);
                                     }
                                 }
-<STRSTATE>\\$                       {
+<XTRSTATE,STRSTATE>\\$                       {
                                 if(config.testpreflex)
                                     { printf("[STRSTATE BSL EOL] '%s", yytext); fflush(stdout); }
                                 // Skipping ...
@@ -396,7 +404,29 @@ FNN  [\~_a-zA-Z0-9]
                                       //  tmp_str2[prog++] = yytext[0];
                                       }
                                 }
-<STRSTATE>.                     {   // default string charater
+<XTRSTATE>\'                    {              /* end quote */
+                                if( (backslash % 2) == 0) /* odd backslash */
+                                     {
+                                     //BEGIN(INITIAL);
+                                     to_prev_state();
+
+                                     //tmp_str2[prog++] = yytext[0];
+                                     tmp_str2[prog] = '\0';
+                                     yylval.sym = make_symstr("", strdup(tmp_str2), STR2);
+
+                                     if(config.testpreflex)
+                                        {
+                                        //dump_symitem(yylval.sym);
+                                        printf("[STR2] '%s' ", yylval.sym->var); fflush(stdout);
+                                        }
+                                     return(STR2);
+                                     }
+                                  else
+                                      {  /* add quote */
+                                      //  tmp_str2[prog++] = yytext[0];
+                                      }
+                                }
+<XTRSTATE,STRSTATE>.            {   // default string charater
                                 backslash  = 0;
 
                                 if(config.testpreflex > 1)

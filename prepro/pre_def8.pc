@@ -1,0 +1,1 @@
+%define DEFINE3 'str3'
