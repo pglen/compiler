@@ -1,11 +1,11 @@
 // Preprocessing
 
-%define HELLO 	// wwww
-%define HELLOX  // eeee
+%define HELLO 	; // wwww
+%define HELLOX  ; #// eeee
 
 	int before = 0;
 
-%ifdef HELLO 	// platform
+%ifdef HELLO 	; // platform
  	str = "here \" we go \\ \'again' \\\" #define at #ifdef";
 %elifdef  HELLOY
 	str = "compiled #elifdef  ";

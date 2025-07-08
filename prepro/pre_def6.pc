@@ -1,0 +1,19 @@
+// Error messsage
+
+%message "------- Compiler message from source code ..."
+%nl
+
+%define DEFINE_HERE2
+
+%ifdef  DEFINE_HERE
+    %message "Define OK"
+%else
+    %message "Define NOT defined"
+%endif
+
+%nl
+%message "------- After ifdef ..."
+%nl
+
+# EOF
+

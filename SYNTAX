@@ -297,18 +297,36 @@ conflicting vars and func names are allowed either.
 
  Preprocessing:
 
-	Processing is controlled by defined names and ifdef statements.
+	Pre - Processing is controlled by defined names and %ifdef statements.
 	The definitions are in an and exist / does not exist state.
     The pre-processor is executed before every other stage.
+    The pre processor items are denoted by the '%' start char, and
+    ended with the semi-colon ';' or new-line '\n'.
+
     The pre-processor maintains the following vars:
 
-        __file__  __line__  __func__ __platform__ __target__
-        __version__
-        __code_version__
-        __author__
-        __copyright__
+        __file__  __line__  __func__
+        __date__   __time__    (current compile date/time)
 
-	%define DEFVAR
+    Optional variables may be set by a configuration file. (./pcomp.conf)
+        __platform__ __target__
+        __author__  __copyright__
+        __version__ __code_version__
+
+	%define VARNAME
+	%define VARNAME value
+    %define VARNAME "value"
+    %define VARNAME expresion
+
+    %ifdef  DEFVAR
+		 Statement list
+    %endif
+
+    %ifdef  DEFVAR
+		 Statement list
+	%else
+		 Statement list2
+	%endif
 
     %ifdef  DEFVAR
 		 Statement list
@@ -322,11 +340,42 @@ conflicting vars and func names are allowed either.
 		 Statement list
 	%endmac
 
-	%error  "Message to display"
+	%error  "Exit with Message to display"
 
-	%mesg  "Message to display"
+	%msg   "Message to display"
+    %msg   "Message strings " + "concatinated"
+    %msg    expression
 
-    %nl    "Add New line"
+    %nl         "Add New line"
+    %newline    "Alias for %nl"
+
+    The pre processing expression:
+
+        operators: (in order of precedence)
+            () * / 5 + - | & ^
+
+    Preprocessor comments:
+
+        Starts with '#' or '//' to the end of line.
+
+        Comments are valid anywhere outside statements;
+        For example:
+                %msg hello ; # comment
+                %msg hello   # invalid comment
+
+    Strings:
+        Nested between " and "
+        Nested between ' and '
+
+    Escapes:
+        \r \n \t
+
+    Data types:
+
+        Strings:         "1234"
+        Identifiers:     abcd _abcd 1234
+        Numbers:         0x1234 1234 0y0101
+        Expressions:     1234+1234
 
  The notion of multipass items.
 
@@ -336,7 +385,7 @@ conflicting vars and func names are allowed either.
     assemble
     link
 
-    comment extraction -> optional interface file
+    comment extraction -> to create optional interface file
 
 # Compiler studies
 

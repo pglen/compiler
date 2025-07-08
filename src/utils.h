@@ -19,6 +19,7 @@ void    hd(char *ptr, int len);
 double  errcheck( double d, char *s);
 void    execerror(char * str, char *str2);
 int     addemit(char chh);
+int     addemitstr(char *str);
 int     inputx(char *buf, int max_size, FILE *ppfp3);
 void    preerror(const char *str);
 

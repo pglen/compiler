@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>    /* for isatty */
 
 // We are in a subdir ./parser
 #include "../symtab.h"
@@ -38,8 +39,7 @@ extern  FILE *ppfp, *ppfp2;
 static  char    tmp_str3[128];
 
 // Global that controls define results
-int hasdefine   = 0;
-int elsedefine   = 0;
+int hasdefine   = 1;
 
 %}
 
@@ -63,7 +63,7 @@ int elsedefine   = 0;
 %token <sym>   PAREN12 PAREN22 SEMI2 ENL2
 
 /* laguage elements */
-%token <sym>   CH2 ID2 SP2 NL2 STR2 COMMENT2 NUM2 MAC2
+%token <sym>   CH2 ID2 ID3 SP2 NL2 STR2 COMMENT2 NUM2 MAC2
 
 /* pre processor strtements */
 %token <sym>  IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
@@ -93,7 +93,6 @@ int elsedefine   = 0;
 %type   <sym>   expr5
 %type   <sym>   semib
 %type   <sym>   semibm
-%type   <sym>   def1args
 
 %%
 
@@ -173,6 +172,26 @@ all2:   define1
             if(config.testpreyacc > 1)
                 { printf("{ all2 nl / blank '%s' } ", (char*)$1->var); fflush(stdout); }
             }
+        | ID3
+            {
+            if(config.testpreyacc > 0)
+                {   printf("{ all2 id3 '%s' } ", $1->var);
+                    fflush(stdout);
+                // Find in symtab
+                Symbol  *st2 = lookup_symtab($1->var, DECL_DEFINE);
+                if(st2)
+                    {
+                    printf("added %s=%s", st2->var, st2->res);
+                    addemitstr(st2->res);
+                    }
+                else
+                    {
+                    printf("added: '%s'", $1->var);
+                    addemitstr($1->var);
+                    }
+                }
+            }
+
 ;
 idd1:   strx1       { if(config.testpreyacc > 1)
                         printf("{ idd1 strx1 } ");fflush(stdout); }
@@ -186,14 +205,16 @@ define1: DEF2 sp1mb idd1 sp1mb semibm
                 printf("{ define1 '%s' } ", $3->var);
                 fflush(stdout);
                 }
-            push_symtab("", $3->var, "", DECL_DEFINE, 0);
+            if(hasdefine)
+                push_symtab("", $3->var, "", DECL_DEFINE, 0);
             }
         | DEF2 sp1mb idd1 sp1mb idd1 sp1mb semibm
             {
             if(config.testpreyacc > 0)
                 { printf("{ define1 '%s' arg: %s } ", $3->var, $5->var);
                     fflush(stdout); }
-            push_symtab("", $3->var, $5->var, DECL_DEFINE, 0);
+            if(hasdefine)
+                push_symtab("", $3->var, $5->var, DECL_DEFINE, 0);
             }
 ;
 undef1:  UNDEF2 sp1mb idd1 sp1mb semibm
@@ -219,20 +240,21 @@ undef1:  UNDEF2 sp1mb idd1 sp1mb semibm
         { // Ignore
         }
 ;
-err1:   ERR2 sp1b STR2 sp1m
-    {
-        // Erase quotes
-        if(hasdefine == 0)
+err1:   ERR2 sp1mb idd1 sp1mb semibm
             {
-            char *tmp_strx = strdup(((char*)$3) + 1);
-            char *last = strrchr(tmp_strx, '\"');
-            if(last)
-                *last = '\0';
-            printf("Error: %s\n", tmp_strx); fflush(stdout);
-            free(tmp_strx);
+            printf(" { err1 %s } ", $3->var); fflush(stdout);
+            if(hasdefine == 1)
+                {
+                if(isatty(2) > 0)
+                    fprintf(stderr, "\033[31;1mError Exit:\033[0m ");
+                else
+                    fprintf(stderr, "Error exit: ");
+
+                fprintf(stderr, "%s\n", $3->var);
+
+                exit(1);
+                }
             }
-        exit(1);
-    }
 ;
 strx1:  STR2 sp1mb
             {
@@ -297,7 +319,7 @@ msg1:    MSG2 sp1mb idd1 sp1mb semibm
             {
             if(config.testpreyacc > 0)
                 { printf(" { msg1: expr1 '%s' } ", $3->var); }
-            if(hasdefine) // || elsedefine)
+            if(hasdefine)
                 fprintf(stderr, "%s", $3->var);
             }
 ;
@@ -365,8 +387,7 @@ endif1:  ENDIF2 sp1mb semibm
         {
         if(config.testpreyacc > 0)
             { printf("{ endif1 '%s'} ", (char*)$1->var); }
-        hasdefine = 0; elsedefine = 0;
-        //printf("Ended define\n");
+        hasdefine = 1;
         }
 ;
 else1:  ELSE2 sp1mb semibm

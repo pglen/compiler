@@ -1,0 +1,8 @@
+%define DEFINE2
+%ifdef DEFINE
+    %msg "pre1234 " ;%nl
+    %error "DEFINE is defined"
+%else
+    %msg "pre3456 " ; %nl
+    %error "DEFINE is NOT defined"
+%endif

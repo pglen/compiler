@@ -4,6 +4,7 @@
 
 #include <stdio.h>     /* for printf */
 #include <stdlib.h>    /* for exit */
+#include <unistd.h>    /* for isatty */
 
 #include "../symtab.h"
 #include  "../pcomp.h"
@@ -54,10 +55,10 @@ FNN  [\~_a-zA-Z0-9]
 <EMITSTATE>\/\/.*\n             { /* comment */
                          num_lines++;
 
-                         if(config.testpreflex)
+                         if(config.testpreflex > 1)
                              { printf("[slash_comment] '%s", yytext); fflush(stdout); }
 
-                         if(config.showcomm)
+                         if(config.showcomm > 0)
                              printf("//comment: '%s", yytext);
 
                          yylval.sym = make_symstr("", strdup(yytext), STR2);
@@ -251,13 +252,13 @@ FNN  [\~_a-zA-Z0-9]
                                 return CH2;
                                 }
 
-<EMITSTATE>%error                   {
-                         if(config.testpreflex)
+<EMITSTATE>%error       {
+                        if(config.testpreflex)
                              { printf(" [error] '%s' ", yytext); fflush(stdout); }
-                        to_new_state(INITIAL);
-                        yylval.sym = make_symstr("", strdup(yytext), ERR2);
-                         return ERR2;
-                         }
+                            to_new_state(INITIAL);
+                            yylval.sym = make_symstr("", strdup(yytext), ERR2);
+                        return ERR2;
+                        }
 
 <EMITSTATE>%mac|%macro         {
                                 if(config.testpreflex)
@@ -348,8 +349,16 @@ FNN  [\~_a-zA-Z0-9]
                                 yylval.sym = make_symstr("", strdup(yytext), ID2);
                                 return ID2;
                                 }
+<EMITSTATE>{FN}{FNN}*           {
+                                if(config.testpreflex)
+                                    { printf(" [ID3] '%s' ", yytext); fflush(stdout); }
+
+                                yylval.sym = make_symstr("", strdup(yytext), ID3);
+                                return ID3;
+                                }
 <EMITSTATE>.                    {
                                 // default emit charater
+
                                 if(config.testpreflex > 1)
                                     { printf(" [emit] '%c' ", yytext[0]); fflush(stdout); }
                                 if(hasdefine)
@@ -521,14 +530,14 @@ int     preprocess(char *ptr)
         else
             printf ("Compiled: '%s' ERR %d sec %d usec\n", ptr, dts, dtu);
         }
+    fprintf(ppfp2, "%s", emitline);
     fclose(ppfp2);
-
     if(config.catpre)
         {
-        printf("Displaying pre processed file:\n\n");
-        sprintf(tmp_str, "cat %s\n", ppfile2);
+        printf("\nPre processed file:\n");
+        sprintf(tmp_str, "cat %s", ppfile2);
         int ret = system(tmp_str);
-        printf("\n");
+        printf("EOF\n");
         }
     return ret_val;
 }
@@ -554,15 +563,15 @@ void    preerror(const char *str)
     currline[ppp] = '\0';
 
     // Is term?
-    //printf("isatty(stdout) %d", isatty(stdout));
-    if(isatty(stderr) > 0)
+    //printf("isatty(2) %d", isatty(stdout));
+    if(isatty(2) > 0)
         {
         fprintf(stderr, "\033[31;1mERROR\033[0m ");
         }
     else
         {
-        //fprintf(stderr, "ERROR ");
-        fprintf(stderr, "\033[31;1mERROR\033[0m ");
+        fprintf(stderr, "ERROR ");
+        //fprintf(stderr, "\033[31;1mERROR\033[0m ");
         }
     if(strlen(currline))
         {

@@ -254,10 +254,18 @@ Symbol  *push_symtab(char *name, char *var, char *res, int type, double d)
 {
     //return NULL;
 
-    Symbol *sp = lookup_symtab(name, type);
-    // Duplicate
-    //if(sp)
-    //  return NULL;
+    Symbol *sp = lookup_symtab(var, type);
+    // Duplicate, overwrite
+    if(sp)
+        {
+        sp->name = estrdup2(name, __LINE__, __FILE__);
+        sp->var = estrdup2(var, __LINE__, __FILE__);
+        sp->res = estrdup2(res, __LINE__, __FILE__);
+        sp->type = type;
+        sp->u.dval = d;
+
+        return sp;
+        }
     sp = make_symtab(name, var, res, type, d);
 
     if(symlist == NULL)           /* add first one */

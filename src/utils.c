@@ -234,7 +234,6 @@ double errcheck( double d, char *s)
         errno = 0 ;
         execerror(s, "result out of range") ;
     }
-
     return d ;
 }
 
@@ -250,6 +249,20 @@ int     addemit(char chh)
         emitprog++;
     emitline[emitprog] = '\0';
     return emitprog;
+}
+
+int     addemitstr(char *str)
+
+{
+    int cnt = 0;
+    while(1)
+        {
+        char chh = str[cnt];
+        if(chh == '\0')
+            break;
+        addemit(chh);
+        cnt++;
+        }
 }
 
 char    currline[1024];

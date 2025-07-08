@@ -1,3 +1,0 @@
-u32 cc1 = 2000;
-
-%ifdef HELLO2

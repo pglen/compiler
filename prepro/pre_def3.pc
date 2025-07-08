@@ -1,15 +1,20 @@
+# Test define
 %define DEFINE
 %ifdef DEFINE
     %msg " pre1234 " ;%nl
+    %define AA aa
 %else
     %msg " pre3456 " ; %nl
+    %define AA bb
 %endif
-
+u32  AA = 0 ;
 %undef DEFINE
 %ifdef DEFINE
     %msg " aft1234 " ; %nl
+    %define AA aa
 %else
     %msg " aft3456 " ; %nl
-
+    %define AA bb
 %endif
-
+u32  AA = 0;
+# EOF
