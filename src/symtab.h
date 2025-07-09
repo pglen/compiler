@@ -32,6 +32,7 @@
 #define     DECL_VAR4          11006
 #define     DECL_VARLIST    11007
 #define     DECL_VARITEM    11008
+#define     DECL_MACITEM    11009
 
 #define     DECL_CALL       11012
 #define     DECL_CALL2      11013

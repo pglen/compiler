@@ -270,7 +270,7 @@ FNN  [\~_a-zA-Z0-9]
 
 <EMITSTATE>%mac|%macro         {
                                 if(config.testpreflex)
-                                    { printf(" [mmacro] '%s' ", yytext); fflush(stdout); }
+                                    { printf(" [MAC2] '%s' ", yytext); fflush(stdout); }
                                 to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), MAC2);
                                 return MAC2;

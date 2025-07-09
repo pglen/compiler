@@ -86,6 +86,7 @@ int hasdefine   = 1;
 %type   <sym>   else1
 %type   <sym>   strx1
 %type   <sym>   idd1
+%type   <sym>   idd2
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
@@ -175,33 +176,56 @@ all2:   define1
         | ID3
             {
             if(config.testpreyacc > 0)
-                {   printf("{ all2 id3 '%s' } ", $1->var);
-                    fflush(stdout);
+                {
+                //printf("{ all2 id3 '%s' } ", $1->var);
+                //fflush(stdout);
                 // Find in symtab
-                Symbol  *st2 = lookup_symtab($1->var, DECL_DEFINE);
-                if(st2)
-                    {
-                    //printf("added %s=%s", st2->var, st2->res);
-                    addemitstr(st2->res);
-                    }
-                else
-                    {
-                    //printf("added: '%s'", $1->var);
-                    addemitstr($1->var);
-                    }
+                }
+            Symbol  *st2 = lookup_symtab($1->var, DECL_DEFINE);
+            if(st2)
+                {
+                //printf("added %s=%s", st2->var, st2->res);
+                addemitstr(st2->res);
+                }
+            else
+                {
+                //printf("added: '%s'", $1->var);
+                addemitstr($1->var);
                 }
             }
 ;
-idd1:   strx1      { if(config.testpreyacc > 1)
-                        printf("{ idd1 strx1 } ");fflush(stdout); }
-        | idd1 strx1    { if(config.testpreyacc > 0)
-                        printf("{ idd1 strx1 %s } ", $2->var);fflush(stdout); }
-        | expr1    { if(config.testpreyacc > 0)
-                        printf("{ idd1 expr1 %s } ", $1->var);fflush(stdout); }
-        | idd1 expr1    { if(config.testpreyacc > 0)
-                        printf("{ idd1 expr1 %s } ", $2->var);fflush(stdout); }
-;
+idd1:   strx1      {
+                    //if(config.testpreyacc > 0)
+                    //    if($1)
+                    //        printf("{ idd1 strx1 '%p' } ", $1->var);
 
+                    //if(hasdefine)
+                    //    push_symtab("", $1->var, $1->res, DECL_MACITEM, 0);
+                        }
+        | expr1    { if(config.testpreyacc > 0)
+                        printf("{ idd1 expr1 %s } ", $1->var);
+                    //if(hasdefine)
+                    //        push_symtab("", $1->var, $1->res, DECL_MACITEM, 0);
+                        }
+;
+idd2:
+        | idd2 expr1    { if(config.testpreyacc > 0)
+                            printf("{ idd2 expr1 %s } ", $2->var);
+                        char tmp[32];
+                        create_unique(tmp, "mac");
+                        $$=make_symstr($2->var, tmp, $2->res);
+                        if(hasdefine)
+                            push_symtab(tmp, $2->var, $2->res, DECL_MACITEM, 0);
+                        }
+        | idd2 strx1    { if(config.testpreyacc > 0)
+                            printf("{ idd2 strx1 %s } ", $2->var);
+                        char tmp[32];
+                        create_unique(tmp, "mac");
+                        $$=make_symstr($2->var, tmp, $2->res);
+                        if(hasdefine)
+                            push_symtab(tmp, $2->var, $2->res, DECL_MACITEM, 0);
+                        }
+;
 define1: DEF2 sp1mb idd1 sp1mb semibm
             {
             if(config.testpreyacc > 0)
@@ -328,7 +352,7 @@ msg1:    MSG2 sp1mb idd1 sp1mb semibm
             }
 ;
 mac1:   MAC2 sp1mb idd1 sp1mb PAREN12 sp1mb idd1
-                sp1mb PAREN22 sp1mb idd1 sp1mb semibm
+                sp1mb PAREN22 sp1mb idd2 sp1mb semibm
         {
         if(config.testpreyacc > 0)
             { printf(" { mac1: idd1 '%s' ( '%s' ) '%s' } ",
@@ -497,7 +521,7 @@ expr4:  expr5
     }
     |    sp1mb PAREN12 sp1mb expr1 sp1mb PAREN22  sp1mb
         {
-        if(config.testpreyacc > 0)
+        if(config.testpreyacc > 1)
             { printf(" { paren: expr4 '%s' } ", $4->var); }
         $$ = make_symstr("", $4->var, NUM2);
         }

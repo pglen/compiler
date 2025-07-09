@@ -1459,7 +1459,7 @@ YY_RULE_SETUP
 #line 271 "ppre.f"
 {
                                 if(config.testpreflex)
-                                    { printf(" [mmacro] '%s' ", yytext); fflush(stdout); }
+                                    { printf(" [MAC2] '%s' ", yytext); fflush(stdout); }
                                 to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), MAC2);
                                 return MAC2;
