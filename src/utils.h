@@ -22,11 +22,13 @@ int     addemit(char chh);
 int     addemitstr(char *str);
 int     inputx(char *buf, int max_size, FILE *ppfp3);
 void    preerror(const char *str);
+void    safe_printf(char *fmt, ...);
 
 extern  int     emitprog;
 extern  char    emitline[1024];
 
 extern  char    currline[1024];
 extern  int     currprog ;
+extern  char    prevline[1024];
 
 // EOF

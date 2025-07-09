@@ -215,7 +215,7 @@ Symbol  *lookup_symtab(char *str, int type)
     return retsp;
 }
 
-Symbol  *make_symstr(char *name, char *var, int type)
+Symbol  *make_symstr(char *name, char *var, char *val, int type)
 
 {
     static int serial = 0;
@@ -225,7 +225,7 @@ Symbol  *make_symstr(char *name, char *var, int type)
         snprintf(name2, sizeof(name2), "name_%d_%x", type, serial);
         serial++;
         }
-    return make_symtab(name2, var, "", type, 0);
+    return make_symtab(name2, var, val, type, 0);
 }
 
 Symbol  *make_symtab(char *name, char *var, char *res, int type, double d)

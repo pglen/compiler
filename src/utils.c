@@ -14,8 +14,11 @@
 #include <time.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 #include <string.h>
 #include <errno.h>
+#include <signal.h>
+#include <setjmp.h>
 
 #include "symtab.h"
 #include "pcomp.h"
@@ -267,6 +270,7 @@ int     addemitstr(char *str)
 
 char    currline[1024];
 int     currprog = 0;
+char    prevline[1024];
 
 // Tag a new line at the end of sequence
 
@@ -286,15 +290,21 @@ int     inputx(char *buf, int max_size, FILE *ppfp3)
     if(cc == EOF)  {
         buf[0] = '\n';  end = 1;
         currline[currprog] = '\0';
+        //printf("c='EOF'"); fflush(stdout);
         }
     else {
         buf[0] = cc;
-        //printf("c='%c'", cc);
+        //if(cc <= '\n')
+        //    printf("c=%d ", cc);
+        //else
+        //    printf("c='%c' ", cc);
+        //fflush(stdout);
+
         // Restart
         if (cc == '\n')
             {
+            memcpy(prevline, currline, currprog);
             currprog = 0;
-            //currline[currprog] = '\0';
             }
         else
             {
@@ -305,6 +315,76 @@ int     inputx(char *buf, int max_size, FILE *ppfp3)
             }
         }
     return ret;
+}
+
+jmp_buf env;
+
+void segfault_handler(int sig_num, siginfo_t *si, void *context) {
+    printf("\n\033[31;1mCaught segmentation fault\033[0m (Signal %d)\n",
+                          sig_num);
+    //hd(si, 128);
+    sigset_t signal_set;
+    sigemptyset(&signal_set);
+    sigaddset(&signal_set, SIGSEGV);
+    sigprocmask(SIG_UNBLOCK, &signal_set, NULL);
+    //signal(SIGSEGV, SIG_DFL);
+    struct sigaction action;
+    memset(&action, 0, sizeof(struct sigaction));
+    action.sa_flags = SA_SIGINFO;
+    action.sa_sigaction = SIG_DFL;
+    sigaction(SIGSEGV, &action, NULL);
+    longjmp(env, 1);
+}
+
+int boom()
+{
+    // BOOM
+    int *aa = NULL;
+    *aa = 1;
+}
+
+// Macros to use in catching signal for 'C' try.
+
+#define SET_SIG                                     \
+    struct sigaction action;                        \
+    struct sigaction action2;                       \
+    memset(&action, 0, sizeof(struct sigaction));   \
+    memset(&action2, 0, sizeof(struct sigaction));  \
+    action.sa_flags = SA_SIGINFO;                   \
+    action.sa_sigaction = segfault_handler;         \
+    sigaction(SIGSEGV, &action, &action2);          \
+
+//#define UNSET_SIG                                   \
+//    memset(&action, 0, sizeof(struct sigaction));   \
+//    action.sa_flags = SA_SIGINFO;                   \
+//    action.sa_sigaction = SIG_DFL;                  \
+//    sigaction(SIGSEGV, &action, NULL);
+
+#define UNSET_SIG                                   \
+    sigaction(SIGSEGV, &action2, NULL);
+
+void    safe_printf(char *fmt, ...)
+
+{
+    SET_SIG
+
+    if(setjmp(env) == 0)  {
+        // Put the actual function calls here
+        va_list ap;
+        va_start(ap, fmt);
+        vprintf(fmt, ap);
+        va_end(ap);
+        //boom();
+        }
+    else
+        {
+        //printf("Back to safe\n");
+        }
+    UNSET_SIG
+
+    //printf("End of safe");
+    // TEST This should set it off
+    //boom();
 }
 
 // EOF

@@ -1,5 +1,1 @@
-// Macro definitions
-u32 cc1 = 2000;
-%mac hello ( qw ) qqq  345 + 678 910
-u32 cc2 = 3000;
-# EOF
+%mac mac_name ( mac_arg ) aaa bbb ccc 1234 + 12

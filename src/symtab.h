@@ -113,7 +113,7 @@ typedef struct Symcoll {
 /* -------- Declarations: ------------------------------------------------ */
 
 void    dump_symitem(Symbol *sp);
-int        if_func(int type);
+int     if_func(int type);
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -123,7 +123,7 @@ void    revdump_symtab(void);
 void    delitem_symtab(Symbol  *sp);
 void    empty_symtab();
 
-Symbol  *make_symstr(char *name, char *var, int type);
+Symbol  *make_symstr(char *name, char *var, char *val, int type);
 Symbol  *make_symtab(char *name, char *var, char *res, int type, double d);
 Symbol  *lookup_res_symtab(char *var, int type);
 Symbol  *lookup_symtab(char *s, int type);
