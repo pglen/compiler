@@ -38,7 +38,7 @@ int     prelex();
 
 %x STRSTATE
 %x XTRSTATE
-%x ESTATE
+%x EMITSTATE
 
 %option noyywrap stack
 
@@ -48,306 +48,329 @@ FNN  [\~_a-zA-Z0-9]
 %%
 
 \\\n                 {
-                     inff(0, "[BS EOL] '%s", yytext);
+                     if(config.testpreflex)
+                         { printf("[BS EOL] '%s", yytext); fflush(stdout); }
                      // Ignore
                      }
 
-<INITIAL,ESTATE>\/\/.*\n             { /* comment */
+<INITIAL,EMITSTATE>\/\/.*\n             { /* comment */
                          num_lines++;
 
-
-                              inff(0, "[slash_comment] '%s", yytext);
+                         if(config.testpreflex > 1)
+                             { printf("[slash_comment] '%s", yytext); fflush(stdout); }
 
                          if(config.showcomm > 0)
-                             inff(0, "//comment: '%s", yytext);
+                             printf("//comment: '%s", yytext);
 
                          yylval.sym = make_symstr("", strdup(yytext), "", STR2);
                          return COMMENT2;
                      }
 
-<INITIAL,ESTATE>#.*\n                { /* comment */
+<INITIAL,EMITSTATE>#.*\n                { /* comment */
                          num_lines++;
 
-
-                              inff(0, "[hash_comment] '%s", yytext);
+                         if(config.testpreflex > 1)
+                             { printf("[hash_comment] '%s", yytext); fflush(stdout); }
 
                          if(config.showcomm)
-                             inff(0, "#comment: '%s", yytext);
+                             printf("#comment: '%s", yytext);
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", COMMENT2);
                          return COMMENT2;
                      }
 
 0x[0-9a-fA-F]+       {
-
-                              inff(0, "[xNUM2] '%s' ", yytext);
+                         if(config.testpreflex)
+                             { printf("[xNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
                          return(NUM2);
                      }
 0y[0-7]+             {
-
-                              inff(0, "[yNUM2] '%s' ", yytext);
+                         if(config.testpreflex)
+                             { printf("[yNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
 
                          return(NUM2);
                          }
 0z[0-1]+                 {
-
-                              inff(0, "[zNUM2] '%s' ", yytext);
+                         if(config.testpreflex)
+                             { printf("[zNUM2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
 
                          return(NUM2);
                          }
-<INITIAL,ESTATE>\=     {
-
-                              inff(0, " [EQ2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\=     {
+                         if(config.testpreflex)
+                             { printf(" [EQ2] '%s' ", yytext); fflush(stdout); }
                           yylval.sym = make_symstr("", strdup(yytext), "", EQ2);
                          return(EQ2);
                          }
-<INITIAL,ESTATE>\+     {
-
-                              inff(0, " [PLUS2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\+     {
+                         if(config.testpreflex)
+                             { printf(" [PLUS2] '%s' ", yytext); fflush(stdout); }
                           yylval.sym = make_symstr("", strdup(yytext), "", PLUS2);
                          return(PLUS2);
                          }
-<INITIAL,ESTATE>\-                       {
-
-                              inff(0, " [MINUS2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\-                       {
+                         if(config.testpreflex)
+                             { printf(" [MINUS2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", MINUS2);
                          return(MINUS2);
                          }
-<INITIAL,ESTATE>\*                       {
-
-                              inff(0, " [MULT2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\*                       {
+                         if(config.testpreflex)
+                             { printf(" [MULT2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", MULT2);
                          return(MULT2);
                          }
-<INITIAL,ESTATE>\/                       {
-
-                              inff(0, " [DIV2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\/                       {
+                         if(config.testpreflex)
+                             { printf(" [DIV2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", DIV2);
                          return(DIV2);
                          }
-<INITIAL,ESTATE>\%                       {
-
-                              inff(0, " [MOD2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\%                       {
+                         if(config.testpreflex)
+                             { printf(" [MOD2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", MOD2);
                          return(MOD2);
                          }
-<INITIAL,ESTATE>\|                       {
-
-                              inff(0, " [OR2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\|                       {
+                         if(config.testpreflex)
+                             { printf(" [OR2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", OR2);
                          return(OR2);
                          }
-<INITIAL,ESTATE>\&                       {
-
-                              inff(0, " [AND2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\&                       {
+                         if(config.testpreflex)
+                             { printf(" [AND2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", AND2);
                          return(AND2);
                          }
-<INITIAL,ESTATE>\!                       {
+<INITIAL,EMITSTATE>\!                       {
                          yylval.sym = make_symstr("", strdup(yytext), "", NOT2);
                          return(NOT2);
                          }
-<INITIAL,ESTATE>\^                       {
-
-                              inff(0, " [XOR2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\^                       {
+                         if(config.testpreflex)
+                             { printf(" [XOR2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", XOR2);
                          return(XOR2);
                          }
-<INITIAL,ESTATE>\(                       {
-
-                              inff(0, " [PAREN1] '%s' ", yytext);
+<INITIAL,EMITSTATE>\(                       {
+                         if(config.testpreflex)
+                             { printf(" [PAREN1] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
                          return(PAREN12);
                          }
-<INITIAL,ESTATE>\)                       {
-
-                              inff(0, " [PAREN2] '%s' ", yytext);
+<INITIAL,EMITSTATE>\)                       {
+                         if(config.testpreflex)
+                             { printf(" [PAREN2] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
                          return(PAREN22);
                          }
 
-<INITIAL,ESTATE>[0-9]+       {
-
-                              inff(0, "[NUM2] '%s' ", (char*)yytext);
+<INITIAL,EMITSTATE>[0-9]+       {
+                         if(config.testpreflex)
+                             { printf("[NUM2] '%s' ", (char*)yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
 
                          return(NUM2);
                          }
 
-<INITIAL,ESTATE>\>\>                     {
-
-                              inff(0, " [RSHIFT] '%s' ", yytext);
+<INITIAL,EMITSTATE>\>\>                     {
+                         if(config.testpreflex)
+                             { printf(" [RSHIFT] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", RSHIFT2);
 
                          return(RSHIFT2);
                          }
 
-<INITIAL,ESTATE>\<\<                     {
-
-                              inff(0, " [LSHIFT] '%s' ", yytext);
+<INITIAL,EMITSTATE>\<\<                     {
+                         if(config.testpreflex)
+                             { printf(" [LSHIFT] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", LSHIFT2);
                          return(LSHIFT2);
                          }
-<INITIAL,ESTATE>;                        {
-
-                              inff(0, " [SEMI] '%s' ", yytext);
+<INITIAL,EMITSTATE>;                        {
+                         if(config.testpreflex)
+                             { printf(" [SEMI] '%s' ", yytext); fflush(stdout); }
 
                          yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
                          return(SEMI2);
                          }
-<INITIAL,ESTATE>[ \t]                   {
-
-                             inff(0, " [SP2] '%s' ", yytext);
+<INITIAL,EMITSTATE>[ \t]                   {
+                        if(config.testpreflex)
+                            { printf(" [SP2] '%s' ", yytext); fflush(stdout); }
                         yylval.sym = make_symstr("", strdup(yytext), "", SP2);
                         return SP2;
                         }
-<INITIAL,ESTATE>\r                              {
+<INITIAL,EMITSTATE>\r                              {
                                 // Ignore
-
-                                     inff(0, " [rnl] '%d'", yytext[0]);
+                                if(config.testpreflex)
+                                    { printf(" [rnl] '%d'", yytext[0]); fflush(stdout); }
                                 num_lines++;
                                 yylval.sym = make_symstr("", strdup(yytext), "", NL2);
                                 return NL2;
                                 }
 
-<INITIAL,ESTATE>\n                              {
-
-                                     inff(0, " [NL2] '%d' ", yytext[0]);
+<INITIAL,EMITSTATE>\n                              {
+                                if(config.testpreflex)
+                                    { printf(" [NL2] '%d' ", yytext[0]); fflush(stdout); }
 
                                 num_lines++;
                                 yylval.sym = make_symstr("", strdup(yytext), "", NL2);
                                 return NL2;
                                 }
 
-<INITIAL,ESTATE>\'                              {              /* begin quote */
+<INITIAL,EMITSTATE>\'                              {              /* begin quote */
                                 to_new_state(XTRSTATE);
-
-                                    inff(0, " xtr<<<");
+                                if(config.testpreflex > 1)
+                                    printf(" xtr<<<");
                                 prog = 0; backslash  = 0;
                                 //tmp_str2[prog++] = yytext[0];
                                 }
-<INITIAL,ESTATE>\"                              {              /* begin quote */
+<INITIAL,EMITSTATE>\"                              {              /* begin quote */
                                 to_new_state(STRSTATE);
-
-                                    inff(0, " str<<<");
+                                if(config.testpreflex > 1)
+                                    printf(" str<<<");
                                 prog = 0; backslash  = 0;
                                 //tmp_str2[prog++] = yytext[0];
                                 }
-<INITIAL,ESTATE>%error       {
-
-                              inff(0, " [error] '%s' ", yytext);
+<INITIAL,EMITSTATE>%error       {
+                        if(config.testpreflex)
+                             { printf(" [error] '%s' ", yytext); fflush(stdout); }
                             //to_new_state(INITIAL);
                             yylval.sym = make_symstr("", strdup(yytext), "", ERR2);
                         return ERR2;
                         }
 
-<INITIAL,ESTATE>%mac|%macro         {
-
-                                     inff(0, " [MAC2] '%s' ", yytext);
+<INITIAL,EMITSTATE>%mac|%macro         {
+                                if(config.testpreflex)
+                                    { printf(" [MAC2] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", MAC2);
                                 return MAC2;
                                 }
 
-<INITIAL,ESTATE>%nl|%newline         {
-
-                                     inff(0, " [enl] '%s' ", yytext);
+<INITIAL,EMITSTATE>%nl|%newline         {
+                                if(config.testpreflex)
+                                    { printf(" [enl] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
                                 return ENL2;
                                 }
-<INITIAL,ESTATE>%msg|%message        {
-
-                                     inff(0, " [MSG2] '%s' ", yytext);
+<INITIAL,EMITSTATE>%msg|%message        {
+                                if(config.testpreflex)
+                                    { printf(" [MSG2] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
                                 return MSG2;
                                 }
-<INITIAL,ESTATE>%def|%define         {
-
-                                     inff(0, " \n[DEF2] '%s' ", yytext);
+<INITIAL,EMITSTATE>%def|%define         {
+                                if(config.testpreflex)
+                                    { printf(" \n[DEF2] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", DEF2);
                                 return DEF2;
                                 }
-<INITIAL,ESTATE>%undef               {
-
-                                     inff(0, " [undef] '%s' ", yytext);
+<INITIAL,EMITSTATE>%undef               {
+                                if(config.testpreflex)
+                                    { printf(" [undef] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", UNDEF2);
                                 return UNDEF2;
                                 }
 
-<INITIAL,ESTATE>%ifdef               {
-
-                                     inff(0, " [ifdef] '%s' ", yytext);
+<INITIAL,EMITSTATE>%ifdef               {
+                                if(config.testpreflex)
+                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", IFDEF2);
                                 return IFDEF2;
                                 }
 
-<INITIAL,ESTATE>%elifdef             {
-
-                                     inff(0, " [elifdef] '%s' ", yytext);
+<INITIAL,EMITSTATE>%elifdef             {
+                                if(config.testpreflex)
+                                    { printf(" [elifdef] '%s' ", yytext); fflush(stdout); }
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", ELIFDEF2);
                                 return ELIFDEF2;
                                 }
-<INITIAL,ESTATE>%else                {
-
-                                     inff(0, " [else] '%s' ", yytext);
+<INITIAL,EMITSTATE>%else                {
+                                if(config.testpreflex)
+                                    { printf(" [else] '%s' ", yytext); fflush(stdout); }
 
                                 //to_new_state(INITIAL);
                                 yylval.sym = make_symstr("", strdup(yytext), "", ELSE2);
                                 return ELSE2;
                                 }
-<INITIAL,ESTATE>%endif               {
-                                inff(0, "%s", " [ %endif ] ");
-                                inff(0, "emit: '%s'\n", emitline);
+<INITIAL,EMITSTATE>%endif               {
+                                if(config.testpreflex)
+                                    { printf(" [ifdef] '%s' ", yytext); fflush(stdout); }
+
+                                //to_new_state(INITIAL);
+                                yylval.sym = make_symstr("", strdup(yytext), "", ENDIF2);
+                                return ENDIF2;
+                                }
+<INITIAL,EMITSTATE>%endif               {
+                                printf("%s", " [ %endif ] ");
+                                printf("emit: '%s'\n", emitline);
                                 //hd(emitline, strlen(emitline) + 12);
 
                                 BEGIN(INITIAL);
                                 }
-{FN}{FNN}*                      {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
-                                return ID2;
-                                }
-<INITIAL,ESTATE>{FN}{FNN}*      {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
-                                return ID2;
-                                }
-<ESTATE>.                       {
-                                // default emit charater
-                                inff(0, " [emit] '%c' ", yytext[0]);
+<INITIAL,EMITSTATE>\n                   {
+                                //printf("emit newline");
                                 if(hasdefine)
                                     {
-                                    //if(config.testpreflex > 0)
-                                    //    inff(0, " [emitx] '%c' ", yytext[0]);
                                     addemit(yytext[0]);
                                     }
                                 }
-<XTRSTATE,STRSTATE>\\$          {
-                                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
+{FN}{FNN}*                      {
+                                if(config.testpreflex)
+                                    { printf(" [ID] '%s' ", yytext); fflush(stdout); }
+
+                                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
+                                return ID2;
+                                }
+<INITIAL,EMITSTATE>{FN}{FNN}*           {
+                                if(config.testpreflex)
+                                    { printf(" [ID2] '%s' ", yytext); fflush(stdout); }
+
+                                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
+                                return ID2;
+                                }
+<INITIAL,EMITSTATE>.                    {
+                                // default emit charater
+
+                                if(config.testpreflex > 1)
+                                    { printf(" [emit] '%c' ", yytext[0]); fflush(stdout); }
+                                if(hasdefine)
+                                    {
+                                    //if(config.testpreflex > 0)
+                                    //    printf(" [emitx] '%c' ", yytext[0]);
+                                    addemit(yytext[0]);
+                                    }
+                                }
+<XTRSTATE,STRSTATE>\\$                       {
+                                if(config.testpreflex)
+                                    { printf("[STRSTATE BSL EOL] '%s", yytext); fflush(stdout); }
                                 // Skipping ...
                                 }
 
@@ -361,10 +384,10 @@ FNN  [\~_a-zA-Z0-9]
                                      tmp_str2[prog] = '\0';
                                      yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
 
-
+                                     if(config.testpreflex)
                                         {
                                         //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
+                                        printf("[STR2] '%s' ", yylval.sym->var); fflush(stdout);
                                         }
                                      return(STR2);
                                      }
@@ -383,10 +406,10 @@ FNN  [\~_a-zA-Z0-9]
                                      tmp_str2[prog] = '\0';
                                      yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
 
-
+                                     if(config.testpreflex)
                                         {
                                         //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
+                                        printf("[STR2] '%s' ", yylval.sym->var); fflush(stdout);
                                         }
                                      return(STR2);
                                      }
@@ -398,14 +421,14 @@ FNN  [\~_a-zA-Z0-9]
 <XTRSTATE,STRSTATE>.            {   // default string charater
                                 backslash  = 0;
 
-
-                                     inff(0, "'%s'", yytext);
+                                if(config.testpreflex > 1)
+                                    { printf("'%s'", yytext); fflush(stdout); }
 
                                 tmp_str2[prog++] = yytext[0];
                                 }
-<INITIAL,ESTATE>.                               {  // default character
-
-                                     inff(0, " [CH2] '%s' ", yytext);
+<INITIAL,EMITSTATE>.                               {  // default character
+                                if(config.testpreflex)
+                                    { printf(" [CH2] '%s' ", yytext); fflush(stdout); }
                                 yylval.sym = make_symstr("", strdup(yytext), "", CH2);
                                 return CH2;
                                 }
@@ -440,8 +463,8 @@ int     preprocess(char *ptr)
     // re - initialize preprocessor
     num_lines = 1;
 
-    //printf("states %d %d %d\n", INITIAL, STRSTATE, ESTATE);
-    //to_new_state(ESTATE);
+    //printf("states %d %d %d\n", INITIAL, STRSTATE, EMITSTATE);
+    //to_new_state(EMITSTATE);
 
     if(stat(ptr, &buf) >= 0)
         {

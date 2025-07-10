@@ -10,7 +10,7 @@
      0.00   dec/1/2013      Peter Glen     Initial
      0.03   dec/23/2013     Peter Glen     Progress.
      0.04   jan/22/2014     Peter Glen     Added new symtab
-     0.04   Thu 03.Jul.2025 Peter Glen     Restructuret to compler project
+     0.04   Thu 03.Jul.2025 Peter Glen     Restructuret to compiler project
 
      ======================================================================= */
 %{

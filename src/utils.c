@@ -387,4 +387,27 @@ void    safe_printf(char *fmt, ...)
     //boom();
 }
 
+void    inf(int lev, char *fmt, ...)
+{
+    if(config.testpreyacc > lev)
+        {
+        va_list ap;
+        va_start(ap, fmt);
+        vprintf(fmt, ap);
+        va_end(ap);
+        fflush(stdout);
+        }
+}
+void    inff(int lev, char *fmt, ...)
+{
+    if(config.testpreflex > lev)
+        {
+        va_list ap;
+        va_start(ap, fmt);
+        vprintf(fmt, ap);
+        va_end(ap);
+        fflush(stdout);
+        }
+}
+
 // EOF

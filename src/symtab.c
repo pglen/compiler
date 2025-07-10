@@ -218,14 +218,15 @@ Symbol  *lookup_symtab(char *str, int type)
 Symbol  *make_symstr(char *name, char *var, char *val, int type)
 
 {
-    static int serial = 0;
+    static int nserial = 0;
     char name2[12] = "";
     if (!strlen(name))
         {
-        snprintf(name2, sizeof(name2), "name_%d_%x", type, serial);
-        serial++;
+        snprintf(name2, sizeof(name2), "name_%d_%x", type, nserial);
+        name = name2;
+        nserial++;
         }
-    return make_symtab(name2, var, val, type, 0);
+    return make_symtab(name, var, val, type, 0);
 }
 
 Symbol  *make_symtab(char *name, char *var, char *res, int type, double d)
