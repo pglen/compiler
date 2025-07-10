@@ -47,24 +47,23 @@ int hasdefine   = 1;
 
 %}
 
-//%union {                                                /* stack object type */
-//    int     val ;                                            /* actual value */
-//    long    lngval ;                                         /* actual value */
-//    float   fltlval;                                         /* actual value */
-//    double  dblval ;                                         /* actual value */
-//    char    *strval;                                            /* str value */
-//    Symbol  *sym ;                                       /* symbol table ptr */
+//%union {                                     /* stack object type */
+//    int     val ;                                 /* actual value */
+//    long    lngval ;                              /* actual value */
+//    float   fltlval;                              /* actual value */
+//    double  dblval ;                              /* actual value */
+//    char    *strval;                                 /* str value */
+//    Symbol  *sym ;                            /* symbol table ptr */
 //}
 
 %union {
-    //char    *strval;
     Symbol  *sym ;
 }
 
 /*
 // %verbose
 // %define parse.trace  true
-// % define parse.lac full
+// %define parse.lac full
 */
 
 /* operators */
@@ -73,19 +72,18 @@ int hasdefine   = 1;
 %token <sym>   PAREN12 PAREN22 SEMI2 ENL2
 
 /* laguage elements */
-%token <sym>   CH2 ID2 ID3 SP2 NL2 STR2 COMMENT2 NUM2 MAC2
+%token <sym>    CH2 ID2 ID3 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
+%token <sym>    IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
 
-%type <sym>     all1
-%type <sym>     all2
-%type <sym>     assn1
-%type <sym>     num1
+%type   <sym>   all1
+%type   <sym>   all2
+%type   <sym>   assn1
+%type   <sym>   num1
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
 %type   <sym>   expr4
 %type   <sym>   expr5
-
-%token <sym>  IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
 
 // %start all1
 
@@ -96,12 +94,12 @@ all1:           { inf(1, " { all1 none } "); }
 ;
 all2:   all1 spnl1 assn1
             { inf(0, "{ all2 assn1 '%s' '%s' } ", $3->name, $3->var); }
-        | all1 spnl1 COMMENT2
+        | all1 spnl1 COMM2
             { inf(0, "{ all2 com2 '%s' '%s' } ", $3->name, $3->var); }
         | all1 spnl1 expr1
             { inf(0, "{ all2 expr1 } "); }
 ;
-assn1:  spnl1b ID2 spnl1b EQ2 spnl1b num1 spnl1
+assn1:  spnl1b ID2 spnl1b EQ2 spnl1b expr1 spnl1
         {
         inf(0, " { assn1 %s = %s } ", $2->var, $6->var);
         //if(hasdefine)
@@ -109,11 +107,11 @@ assn1:  spnl1b ID2 spnl1b EQ2 spnl1b num1 spnl1
         $$ = make_symstr($2->var, $6->var, "", 0);
         }
 ;
-num1:   NUM2
+/*num1:   NUM2
       | ID2
       | expr1
+;*/
 
-;
 sp1:  SP2
      | SP2 sp1
 ;
@@ -220,11 +218,12 @@ expr4:  expr5
         $$ = make_symstr("", $4->var, "", NUM2);
         }
 ;
-expr5:  spnl1 NUM2 spnl1
+expr5:      NUM2
+        |   ID2
         {
         if(config.testpreyacc > 1)
-            { inf(0, " { expr5 '%s' } ", $2->var); }
-        $$ = make_symstr("", $2->var, "", NUM2);
+            { inf(0, " { expr5 '%s' } ", $1->var); }
+        $$ = make_symstr("", $1->var, "", NUM2);
         }
 ;
 %%

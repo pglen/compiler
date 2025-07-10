@@ -847,7 +847,7 @@ int     prelex();
 #define INITIAL 0
 #define STRSTATE 1
 #define XTRSTATE 2
-#define ESTATE 3
+#define EXSTATE 3
 
 #ifndef YY_NO_UNISTD_H
 /* Special case for "unistd.h", since it is non-ANSI. We include it way
@@ -1137,547 +1137,466 @@ case 1:
 YY_RULE_SETUP
 #line 50 "ppre.f"
 {
-                     inff(0, "[BS EOL] '%s", yytext);
-                     // Ignore
-                     }
+                inff(0, "[BS EOL] '%s", yytext);
+                // no ret, ignore
+                }
 	YY_BREAK
 case 2:
 /* rule 2 can match eol */
 YY_RULE_SETUP
-#line 55 "ppre.f"
-{ /* comment */
-                         num_lines++;
-
-
-                              inff(0, "[slash_comment] '%s", yytext);
-
-                         if(config.showcomm > 0)
-                             inff(0, "//comment: '%s", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", STR2);
-                         return COMMENT2;
-                     }
+#line 54 "ppre.f"
+{
+                num_lines++;
+                inff(0, "[//COMM2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", STR2);
+                return COMM2;
+                }
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 68 "ppre.f"
-{ /* comment */
-                         num_lines++;
-
-
-                              inff(0, "[hash_comment] '%s", yytext);
-
-                         if(config.showcomm)
-                             inff(0, "#comment: '%s", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", COMMENT2);
-                         return COMMENT2;
-                     }
+#line 60 "ppre.f"
+{
+                num_lines++;
+                inff(0, "[#COMM2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
+                return COMM2;
+                }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 81 "ppre.f"
+#line 66 "ppre.f"
 {
-
-                              inff(0, "[xNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-                         return(NUM2);
-                     }
+                inff(0, "[xNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 88 "ppre.f"
+#line 71 "ppre.f"
 {
-
-                              inff(0, "[yNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
+                inff(0, "[yNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 96 "ppre.f"
+#line 76 "ppre.f"
 {
-
-                              inff(0, "[zNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
+                inff(0, "[zNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 104 "ppre.f"
+#line 81 "ppre.f"
 {
-
-                              inff(0, " [EQ2] '%s' ", yytext);
-                          yylval.sym = make_symstr("", strdup(yytext), "", EQ2);
-                         return(EQ2);
-                         }
+                inff(0, " [EQ2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", EQ2);
+                return(EQ2);
+                }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 110 "ppre.f"
+#line 86 "ppre.f"
 {
-
-                              inff(0, " [PLUS2] '%s' ", yytext);
-                          yylval.sym = make_symstr("", strdup(yytext), "", PLUS2);
-                         return(PLUS2);
-                         }
+                inff(0, " [PLUS2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PLUS2);
+                return(PLUS2);
+                }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 116 "ppre.f"
+#line 91 "ppre.f"
 {
-
-                              inff(0, " [MINUS2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", MINUS2);
-                         return(MINUS2);
-                         }
+                inff(0, " [MINUS2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", MINUS2);
+                return(MINUS2);
+                }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 123 "ppre.f"
+#line 96 "ppre.f"
 {
-
-                              inff(0, " [MULT2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", MULT2);
-                         return(MULT2);
-                         }
+                inff(0, " [MULT2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", MULT2);
+                return(MULT2);
+                }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 130 "ppre.f"
+#line 101 "ppre.f"
 {
-
-                              inff(0, " [DIV2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", DIV2);
-                         return(DIV2);
-                         }
+                inff(0, " [DIV2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", DIV2);
+                return(DIV2);
+                }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 137 "ppre.f"
+#line 106 "ppre.f"
 {
-
-                              inff(0, " [MOD2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", MOD2);
-                         return(MOD2);
-                         }
+                inff(0, " [MOD2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", MOD2);
+                return(MOD2);
+                }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 144 "ppre.f"
+#line 111 "ppre.f"
 {
-
-                              inff(0, " [OR2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", OR2);
-                         return(OR2);
-                         }
+                inff(0, " [OR2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", OR2);
+                return(OR2);
+                }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 151 "ppre.f"
+#line 116 "ppre.f"
 {
-
-                              inff(0, " [AND2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", AND2);
-                         return(AND2);
-                         }
+                  inff(0, " [AND2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", AND2);
+                return(AND2);
+                }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 158 "ppre.f"
+#line 121 "ppre.f"
 {
-                         yylval.sym = make_symstr("", strdup(yytext), "", NOT2);
-                         return(NOT2);
-                         }
+                yylval.sym = make_symstr("", strdup(yytext), "", NOT2);
+                return(NOT2);
+                }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 162 "ppre.f"
+#line 125 "ppre.f"
 {
-
-                              inff(0, " [XOR2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", XOR2);
-                         return(XOR2);
-                         }
+                inff(0, " [XOR2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", XOR2);
+                return(XOR2);
+                }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 169 "ppre.f"
+#line 130 "ppre.f"
 {
-
-                              inff(0, " [PAREN1] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
-                         return(PAREN12);
-                         }
+                inff(0, " [PAREN1] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
+                return(PAREN12);
+                }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 176 "ppre.f"
+#line 135 "ppre.f"
 {
-
-                              inff(0, " [PAREN2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
-                         return(PAREN22);
-                         }
+                inff(0, " [PAREN2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
+                return(PAREN22);
+                }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 184 "ppre.f"
+#line 140 "ppre.f"
 {
-
-                              inff(0, "[NUM2] '%s' ", (char*)yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
+                inff(0, "[NUM2] '%s' ", (char*)yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 193 "ppre.f"
+#line 145 "ppre.f"
 {
-
-                              inff(0, " [RSHIFT] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", RSHIFT2);
-
-                         return(RSHIFT2);
-                         }
+                inff(0, " [RSHIFT] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", RSHIFT2);
+                return(RSHIFT2);
+                }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 202 "ppre.f"
+#line 150 "ppre.f"
 {
-
-                              inff(0, " [LSHIFT] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", LSHIFT2);
-                         return(LSHIFT2);
-                         }
+                inff(0, " [LSHIFT] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", LSHIFT2);
+                return(LSHIFT2);
+                }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 209 "ppre.f"
+#line 155 "ppre.f"
 {
-
-                              inff(0, " [SEMI] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
-                         return(SEMI2);
-                         }
+                inff(0, " [SEMI] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
+                return(SEMI2);
+                }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 216 "ppre.f"
+#line 160 "ppre.f"
 {
-
-                             inff(0, " [SP2] '%s' ", yytext);
-                        yylval.sym = make_symstr("", strdup(yytext), "", SP2);
-                        return SP2;
-                        }
+                inff(0, " [SP2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", SP2);
+                return SP2;
+                }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 222 "ppre.f"
+#line 165 "ppre.f"
 {
-                                // Ignore
-
-                                     inff(0, " [rnl] '%d'", yytext[0]);
-                                num_lines++;
-                                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
-                                return NL2;
-                                }
+                inff(0, " [rnl] '%d'", yytext[0]);
+                num_lines++;
+                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
+                return NL2;
+                }
 	YY_BREAK
 case 25:
 /* rule 25 can match eol */
 YY_RULE_SETUP
-#line 231 "ppre.f"
+#line 171 "ppre.f"
 {
-
-                                     inff(0, " [NL2] '%d' ", yytext[0]);
-
-                                num_lines++;
-                                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
-                                return NL2;
-                                }
+                inff(0, " [NL2] '%d' ", yytext[0]);
+                num_lines++;
+                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
+                return NL2;
+                }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 240 "ppre.f"
-{              /* begin quote */
-                                to_new_state(XTRSTATE);
-
-                                    inff(0, " xtr<<<");
-                                prog = 0; backslash  = 0;
-                                //tmp_str2[prog++] = yytext[0];
-                                }
+#line 178 "ppre.f"
+{
+                to_new_state(XTRSTATE);
+                inff(0, " xtr<<<");
+                prog = 0; backslash  = 0;
+                //tmp_str2[prog++] = yytext[0];
+                }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 247 "ppre.f"
-{              /* begin quote */
-                                to_new_state(STRSTATE);
-
-                                    inff(0, " str<<<");
-                                prog = 0; backslash  = 0;
-                                //tmp_str2[prog++] = yytext[0];
-                                }
+#line 184 "ppre.f"
+{
+                to_new_state(STRSTATE);
+                inff(0, " str<<<");
+                prog = 0; backslash  = 0;
+                //tmp_str2[prog++] = yytext[0];
+                }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 254 "ppre.f"
+#line 190 "ppre.f"
 {
-
-                              inff(0, " [error] '%s' ", yytext);
-                            //to_new_state(INITIAL);
-                            yylval.sym = make_symstr("", strdup(yytext), "", ERR2);
-                        return ERR2;
-                        }
+                inff(0, " [error] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ERR2);
+                return ERR2;
+                }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 262 "ppre.f"
+#line 196 "ppre.f"
 {
-
-                                     inff(0, " [MAC2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MAC2);
-                                return MAC2;
-                                }
+                inff(0, " [MAC2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MAC2);
+                return MAC2;
+                }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 270 "ppre.f"
+#line 203 "ppre.f"
 {
-
-                                     inff(0, " [enl] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
-                                return ENL2;
-                                }
+                inff(0, " [enl] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
+                return ENL2;
+                }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 277 "ppre.f"
+#line 209 "ppre.f"
 {
-
-                                     inff(0, " [MSG2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
-                                return MSG2;
-                                }
+                inff(0, " [MSG2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
+                return MSG2;
+                }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 284 "ppre.f"
+#line 215 "ppre.f"
 {
-
-                                     inff(0, " \n[DEF2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", DEF2);
-                                return DEF2;
-                                }
+                inff(0, " \n[DEF2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", DEF2);
+                return DEF2;
+                }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 291 "ppre.f"
+#line 221 "ppre.f"
 {
-
-                                     inff(0, " [undef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", UNDEF2);
-                                return UNDEF2;
-                                }
+                inff(0, " [undef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", UNDEF2);
+                return UNDEF2;
+                }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 299 "ppre.f"
+#line 227 "ppre.f"
 {
-
-                                     inff(0, " [ifdef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", IFDEF2);
-                                return IFDEF2;
-                                }
+                inff(0, " [ifdef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", IFDEF2);
+                return IFDEF2;
+                }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 307 "ppre.f"
+#line 234 "ppre.f"
 {
-
-                                     inff(0, " [elifdef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ELIFDEF2);
-                                return ELIFDEF2;
-                                }
+                inff(0, " [elifdef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELIFDEF2);
+                return ELIFDEF2;
+                }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 314 "ppre.f"
+#line 240 "ppre.f"
 {
-
-                                     inff(0, " [else] '%s' ", yytext);
-
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ELSE2);
-                                return ELSE2;
-                                }
+                inff(0, " [else] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELSE2);
+                return ELSE2;
+                }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 322 "ppre.f"
+#line 246 "ppre.f"
 {
-                                inff(0, "%s", " [ %endif ] ");
-                                inff(0, "emit: '%s'\n", emitline);
-                                //hd(emitline, strlen(emitline) + 12);
+                inff(0, "%s", " [ %endif ] ");
+                inff(0, "emit: '%s'\n", emitline);
+                //hd(emitline, strlen(emitline) + 12);
 
-                                BEGIN(INITIAL);
-                                }
+                BEGIN(INITIAL);
+                }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 329 "ppre.f"
+#line 253 "ppre.f"
 {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
-                                return ID2;
-                                }
+                inff(0, " [ID2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
+                return ID2;
+                }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 334 "ppre.f"
+#line 258 "ppre.f"
 {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
-                                return ID2;
-                                }
+                inff(0, " [ID2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
+                return ID2;
+                }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 339 "ppre.f"
+#line 263 "ppre.f"
 {
-                                // default emit charater
-                                inff(0, " [emit] '%c' ", yytext[0]);
-                                if(hasdefine)
-                                    {
-                                    //if(config.testpreflex > 0)
-                                    //    inff(0, " [emitx] '%c' ", yytext[0]);
-                                    addemit(yytext[0]);
-                                    }
-                                }
+                // default emit charater
+                inff(0, " [emit] '%c' ", yytext[0]);
+                if(hasdefine)
+                    {
+                    //if(config.testpreflex > 0)
+                    //    inff(0, " [emitx] '%c' ", yytext[0]);
+                    addemit(yytext[0]);
+                    }
+                }
 	YY_BREAK
 case 41:
 *yy_cp = (yy_hold_char); /* undo effects of setting up yytext */
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 349 "ppre.f"
+#line 273 "ppre.f"
 {
-                                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
-                                // Skipping ...
-                                }
+                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
+                // Skipping ...
+                }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 354 "ppre.f"
-{              /* end quote */
-                                if( (backslash % 2) == 0) /* odd backslash */
-                                     {
-                                     //BEGIN(INITIAL);
-                                     to_prev_state();
+#line 277 "ppre.f"
+{
+                if( (backslash % 2) == 0) /* odd backslash */
+                    {
+                    //BEGIN(INITIAL);
+                    to_prev_state();
 
-                                     //tmp_str2[prog++] = yytext[0];
-                                     tmp_str2[prog] = '\0';
-                                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
-
-
-                                        {
-                                        //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
-                                        }
-                                     return(STR2);
-                                     }
-                                  else
-                                      {  /* add quote */
-                                      //  tmp_str2[prog++] = yytext[0];
-                                      }
-                                }
+                    //tmp_str2[prog++] = yytext[0];
+                    tmp_str2[prog] = '\0';
+                    yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
+                    inff(0, "[STR2] '%s' ", yylval.sym->var);
+                    return(STR2);
+                    }
+                  else
+                    {  /* add quote */
+                    //  tmp_str2[prog++] = yytext[0];
+                    }
+                }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 376 "ppre.f"
-{              /* end quote */
-                                if( (backslash % 2) == 0) /* odd backslash */
-                                     {
-                                     //BEGIN(INITIAL);
-                                     to_prev_state();
+#line 294 "ppre.f"
+{
+                if( (backslash % 2) == 0) /* odd backslash */
+                     {
+                     //BEGIN(INITIAL);
+                     to_prev_state();
 
-                                     //tmp_str2[prog++] = yytext[0];
-                                     tmp_str2[prog] = '\0';
-                                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
-
-
-                                        {
-                                        //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
-                                        }
-                                     return(STR2);
-                                     }
-                                  else
-                                      {  /* add quote */
-                                      //  tmp_str2[prog++] = yytext[0];
-                                      }
-                                }
+                     //tmp_str2[prog++] = yytext[0];
+                     tmp_str2[prog] = '\0';
+                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
+                     inff(0, "[STR2] '%s' ", yylval.sym->var);
+                     return(STR2);
+                     }
+                  else
+                      {  /* add quote */
+                      //  tmp_str2[prog++] = yytext[0];
+                      }
+                }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 398 "ppre.f"
+#line 311 "ppre.f"
 {   // default string charater
-                                backslash  = 0;
-
-
-                                     inff(0, "'%s'", yytext);
-
-                                tmp_str2[prog++] = yytext[0];
-                                }
+                backslash  = 0;
+                inff(0, "'%s'", yytext);
+                tmp_str2[prog++] = yytext[0];
+                }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 406 "ppre.f"
+#line 316 "ppre.f"
 {  // default character
-
-                                     inff(0, " [CH2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", CH2);
-                                return CH2;
-                                }
+                inff(0, " [CH2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", CH2);
+                return CH2;
+                }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 412 "ppre.f"
+#line 321 "ppre.f"
 ECHO;
 	YY_BREAK
-#line 1677 "parser/ppre.lex.c"
+#line 1596 "parser/ppre.lex.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(STRSTATE):
 case YY_STATE_EOF(XTRSTATE):
-case YY_STATE_EOF(ESTATE):
+case YY_STATE_EOF(EXSTATE):
 	yyterminate();
 
 	case YY_END_OF_BUFFER:
@@ -2727,7 +2646,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 412 "ppre.f"
+#line 321 "ppre.f"
 
 
 /* ========================= End of LEX ================================ */
@@ -2759,8 +2678,8 @@ int     preprocess(char *ptr)
     // re - initialize preprocessor
     num_lines = 1;
 
-    //printf("states %d %d %d\n", INITIAL, STRSTATE, ESTATE);
-    //to_new_state(ESTATE);
+    //printf("states %d %d %d\n", INITIAL, STRSTATE, EXSTATE);
+    //to_new_state(EXSTATE);
 
     if(stat(ptr, &buf) >= 0)
         {

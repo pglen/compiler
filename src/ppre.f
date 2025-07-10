@@ -38,7 +38,7 @@ int     prelex();
 
 %x STRSTATE
 %x XTRSTATE
-%x ESTATE
+%x EXSTATE
 
 %option noyywrap stack
 
@@ -47,368 +47,277 @@ FNN  [\~_a-zA-Z0-9]
 
 %%
 
-\\\n                 {
-                     inff(0, "[BS EOL] '%s", yytext);
-                     // Ignore
+\\\n            {
+                inff(0, "[BS EOL] '%s", yytext);
+                // no ret, ignore
+                }
+<INITIAL,EXSTATE>\/\/.*\n  {
+                num_lines++;
+                inff(0, "[//COMM2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", STR2);
+                return COMM2;
+                }
+<INITIAL,EXSTATE>#.*\n {
+                num_lines++;
+                inff(0, "[#COMM2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
+                return COMM2;
+                }
+0x[0-9a-fA-F]+  {
+                inff(0, "[xNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
+0y[0-7]+        {
+                inff(0, "[yNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
+0z[0-1]+        {
+                inff(0, "[zNUM2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
+<INITIAL,EXSTATE>\= {
+                inff(0, " [EQ2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", EQ2);
+                return(EQ2);
+                }
+<INITIAL,EXSTATE>\+   {
+                inff(0, " [PLUS2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PLUS2);
+                return(PLUS2);
+                }
+<INITIAL,EXSTATE>\-   {
+                inff(0, " [MINUS2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", MINUS2);
+                return(MINUS2);
+                }
+<INITIAL,EXSTATE>\*   {
+                inff(0, " [MULT2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", MULT2);
+                return(MULT2);
+                }
+<INITIAL,EXSTATE>\/   {
+                inff(0, " [DIV2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", DIV2);
+                return(DIV2);
+                }
+<INITIAL,EXSTATE>\%                       {
+                inff(0, " [MOD2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", MOD2);
+                return(MOD2);
+                }
+<INITIAL,EXSTATE>\|   {
+                inff(0, " [OR2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", OR2);
+                return(OR2);
+                }
+<INITIAL,EXSTATE>\& {
+                  inff(0, " [AND2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", AND2);
+                return(AND2);
+                }
+<INITIAL,EXSTATE>\! {
+                yylval.sym = make_symstr("", strdup(yytext), "", NOT2);
+                return(NOT2);
+                }
+<INITIAL,EXSTATE>\^ {
+                inff(0, " [XOR2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", XOR2);
+                return(XOR2);
+                }
+<INITIAL,EXSTATE>\(  {
+                inff(0, " [PAREN1] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
+                return(PAREN12);
+                }
+<INITIAL,EXSTATE>\) {
+                inff(0, " [PAREN2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
+                return(PAREN22);
+                }
+<INITIAL,EXSTATE>[0-9]+ {
+                inff(0, "[NUM2] '%s' ", (char*)yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
+                return(NUM2);
+                }
+<INITIAL,EXSTATE>\>\>   {
+                inff(0, " [RSHIFT] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", RSHIFT2);
+                return(RSHIFT2);
+                }
+<INITIAL,EXSTATE>\<\<   {
+                inff(0, " [LSHIFT] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", LSHIFT2);
+                return(LSHIFT2);
+                }
+<INITIAL,EXSTATE>;   {
+                inff(0, " [SEMI] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
+                return(SEMI2);
+                }
+<INITIAL,EXSTATE>[ \t]  {
+                inff(0, " [SP2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", SP2);
+                return SP2;
+                }
+<INITIAL,EXSTATE>\r  {
+                inff(0, " [rnl] '%d'", yytext[0]);
+                num_lines++;
+                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
+                return NL2;
+                }
+<INITIAL,EXSTATE>\n  {
+                inff(0, " [NL2] '%d' ", yytext[0]);
+                num_lines++;
+                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
+                return NL2;
+                }
+
+<INITIAL,EXSTATE>\'   {
+                to_new_state(XTRSTATE);
+                inff(0, " xtr<<<");
+                prog = 0; backslash  = 0;
+                //tmp_str2[prog++] = yytext[0];
+                }
+<INITIAL,EXSTATE>\"     {
+                to_new_state(STRSTATE);
+                inff(0, " str<<<");
+                prog = 0; backslash  = 0;
+                //tmp_str2[prog++] = yytext[0];
+                }
+<INITIAL,EXSTATE>%error  {
+                inff(0, " [error] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ERR2);
+                return ERR2;
+                }
+<INITIAL,EXSTATE>%mac|%macro  {
+                inff(0, " [MAC2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MAC2);
+                return MAC2;
+                }
+
+<INITIAL,EXSTATE>%nl|%newline   {
+                inff(0, " [enl] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
+                return ENL2;
+                }
+<INITIAL,EXSTATE>%msg|%message  {
+                inff(0, " [MSG2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
+                return MSG2;
+                }
+<INITIAL,EXSTATE>%def|%define  {
+                inff(0, " \n[DEF2] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", DEF2);
+                return DEF2;
+                }
+<INITIAL,EXSTATE>%undef  {
+                inff(0, " [undef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", UNDEF2);
+                return UNDEF2;
+                }
+<INITIAL,EXSTATE>%ifdef {
+                inff(0, " [ifdef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", IFDEF2);
+                return IFDEF2;
+                }
+
+<INITIAL,EXSTATE>%elifdef  {
+                inff(0, " [elifdef] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELIFDEF2);
+                return ELIFDEF2;
+                }
+<INITIAL,EXSTATE>%else    {
+                inff(0, " [else] '%s' ", yytext);
+                //to_new_state(INITIAL);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELSE2);
+                return ELSE2;
+                }
+<INITIAL,EXSTATE>%endif     {
+                inff(0, "%s", " [ %endif ] ");
+                inff(0, "emit: '%s'\n", emitline);
+                //hd(emitline, strlen(emitline) + 12);
+
+                BEGIN(INITIAL);
+                }
+{FN}{FNN}*      {
+                inff(0, " [ID2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
+                return ID2;
+                }
+<INITIAL,EXSTATE>{FN}{FNN}*   {
+                inff(0, " [ID2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
+                return ID2;
+                }
+<EXSTATE>.      {
+                // default emit charater
+                inff(0, " [emit] '%c' ", yytext[0]);
+                if(hasdefine)
+                    {
+                    //if(config.testpreflex > 0)
+                    //    inff(0, " [emitx] '%c' ", yytext[0]);
+                    addemit(yytext[0]);
+                    }
+                }
+<XTRSTATE,STRSTATE>\\$  {
+                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
+                // Skipping ...
+                }
+<STRSTATE>\"    {
+                if( (backslash % 2) == 0) /* odd backslash */
+                    {
+                    //BEGIN(INITIAL);
+                    to_prev_state();
+
+                    //tmp_str2[prog++] = yytext[0];
+                    tmp_str2[prog] = '\0';
+                    yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
+                    inff(0, "[STR2] '%s' ", yylval.sym->var);
+                    return(STR2);
+                    }
+                  else
+                    {  /* add quote */
+                    //  tmp_str2[prog++] = yytext[0];
+                    }
+                }
+<XTRSTATE>\'    {
+                if( (backslash % 2) == 0) /* odd backslash */
+                     {
+                     //BEGIN(INITIAL);
+                     to_prev_state();
+
+                     //tmp_str2[prog++] = yytext[0];
+                     tmp_str2[prog] = '\0';
+                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
+                     inff(0, "[STR2] '%s' ", yylval.sym->var);
+                     return(STR2);
                      }
-
-<INITIAL,ESTATE>\/\/.*\n             { /* comment */
-                         num_lines++;
-
-
-                              inff(0, "[slash_comment] '%s", yytext);
-
-                         if(config.showcomm > 0)
-                             inff(0, "//comment: '%s", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", STR2);
-                         return COMMENT2;
-                     }
-
-<INITIAL,ESTATE>#.*\n                { /* comment */
-                         num_lines++;
-
-
-                              inff(0, "[hash_comment] '%s", yytext);
-
-                         if(config.showcomm)
-                             inff(0, "#comment: '%s", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", COMMENT2);
-                         return COMMENT2;
-                     }
-
-0x[0-9a-fA-F]+       {
-
-                              inff(0, "[xNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-                         return(NUM2);
-                     }
-0y[0-7]+             {
-
-                              inff(0, "[yNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
-0z[0-1]+                 {
-
-                              inff(0, "[zNUM2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
-<INITIAL,ESTATE>\=     {
-
-                              inff(0, " [EQ2] '%s' ", yytext);
-                          yylval.sym = make_symstr("", strdup(yytext), "", EQ2);
-                         return(EQ2);
-                         }
-<INITIAL,ESTATE>\+     {
-
-                              inff(0, " [PLUS2] '%s' ", yytext);
-                          yylval.sym = make_symstr("", strdup(yytext), "", PLUS2);
-                         return(PLUS2);
-                         }
-<INITIAL,ESTATE>\-                       {
-
-                              inff(0, " [MINUS2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", MINUS2);
-                         return(MINUS2);
-                         }
-<INITIAL,ESTATE>\*                       {
-
-                              inff(0, " [MULT2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", MULT2);
-                         return(MULT2);
-                         }
-<INITIAL,ESTATE>\/                       {
-
-                              inff(0, " [DIV2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", DIV2);
-                         return(DIV2);
-                         }
-<INITIAL,ESTATE>\%                       {
-
-                              inff(0, " [MOD2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", MOD2);
-                         return(MOD2);
-                         }
-<INITIAL,ESTATE>\|                       {
-
-                              inff(0, " [OR2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", OR2);
-                         return(OR2);
-                         }
-<INITIAL,ESTATE>\&                       {
-
-                              inff(0, " [AND2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", AND2);
-                         return(AND2);
-                         }
-<INITIAL,ESTATE>\!                       {
-                         yylval.sym = make_symstr("", strdup(yytext), "", NOT2);
-                         return(NOT2);
-                         }
-<INITIAL,ESTATE>\^                       {
-
-                              inff(0, " [XOR2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", XOR2);
-                         return(XOR2);
-                         }
-<INITIAL,ESTATE>\(                       {
-
-                              inff(0, " [PAREN1] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
-                         return(PAREN12);
-                         }
-<INITIAL,ESTATE>\)                       {
-
-                              inff(0, " [PAREN2] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
-                         return(PAREN22);
-                         }
-
-<INITIAL,ESTATE>[0-9]+       {
-
-                              inff(0, "[NUM2] '%s' ", (char*)yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
-
-                         return(NUM2);
-                         }
-
-<INITIAL,ESTATE>\>\>                     {
-
-                              inff(0, " [RSHIFT] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", RSHIFT2);
-
-                         return(RSHIFT2);
-                         }
-
-<INITIAL,ESTATE>\<\<                     {
-
-                              inff(0, " [LSHIFT] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", LSHIFT2);
-                         return(LSHIFT2);
-                         }
-<INITIAL,ESTATE>;                        {
-
-                              inff(0, " [SEMI] '%s' ", yytext);
-
-                         yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
-                         return(SEMI2);
-                         }
-<INITIAL,ESTATE>[ \t]                   {
-
-                             inff(0, " [SP2] '%s' ", yytext);
-                        yylval.sym = make_symstr("", strdup(yytext), "", SP2);
-                        return SP2;
-                        }
-<INITIAL,ESTATE>\r                              {
-                                // Ignore
-
-                                     inff(0, " [rnl] '%d'", yytext[0]);
-                                num_lines++;
-                                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
-                                return NL2;
-                                }
-
-<INITIAL,ESTATE>\n                              {
-
-                                     inff(0, " [NL2] '%d' ", yytext[0]);
-
-                                num_lines++;
-                                yylval.sym = make_symstr("", strdup(yytext), "", NL2);
-                                return NL2;
-                                }
-
-<INITIAL,ESTATE>\'                              {              /* begin quote */
-                                to_new_state(XTRSTATE);
-
-                                    inff(0, " xtr<<<");
-                                prog = 0; backslash  = 0;
-                                //tmp_str2[prog++] = yytext[0];
-                                }
-<INITIAL,ESTATE>\"                              {              /* begin quote */
-                                to_new_state(STRSTATE);
-
-                                    inff(0, " str<<<");
-                                prog = 0; backslash  = 0;
-                                //tmp_str2[prog++] = yytext[0];
-                                }
-<INITIAL,ESTATE>%error       {
-
-                              inff(0, " [error] '%s' ", yytext);
-                            //to_new_state(INITIAL);
-                            yylval.sym = make_symstr("", strdup(yytext), "", ERR2);
-                        return ERR2;
-                        }
-
-<INITIAL,ESTATE>%mac|%macro         {
-
-                                     inff(0, " [MAC2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MAC2);
-                                return MAC2;
-                                }
-
-<INITIAL,ESTATE>%nl|%newline         {
-
-                                     inff(0, " [enl] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
-                                return ENL2;
-                                }
-<INITIAL,ESTATE>%msg|%message        {
-
-                                     inff(0, " [MSG2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", MSG2);
-                                return MSG2;
-                                }
-<INITIAL,ESTATE>%def|%define         {
-
-                                     inff(0, " \n[DEF2] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", DEF2);
-                                return DEF2;
-                                }
-<INITIAL,ESTATE>%undef               {
-
-                                     inff(0, " [undef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", UNDEF2);
-                                return UNDEF2;
-                                }
-
-<INITIAL,ESTATE>%ifdef               {
-
-                                     inff(0, " [ifdef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", IFDEF2);
-                                return IFDEF2;
-                                }
-
-<INITIAL,ESTATE>%elifdef             {
-
-                                     inff(0, " [elifdef] '%s' ", yytext);
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ELIFDEF2);
-                                return ELIFDEF2;
-                                }
-<INITIAL,ESTATE>%else                {
-
-                                     inff(0, " [else] '%s' ", yytext);
-
-                                //to_new_state(INITIAL);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ELSE2);
-                                return ELSE2;
-                                }
-<INITIAL,ESTATE>%endif               {
-                                inff(0, "%s", " [ %endif ] ");
-                                inff(0, "emit: '%s'\n", emitline);
-                                //hd(emitline, strlen(emitline) + 12);
-
-                                BEGIN(INITIAL);
-                                }
-{FN}{FNN}*                      {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
-                                return ID2;
-                                }
-<INITIAL,ESTATE>{FN}{FNN}*      {
-                                inff(0, " [ID2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
-                                return ID2;
-                                }
-<ESTATE>.                       {
-                                // default emit charater
-                                inff(0, " [emit] '%c' ", yytext[0]);
-                                if(hasdefine)
-                                    {
-                                    //if(config.testpreflex > 0)
-                                    //    inff(0, " [emitx] '%c' ", yytext[0]);
-                                    addemit(yytext[0]);
-                                    }
-                                }
-<XTRSTATE,STRSTATE>\\$          {
-                                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
-                                // Skipping ...
-                                }
-
-<STRSTATE>\"                    {              /* end quote */
-                                if( (backslash % 2) == 0) /* odd backslash */
-                                     {
-                                     //BEGIN(INITIAL);
-                                     to_prev_state();
-
-                                     //tmp_str2[prog++] = yytext[0];
-                                     tmp_str2[prog] = '\0';
-                                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
-
-
-                                        {
-                                        //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
-                                        }
-                                     return(STR2);
-                                     }
-                                  else
-                                      {  /* add quote */
-                                      //  tmp_str2[prog++] = yytext[0];
-                                      }
-                                }
-<XTRSTATE>\'                    {              /* end quote */
-                                if( (backslash % 2) == 0) /* odd backslash */
-                                     {
-                                     //BEGIN(INITIAL);
-                                     to_prev_state();
-
-                                     //tmp_str2[prog++] = yytext[0];
-                                     tmp_str2[prog] = '\0';
-                                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
-
-
-                                        {
-                                        //dump_symitem(yylval.sym);
-                                        inff(0, "[STR2] '%s' ", yylval.sym->var);
-                                        }
-                                     return(STR2);
-                                     }
-                                  else
-                                      {  /* add quote */
-                                      //  tmp_str2[prog++] = yytext[0];
-                                      }
-                                }
-<XTRSTATE,STRSTATE>.            {   // default string charater
-                                backslash  = 0;
-
-
-                                     inff(0, "'%s'", yytext);
-
-                                tmp_str2[prog++] = yytext[0];
-                                }
-<INITIAL,ESTATE>.                               {  // default character
-
-                                     inff(0, " [CH2] '%s' ", yytext);
-                                yylval.sym = make_symstr("", strdup(yytext), "", CH2);
-                                return CH2;
-                                }
+                  else
+                      {  /* add quote */
+                      //  tmp_str2[prog++] = yytext[0];
+                      }
+                }
+<XTRSTATE,STRSTATE>. {   // default string charater
+                backslash  = 0;
+                inff(0, "'%s'", yytext);
+                tmp_str2[prog++] = yytext[0];
+                }
+<INITIAL,EXSTATE>.  {  // default character
+                inff(0, " [CH2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", CH2);
+                return CH2;
+                }
 %%
 
 /* ========================= End of LEX ================================ */
@@ -440,8 +349,8 @@ int     preprocess(char *ptr)
     // re - initialize preprocessor
     num_lines = 1;
 
-    //printf("states %d %d %d\n", INITIAL, STRSTATE, ESTATE);
-    //to_new_state(ESTATE);
+    //printf("states %d %d %d\n", INITIAL, STRSTATE, EXSTATE);
+    //to_new_state(EXSTATE);
 
     if(stat(ptr, &buf) >= 0)
         {
