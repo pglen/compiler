@@ -1,1 +1,5 @@
+# Hello
+#aa = 1
+# bb = cc
+# dd=3
 %mac mac_name ( mac_arg ) aaa bbb ccc 1234 + 12

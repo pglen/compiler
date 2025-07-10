@@ -39,22 +39,12 @@
 extern  FILE *ppfp, *ppfp2;
 static  char    tmp_str3[128];
 
+#define DEBI(lev, str1, var2) \
+    { inf(lev, " { %s '%s' '%s' } ", str1, var2->name, var2->var); }
+
 // Global that controls define results
 int hasdefine   = 1;
-
-#define  IFX if(config.testpreyacc > 0)
-#define  IFX2 if(config.testpreyacc > 1)
-
 %}
-
-//%union {                                     /* stack object type */
-//    int     val ;                                 /* actual value */
-//    long    lngval ;                              /* actual value */
-//    float   fltlval;                              /* actual value */
-//    double  dblval ;                              /* actual value */
-//    char    *strval;                                 /* str value */
-//    Symbol  *sym ;                            /* symbol table ptr */
-//}
 
 %union {
     Symbol  *sym ;
@@ -78,58 +68,42 @@ int hasdefine   = 1;
 %type   <sym>   all1
 %type   <sym>   all2
 %type   <sym>   assn1
-%type   <sym>   num1
+%type   <sym>   comm1
+%type   <sym>   spnl1
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
 %type   <sym>   expr4
 %type   <sym>   expr5
 
-// %start all1
-
 %%
 
-all1:           { inf(1, " { all1 none } "); }
-        | all2  { inf(1, " { all1 all2 } "); }
+all1:  %empty {}
+       |  all1 all2 {}
 ;
-all2:   all1 spnl1 assn1
-            { inf(0, "{ all2 assn1 '%s' '%s' } ", $3->name, $3->var); }
-        | all1 spnl1 COMM2
-            { inf(0, "{ all2 com2 '%s' '%s' } ", $3->name, $3->var); }
-        | all1 spnl1 expr1
-            { inf(0, "{ all2 expr1 } "); }
+all2:   comm1
+        { DEBI(0, "all2 comm1", $1); }
+        | assn1
+        { DEBI(0, "all2 assn1", $1); }
+        | spnl1
+        { DEBI(0, "all2 spnl1", $1); }
 ;
-assn1:  spnl1b ID2 spnl1b EQ2 spnl1b expr1 spnl1
+comm1:  spnl1 COMM2 spnl1
         {
-        inf(0, " { assn1 %s = %s } ", $2->var, $6->var);
-        //if(hasdefine)
-        //    addemitstr($6->var);
-        $$ = make_symstr($2->var, $6->var, "", 0);
+        $$=$2;
+        }
+assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1
+        {
+        inf(" { assn1 '%s' } ", $6->var);
+        if(hasdefine)
+            addemitstr($6->var);
+        $$ = make_symstr($2->var, $6->var, $6->res, NUM2);
         }
 ;
-/*num1:   NUM2
-      | ID2
-      | expr1
-;*/
-
-sp1:  SP2
-     | SP2 sp1
-;
-nl1: NL2
-     | NL2 nl1
-;
-spnl1:  sp1       {  inf(1, "{ sp1 } ");  }
-        | nl1     {  inf(1, "{ nl1 } ");  }
-;
-spnl1b:
-        | sp1     {  inf(1, "{ spnl sp1 } ");  }
-        | nl1     {  inf(1, "{ spnl nl1 } ");  }
-;
-
+// -------------------------------------------------------------
 expr1:  expr2
         {
-        if(config.testpreyacc > 1)
-            inf(0, " { expr1: '%s' } ", $1->var);
+        inf(0, " { expr1: '%s' } ", $1->var);
         }
     |   expr1 spnl1 OR2 spnl1 expr2
         {
@@ -182,13 +156,12 @@ expr2:   expr3
         }
 ;
 expr3:  expr4
-    {
-    inf(0, "{ expr3 '%s' } ", $1->var);
-    }
+        {
+        inf(0, "{ expr3 '%s' } ", $1->var);
+        }
     | expr3 spnl1 MULT2 spnl1 expr4
         {
-        //if(config.testpreyacc > 1)
-        //  {  inf(0, "expr3 '%s' MUL '%s'\n", $1->var, $5->var); }
+        inf(0, " { expr3 '%s' MUL '%s'\n", $1->var, $5->var);
         int val = str2int($1->var) * str2int($5->var);
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), "", NUM2);
@@ -207,24 +180,32 @@ expr3:  expr4
         }
 ;
 expr4:  expr5
-    {
-    if(config.testpreyacc > 1)
-        { inf(0, "{ expr4 '%s' } ", $1->var); }
-    }
-    |    spnl1 PAREN12 spnl1 expr1 spnl1 PAREN22  spnl1
         {
-        if(config.testpreyacc > 1)
-            { inf(0, " { paren: expr4 '%s' } ", $4->var); }
+        inf(0, "{ expr4 '%s' } ", $1->var);
+        }
+    | spnl1 PAREN12 spnl1 expr1 spnl1 PAREN22  spnl1
+        {
+        inf(0, " { paren: expr4 '%s' } ", $4->var);
         $$ = make_symstr("", $4->var, "", NUM2);
         }
 ;
-expr5:      NUM2
-        |   ID2
+expr5:  spnl1 NUM2 spnl1
         {
-        if(config.testpreyacc > 1)
-            { inf(0, " { expr5 '%s' } ", $1->var); }
-        $$ = make_symstr("", $1->var, "", NUM2);
+        inf(0, " { expr5 '%s' } ", $2->var);
+        $$ = make_symstr("", $2->var, "", NUM2);
         }
+;
+// -----------------------------------------------------------------------
+
+sp1: SP2        {  inf(2, "{ SP2 } ");  }
+     | sp1 SP2  {  inf(2, "{ SP2 sp1 } ");  }
+;
+nl1: NL2        {  inf(2, "{ NL2 } ");  }
+     | nl1 NL2  {  inf(2, "{ NL2 nl1 } ");  }
+;
+spnl1:  %empty {}
+        | sp1   {  inf(2, "{ sp1 } ");  }
+        | nl1   {  inf(2, "{ sp1 } ");  }
 ;
 %%
 

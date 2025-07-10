@@ -26,6 +26,8 @@ void    safe_printf(char *fmt, ...);
 void    inf(int lev, char *fmt, ...);
 void    inff(int lev, char *fmt, ...);
 
+int     addnums(char *num1, char *num2);
+
 extern  int     emitprog;
 extern  char    emitline[1024];
 

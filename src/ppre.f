@@ -51,13 +51,13 @@ FNN  [\~_a-zA-Z0-9]
                 inff(0, "[BS EOL] '%s", yytext);
                 // no ret, ignore
                 }
-<INITIAL,EXSTATE>\/\/.*\n  {
+<INITIAL,EXSTATE>\/\/.*$  {
                 num_lines++;
                 inff(0, "[//COMM2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", STR2);
                 return COMM2;
                 }
-<INITIAL,EXSTATE>#.*\n {
+<INITIAL,EXSTATE>#.*$ {
                 num_lines++;
                 inff(0, "[#COMM2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", COMM2);

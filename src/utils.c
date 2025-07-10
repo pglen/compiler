@@ -274,6 +274,17 @@ char    prevline[1024];
 
 // Tag a new line at the end of sequence
 
+//#define OUTCX
+
+int     addnums(char *num1, char *num2)
+
+{
+    //printf("addnums: %s %s\n", num1, num2);
+    int n1=atoi(num1); int n2=atoi(num2);
+    int ret = n1 + n2;
+    return ret;
+}
+
 int     inputx(char *buf, int max_size, FILE *ppfp3)
 
 {
@@ -290,15 +301,19 @@ int     inputx(char *buf, int max_size, FILE *ppfp3)
     if(cc == EOF)  {
         buf[0] = '\n';  end = 1;
         currline[currprog] = '\0';
-        //printf("c='EOF'"); fflush(stdout);
+        #ifdef OUTCX
+            printf("c='EOF'"); fflush(stdout);
+        #endif
         }
     else {
         buf[0] = cc;
-        //if(cc <= '\n')
-        //    printf("c=%d ", cc);
-        //else
-        //    printf("c='%c' ", cc);
-        //fflush(stdout);
+        #ifdef OUTCX
+            if(cc <= '\n')
+                printf("c=%d ", cc);
+            else
+                printf("c='%c' ", cc);
+            fflush(stdout);
+        #endif
 
         // Restart
         if (cc == '\n')
