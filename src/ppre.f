@@ -54,13 +54,13 @@ FNN  [\~_a-zA-Z0-9]
                 }
 <INITIAL,EXSTATE>\/\/.*$  {
                 num_lines++;
-                inff(0, "[//COMM2] '%s", yytext);
+                inff(1, "[//COMM2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", STR2);
                 return COMM2;
                 }
 <INITIAL,EXSTATE>#.*$ {
                 num_lines++;
-                inff(0, "[#COMM2] '%s", yytext);
+                inff(1, "[#COMM2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
                 return COMM2;
                 }
@@ -68,6 +68,26 @@ FNN  [\~_a-zA-Z0-9]
                 inff(0, "[VAR2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", VAR2);
                 return VAR2;
+                }
+<INITIAL,EXSTATE>func {
+                inff(0, "[FUNC2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", FUNC2);
+                return FUNC2;
+                }
+<INITIAL,EXSTATE>return {
+                inff(0, "[RET2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", RET2);
+                return RET2;
+                }
+<INITIAL,EXSTATE>\{ {
+                inff(0, "[LBRA2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", LBRA2);
+                return LBRA2;
+                }
+<INITIAL,EXSTATE>\} {
+                inff(0, "[RBRA2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", RBRA2);
+                return RBRA2;
                 }
 0x[0-9a-fA-F]+  {
                 inff(0, "[xNUM2] '%s' ", yytext);
@@ -134,12 +154,12 @@ FNN  [\~_a-zA-Z0-9]
                 return(XOR2);
                 }
 <INITIAL,EXSTATE>\(  {
-                inff(0, " [PAREN1] '%s' ", yytext);
+                inff(0, " [PAREN12] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
                 return(PAREN12);
                 }
 <INITIAL,EXSTATE>\) {
-                inff(0, " [PAREN2] '%s' ", yytext);
+                inff(0, " [PAREN22] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
                 return(PAREN22);
                 }
@@ -159,9 +179,14 @@ FNN  [\~_a-zA-Z0-9]
                 return(LSHIFT2);
                 }
 <INITIAL,EXSTATE>;   {
-                inff(0, " [SEMI] '%s' ", yytext);
+                inff(0, " [SEMI2] '%s' ", yytext);
                 yylval.sym = make_symstr("name", strdup(yytext), "", SEMI2);
                 return(SEMI2);
+                }
+<INITIAL,EXSTATE>:   {
+                inff(0, " [COL2] '%s' ", yytext);
+                yylval.sym = make_symstr("name", strdup(yytext), "", COL2);
+                return(COL2);
                 }
 <INITIAL,EXSTATE>[ \t]  {
                 inff(0, " [SP2] '%s' ", yytext);
@@ -269,7 +294,7 @@ FNN  [\~_a-zA-Z0-9]
                 //inff(0, " [COM*/] '%s' ", yytext);
                 BEGIN(INITIAL);
                 yylval.sym = make_symstr("", strdup(tmp_str2), "", COMM3);
-                inff(0, "[COMM3] '%s' ", yylval.sym->var);
+                inff(1, "[COMM3] '%s' ", yylval.sym->var);
                 return COMM3;
                 }
 <COMSTATE>\n    {
@@ -511,9 +536,7 @@ void    preerror(const char *str)
     else
         {
         fprintf(stderr, "ERROR ");
-        //fprintf(stderr, "\033[31;1mERROR\033[0m ");
         }
-
     if(currprog == 0)
         {
         if(strlen(prevline))

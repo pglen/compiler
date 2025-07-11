@@ -1,2 +1,5 @@
-var type bb cc dd ee /*s*/ ;
-aa=1+2+3
+func hello ( qq:www=1234 aa:ff=1111)
+    {
+    tt:ee=0
+    ee=12
+    }

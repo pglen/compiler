@@ -25,6 +25,10 @@
 #include "utils.h"
 #include "xmalloc.h"
 
+char    currline[1024];
+int     currprog = 0;
+char    prevline[1024];
+
 // Time diff
 
 void    calc_usec_diff(Ts *ts, Ts *ts2, int *pdts, int *pdtu)
@@ -268,10 +272,6 @@ int     addemitstr(char *str)
         }
 }
 
-char    currline[1024];
-int     currprog = 0;
-char    prevline[1024];
-
 // Tag a new line at the end of sequence
 
 //#define OUTCX
@@ -318,7 +318,10 @@ int     inputx(char *buf, int max_size, FILE *ppfp3)
         // Restart
         if (cc == '\n')
             {
-            memcpy(prevline, currline, currprog);
+            //memcpy(prevline, currline, currprog);
+            //prevline[currprog] = '\0';
+            //strpcpy(prevline, currline, sizeof(prevline));
+            strcpy(prevline, currline);
             currprog = 0;
             }
         else
