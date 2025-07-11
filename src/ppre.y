@@ -69,7 +69,9 @@ int hasdefine   = 1;
 %type   <sym>   all2
 %type   <sym>   assn1
 %type   <sym>   comm1
+%type   <sym>   comm3
 %type   <sym>   spnl1
+%type   <sym>   semi1
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
@@ -82,23 +84,44 @@ all1:  %empty {}
        |  all1 all2 {}
 ;
 all2:   comm1
-        { DEBI(0, "all2 comm1", $1); }
+            { DEBI(0, "all2 comm1", $1); }
         | assn1
-        { DEBI(0, "all2 assn1", $1); }
-        | spnl1
-        { DEBI(0, "all2 spnl1", $1); }
+            { DEBI(0, "all2 assn1", $1); }
+        | comm3
+            { DEBI(0, "all2 comm3", $1); }
 ;
 comm1:  spnl1 COMM2 spnl1
         {
         $$=$2;
         }
-assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1
+;
+comm3:  spnl1 COMM3 spnl1
+        {
+        $$=$2;
+        }
+;
+assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 semi1
         {
         inf(" { assn1 '%s' } ", $6->var);
         if(hasdefine)
             addemitstr($6->var);
         $$ = make_symstr($2->var, $6->var, $6->res, NUM2);
         }
+;
+semi1:
+        | semi1 SEMI2
+        | semi1 nl1
+;
+sp1: SP2          {  inf(2, "{ SP2 } ");  }
+     | sp1 SP2    {  inf(2, "{ SP2 sp1 } ");  }
+;
+nl1: NL2        {  inf(2, "{ NL2 } ");  }
+     | nl1 NL2  {  inf(2, "{ NL2 nl1 } ");  }
+;
+spnl1:
+        | spnl1 sp1    {  inf(2, "{ sp1 } ");  }
+        | spnl1 nl1    {  inf(2, "{ nl1 } ");  }
+        | spnl1 COMM3  {  inf(2, "{ comm3 } ");  }
 ;
 // -------------------------------------------------------------
 expr1:  expr2
@@ -107,7 +130,7 @@ expr1:  expr2
         }
     |   expr1 spnl1 OR2 spnl1 expr2
         {
-        inf(0, "expr1 '%s' OR '%s'\n", $1->var, $5->var);
+        inf(1, "expr1 '%s' OR '%s'\n", $1->var, $5->var);
         int val = str2int($1->var) | str2int($5->var);
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), "", NUM2);
@@ -139,11 +162,11 @@ expr1:  expr2
 ;
 expr2:   expr3
         {
-        inf(0, "{ expr2 '%s'} ", $1->var);
+        inf(1, "{ expr2 '%s'} ", $1->var);
         }
     |   expr2 spnl1 PLUS2 spnl1 expr3
         {
-        inf(0, " { expr2 '%s' PLUS '%s } ", $1->var, $5->var);
+        inf(1, " { expr2 '%s' PLUS '%s } ", $1->var, $5->var);
         int val = str2int($1->var) + str2int($5->var);
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), "", NUM2);
@@ -157,11 +180,11 @@ expr2:   expr3
 ;
 expr3:  expr4
         {
-        inf(0, "{ expr3 '%s' } ", $1->var);
+        inf(1, "{ expr3 '%s' } ", $1->var);
         }
     | expr3 spnl1 MULT2 spnl1 expr4
         {
-        inf(0, " { expr3 '%s' MUL '%s'\n", $1->var, $5->var);
+        inf(1, " { expr3 '%s' MUL '%s'\n", $1->var, $5->var);
         int val = str2int($1->var) * str2int($5->var);
         sprintf(tmp_str3, "%d", val);
         $$ = make_symstr("", strdup(tmp_str3), "", NUM2);
@@ -181,32 +204,27 @@ expr3:  expr4
 ;
 expr4:  expr5
         {
-        inf(0, "{ expr4 '%s' } ", $1->var);
+        inf(1, "{ expr4 '%s' } ", $1->var);
         }
     | spnl1 PAREN12 spnl1 expr1 spnl1 PAREN22  spnl1
         {
-        inf(0, " { paren: expr4 '%s' } ", $4->var);
+        inf(1, " { paren: expr4 '%s' } ", $4->var);
         $$ = make_symstr("", $4->var, "", NUM2);
         }
 ;
 expr5:  spnl1 NUM2 spnl1
         {
-        inf(0, " { expr5 '%s' } ", $2->var);
+        inf(1, " { expr5 num '%s' } ", $2->var);
         $$ = make_symstr("", $2->var, "", NUM2);
+        }
+      |  spnl1 ID2 spnl1
+        {
+        inf(1, " { expr5 id '%s' } ", $2->var);
+        $$ = make_symstr("", $2->var, "", ID2);
         }
 ;
 // -----------------------------------------------------------------------
 
-sp1: SP2        {  inf(2, "{ SP2 } ");  }
-     | sp1 SP2  {  inf(2, "{ SP2 sp1 } ");  }
-;
-nl1: NL2        {  inf(2, "{ NL2 } ");  }
-     | nl1 NL2  {  inf(2, "{ NL2 nl1 } ");  }
-;
-spnl1:  %empty {}
-        | sp1   {  inf(2, "{ sp1 } ");  }
-        | nl1   {  inf(2, "{ sp1 } ");  }
-;
 %%
 
 // EOF

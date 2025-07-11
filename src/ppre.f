@@ -39,6 +39,7 @@ int     prelex();
 %x STRSTATE
 %x XTRSTATE
 %x EXSTATE
+%x COMSTATE
 
 %option noyywrap stack
 
@@ -254,6 +255,27 @@ FNN  [\~_a-zA-Z0-9]
                 inff(0, " [ID2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", ID2);
                 return ID2;
+                }
+\/\*            {
+                inff(1, " [COM/*] '%s' ", yytext);
+                BEGIN(COMSTATE);
+                }
+<COMSTATE>\*\/  {
+                //inff(0, " [COM*/] '%s' ", yytext);
+                BEGIN(INITIAL);
+                yylval.sym = make_symstr("", strdup(tmp_str2), "", COMM3);
+                inff(0, "[COMM3] '%s' ", yylval.sym->var);
+                return COMM3;
+                }
+<COMSTATE>\n    {
+                tmp_str2[prog++] = yytext[0];
+                //printf("");
+                inff(1, " [COM3] nl '%s' ", yytext);
+                }
+<COMSTATE>.     {
+                tmp_str2[prog++] = yytext[0];
+                //printf("");
+                inff(1, " [COM3] char '%s' ", yytext);
                 }
 <INITIAL,EXSTATE>{FN}{FNN}*   {
                 inff(0, " [ID2] '%s' ", yytext);

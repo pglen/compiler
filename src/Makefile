@@ -76,6 +76,4 @@ tests: pcomp
 test_symtab:  symtab.c emalloc.c
 	gcc -DTEST symtab.c emalloc.c -lm -o test_symtab
 
-
-
-
+# EOF
