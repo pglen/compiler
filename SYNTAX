@@ -387,22 +387,39 @@ conflicting vars and func names are allowed either.
 
     comment extraction -> to create optional interface file
 
-# Compiler studies
+# pcomp Compiler studies
 
-## pcomp - parallel compiler
-
-     Quick intro --- teaser, see SYNTAX
+    ## pcomp - parallel compiler
 
  	Types:
 
-		u8; u16; u32; 				; Unsigned integers
-		s8; s16; s32; 				; Signed integers
+		u8; u16; u32; 	             ; Unsigned integers
+		s8; s16; s32; 			     ; Signed integers
 
-		single,	double				; Floating point types
+		single,	double, quad	     ; Floating point IEEE types
+
+        pu8; pu16; ...               ; pointer types:
 
 	Custom types:
 
-		type_name					; declared by struct statement
+		type newname realtype         ; declared by struct statement
+
+    Compound variable:
+
+       comp NAME type:name type2:name2 ...
+
+
+    Delarations:
+
+        Declaring a variable is done via:
+
+            type:name=value
+
+        A variable has to be declared to be used. Custom types
+        will descend to their original native types via aliases.
+
+        Pointers:
+
 
 
  Exceptions:
@@ -417,15 +434,21 @@ conflicting vars and func names are allowed either.
  Expressions:
 
 		Expressions are evaluated much like in 'C'. New operators are introduced,
-		and the order of precendece follows industrial conventions.
+		and the order of precedence follows industrial conventions.
 		The operators are obeying the signed / unsigned interpretation
-		of variables, in case the oparator sign-nesses are in conflict,
+		of variables, in case the operator sign-nesses are in conflict,
 		the compiler reports an error.
 
  Type conversions:
 
 		Casting not required upwards, to larger storage size. Size promotion
-		is automatic.
+		is automatic. Downwards cast hs to be explicit; and
+        a warning is issued.
+
+ Error reporting:
+
+        Errors are reorted by the file:line:col convention.
+        The next line has a carot to point to the reported location.
 
 # EOF
 
