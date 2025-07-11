@@ -50,16 +50,10 @@ int hasdefine   = 1;
     Symbol  *sym ;
 }
 
-/*
-// %verbose
-// %define parse.trace  true
-// %define parse.lac full
-*/
-
 /* operators */
 %token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2 EQ2
 %token <sym>   OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
-%token <sym>   PAREN12 PAREN22 SEMI2 ENL2
+%token <sym>   VAR2 PAREN12 PAREN22 SEMI2 ENL2
 
 /* laguage elements */
 %token <sym>    CH2 ID2 ID3 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
@@ -72,6 +66,8 @@ int hasdefine   = 1;
 %type   <sym>   comm3
 %type   <sym>   spnl1
 %type   <sym>   semi1
+%type   <sym>   decl1
+
 %type   <sym>   expr1
 %type   <sym>   expr2
 %type   <sym>   expr3
@@ -80,27 +76,34 @@ int hasdefine   = 1;
 
 %%
 
-all1:  %empty {}
+all1:
        |  all1 all2 {}
 ;
 all2:   comm1
             { DEBI(0, "all2 comm1", $1); }
-        | assn1
-            { DEBI(0, "all2 assn1", $1); }
         | comm3
             { DEBI(0, "all2 comm3", $1); }
-;
+        | assn1
+            { DEBI(0, "all2 assn1", $1); }
+        | decl1
+            { DEBI(0, "all2 decl1", $1); }
+    ;
 comm1:  spnl1 COMM2 spnl1
-        {
-        $$=$2;
-        }
+        {  $$=$2; }
 ;
 comm3:  spnl1 COMM3 spnl1
+        {  $$=$2;   }
+;
+decl1:  spnl1 VAR2 spnl1 ID2 spnl1 id3 spnl1 semi1
         {
-        $$=$2;
+        inf(" { decl '%s' } ", $2->var);
+        $$ = make_symstr($2->var, $4->var, $4->res, NUM2);
         }
 ;
-assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 semi1
+id3:    ID2
+        | id3 spnl1 ID2
+;
+assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1 semi1
         {
         inf(" { assn1 '%s' } ", $6->var);
         if(hasdefine)
@@ -109,8 +112,8 @@ assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 semi1
         }
 ;
 semi1:
-        | semi1 SEMI2
-        | semi1 nl1
+        | semi1 spnl1 SEMI2
+        | semi1 spnl1 nl1
 ;
 sp1: SP2          {  inf(2, "{ SP2 } ");  }
      | sp1 SP2    {  inf(2, "{ SP2 sp1 } ");  }

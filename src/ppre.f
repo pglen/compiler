@@ -64,6 +64,11 @@ FNN  [\~_a-zA-Z0-9]
                 yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
                 return COMM2;
                 }
+<INITIAL,EXSTATE>var {
+                inff(0, "[VAR2] '%s", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", VAR2);
+                return VAR2;
+                }
 0x[0-9a-fA-F]+  {
                 inff(0, "[xNUM2] '%s' ", yytext);
                 yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);

@@ -1,1 +1,2 @@
-aa=12/* aa */;
+var type bb cc dd ee /*s*/ ;
+aa=1+2+3
