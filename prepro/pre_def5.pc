@@ -1,5 +1,5 @@
 %define DEFINE0 1234
 %define DEFINE1 "str1"
 %define DEFINE2 'str2'
-%define DEFINE3 "str3" + "str3a"
-%undef "DEFINE1"
+#%define DEFINE3 "str3" + "str3a"
+#%undef "DEFINE1"

@@ -57,12 +57,12 @@ int hasdefine   = 1;
 /* operators */
 %token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2 EQ2
 %token <sym>   OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
-%token <sym>   VAR2 PAREN12 PAREN22 SEMI2 ENL2 COL2
+%token <sym>   VAR2 PAREN12 PAREN22 SEMI2 COL2
 
 /* laguage elements */
 %token <sym>    CH2 ID2 ID3 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
 %token <sym>    IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
-%token <sym>    FUNC2 LBRA2 RBRA2 RET2
+%token <sym>    FUNC2 LBRA2 RBRA2 RET2 ENL2
 
 %type   <sym>   all1
 %type   <sym>   all2
@@ -80,6 +80,7 @@ int hasdefine   = 1;
 %type   <sym>   id2
 %type   <sym>   id3
 %type   <sym>   msg1
+%type   <sym>   enl1
 
 %type   <sym>   define1
 %type   <sym>   ifdef1
@@ -116,6 +117,8 @@ all2:   comm1
             { DEBI(0, "all2 func1", $1); }
         | msg1
             { DEBI(0, "all2 msg1", $1); }
+        | enl1
+            { DEBI(0, "all2 enl1", $1); }
         /*| spnl1
             { DEBI(0, "all2 spnl", $1); } */
         ;
@@ -132,32 +135,38 @@ idd2:  expr1
        | STR2
        | ID2
 ;
-msg1:    MSG2 spnl1 idd2 spnl1
-            {
-            if(config.testpreyacc > 0)
-                { printf(" { msg1: expr1 '%s' } ", $3->var); }
+enl1:   spnl1 ENL2 spnl1
+        {
+           if(config.testpreyacc > 0)
+                { printf(" { nl1: expr1 '%s' } ", $2->var); }
             if(hasdefine)
-                fprintf(stderr, "%s", $3->var);
-            }
+                fprintf(stderr, "\n", $2->var);
+            $$=$1;
+        }
 ;
-define1: DEF2 spnl1 idd1 spnl1
+msg1:   spnl1 MSG2 spnl1 idd2 spnl1
             {
             if(config.testpreyacc > 0)
-                {
-                printf("{ define1 '%s' } ", $3->var);
-                fflush(stdout);
-                }
-            push_symtab("", $3->var, "", DECL_DEFINE, 0);
-            }
-         | DEF2 spnl1 idd1 spnl1 idd2 spnl1
-            {
-            if(config.testpreyacc > 0)
-                { printf("{ define1 '%s' arg: %s } ", $3->var, $5->var);
-                    fflush(stdout); }
-            push_symtab("", $3->var, $5->var, DECL_DEFINE, 0);
+                { printf(" { msg1: expr1 '%s' } ", $4->var); }
+            if(hasdefine)
+                fprintf(stderr, "%s", $4->var);
+            $$=$4;
             }
 ;
-ifdef1:  IFDEF2 spnl1 idd1 spnl1
+define1:  spnl1 DEF2 spnl1 idd1 spnl1
+            {
+            inf(0, "{ define1 '%s' } ", $4->var);
+            push_symtab("", $4->var, "", DECL_DEFINE, 0);
+            $$=$2;
+            }
+         |  spnl1 DEF2 spnl1 idd1 spnl1 idd2 spnl1
+            {
+            inf(0, "{ define1 '%s' arg: %s } ", $4->var, $6->var);
+            push_symtab("", $4->var, $6->var, DECL_DEFINE, 0);
+            $$=$2;
+            }
+;
+ifdef1:   spnl1 IFDEF2 spnl1 idd1 spnl1
         {
         inf(0, "{ ifdef1 '%s' } ", $3->var);
         if(lookup_symtab($3->var, DECL_DEFINE) != NULL)

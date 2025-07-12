@@ -40,12 +40,10 @@ L1:
                                                                           
         section .data                                                     
                                                                           
-format: db      '137758968 0', 10, 0                                          
+format: db      '%d %d', 10, 0                                          
 format2: db      "Hello world", 10, 0                                   
                                                                           
 ; Data
-var_bb: dd  	0
-var_cc: dd  	100
 
 START_CODE:
 
@@ -53,5 +51,5 @@ START_CODE:
 
 
 END_CODE:
-    ;End of program
+ ;End of program
 

@@ -1,1 +1,1 @@
-%define DEFINE 1234+1234 ;
+%define DEFINE 1234+1234

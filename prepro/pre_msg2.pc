@@ -1,4 +1,3 @@
-%msg "a==========a" ; %nl
-# Hello
-%msg "b==========b"
+%msg "a==========a" %nl
+%msg "b==========b" %nl
 %nl

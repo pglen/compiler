@@ -1,9 +1,8 @@
-qq:ww=ee
-%defi ne AAbb
+%define AA BB
 aa:bb=cc
 %ifdef AA
-    cc : ccAA = 2000
+    cc : cc = 2000
 %else
-    vv : ccBB = 2000
+    vv : dd = 2000
 %endif
 # end
