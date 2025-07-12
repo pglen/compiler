@@ -208,13 +208,13 @@ FNN  [\~_a-zA-Z0-9]
 
 <INITIAL,EXSTATE>\'   {
                 to_new_state(XTRSTATE);
-                inff(0, " xtr<<<");
+                inff(1, " xtr<<<");
                 prog = 0; backslash  = 0;
                 //tmp_str2[prog++] = yytext[0];
                 }
 <INITIAL,EXSTATE>\"     {
                 to_new_state(STRSTATE);
-                inff(0, " str<<<");
+                inff(1, " str<<<");
                 prog = 0; backslash  = 0;
                 //tmp_str2[prog++] = yytext[0];
                 }
@@ -362,11 +362,11 @@ FNN  [\~_a-zA-Z0-9]
                 }
 <XTRSTATE,STRSTATE>. {   // default string charater
                 backslash  = 0;
-                inff(0, "'%s'", yytext);
+                inff(1, "'%s'", yytext);
                 tmp_str2[prog++] = yytext[0];
                 }
 <INITIAL,EXSTATE>.  {  // default character
-                inff(0, " [CH2] '%s' ", yytext);
+                inff(1, " [CH2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", CH2);
                 return CH2;
                 }

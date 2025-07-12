@@ -1,4 +1,5 @@
 // Macro definitions
+%define AAA
 %ifdef AAA
     #%msg "aa "
     %define COUNT 4000
@@ -7,8 +8,5 @@
     %define COUNT 5000
 %endif
 %define a123 a456
-u32 cc1 = 2000;
-u32 a123 = 2000;
-%define abc cde
-u32 abc = COUNT;
+u32 : abc = COUNT
 # EOF

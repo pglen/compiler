@@ -845,4 +845,11 @@ int main(int argc, char *argv[])
     //print_estrdup();
 }
 
+int isdefined(char *def)
+{
+    int ret = 0;
+
+
+}
+
 #endif

@@ -1,0 +1,11 @@
+#%msg 123
+%dekfine AA 1000
+%ifdef AA
+    %msg "aa "
+    %define COUNT 4000
+%else
+    %msg "bb "
+    %define COUNT 5000
+%endif
+%msg "123"
+# EOF

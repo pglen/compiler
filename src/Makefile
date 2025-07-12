@@ -61,11 +61,11 @@ parser/ppre.lex.c: ppre.f  ppre.y
 parser/pcomp.lex.c: pcomp.f  pcomp.y
 	${LEX} -Pconf -o parser/pcomp.lex.c  pcomp.f
 
-parser/pcomp.yacc.c:  pcomp.y pcomp.f
+parser/pcomp.yacc.c:  pcomp.y pcomp.f   Makefile
 	${BISON} -p conf pcomp.y -o parser/pcomp.yacc.c
 
-parser/ppre.yacc.c:  ppre.y ppre.f
-	${BISON} -p pre ppre.y  -o parser/ppre.yacc.c
+parser/ppre.yacc.c:  ppre.y ppre.f  Makefile
+	${BISON}  -p pre ppre.y  -o parser/ppre.yacc.c
 
 clean:
 	rm -f *.o  parser/* pcomp.c pcomp.tab.c core pcomp \#*

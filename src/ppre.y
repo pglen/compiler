@@ -33,22 +33,26 @@
 /* define this to see indivdual parsing. Controled by options -y -l */
 #define YYERROR_VERBOSE
 
-#define DEBUGYYY
-#define TESTPCOMP
-
 extern  FILE *ppfp, *ppfp2;
 static  char    tmp_str3[128];
 
-#define DEBI(lev, str1, var2) \
-    { inf(lev, " { %s '%s' '%s' } ", str1, var2->name, var2->var); }
+#define DEBI(lev, str1, var2)               \
+    { inf(lev, " { %s '%s' '%s' } ",        \
+        str1, var2->name, var2->var); }
+
+//#define YYDEBUG 1
+//predebug = 1;
 
 // Global that controls define results
 int hasdefine   = 1;
+
 %}
 
 %union {
     Symbol  *sym ;
 }
+
+// %debug
 
 /* operators */
 %token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2 EQ2
@@ -71,8 +75,16 @@ int hasdefine   = 1;
 %type   <sym>   func1
 %type   <sym>   farg1
 %type   <sym>   ret1
+%type   <sym>   idd1
+%type   <sym>   idd2
 %type   <sym>   id2
 %type   <sym>   id3
+%type   <sym>   msg1
+
+%type   <sym>   define1
+%type   <sym>   ifdef1
+%type   <sym>   else1
+%type   <sym>   endif1
 
 %type   <sym>   expr1
 %type   <sym>   expr2
@@ -83,7 +95,7 @@ int hasdefine   = 1;
 %%
 
 all1:
-        |  all1 spnl1 {}
+        |  /* all1 spnl1 {} // enters loop */
         |  all1 all2 {}
 ;
 all2:   comm1
@@ -94,16 +106,84 @@ all2:   comm1
             { DEBI(0, "all2 assn1", $1); }
         | decl1
             { DEBI(0, "all2 decl1", $1); }
+        | define1
+            { DEBI(0, "all2 define1", $1); }
+        | ifdef1
+            { DEBI(0, "all2 ifdef1", $1); }
+        | else1
+            { DEBI(0, "all2 else1", $1); }
         | func1
             { DEBI(0, "all2 func1", $1); }
-        /* | ret1
-            { DEBI(0, "all2 ret1", $1); } */
-    ;
+        | msg1
+            { DEBI(0, "all2 msg1", $1); }
+        /*| spnl1
+            { DEBI(0, "all2 spnl", $1); } */
+        ;
 comm1:  spnl1 COMM2 spnl1
         {  $$=$2; }
 ;
 comm3:  spnl1 COMM3 spnl1
         {  $$=$2;   }
+;
+idd1:  ID2
+       | STR2
+;
+idd2:  expr1
+       | STR2
+       | ID2
+;
+msg1:    MSG2 spnl1 idd2 spnl1
+            {
+            if(config.testpreyacc > 0)
+                { printf(" { msg1: expr1 '%s' } ", $3->var); }
+            if(hasdefine)
+                fprintf(stderr, "%s", $3->var);
+            }
+;
+define1: DEF2 spnl1 idd1 spnl1
+            {
+            if(config.testpreyacc > 0)
+                {
+                printf("{ define1 '%s' } ", $3->var);
+                fflush(stdout);
+                }
+            push_symtab("", $3->var, "", DECL_DEFINE, 0);
+            }
+         | DEF2 spnl1 idd1 spnl1 idd2 spnl1
+            {
+            if(config.testpreyacc > 0)
+                { printf("{ define1 '%s' arg: %s } ", $3->var, $5->var);
+                    fflush(stdout); }
+            push_symtab("", $3->var, $5->var, DECL_DEFINE, 0);
+            }
+;
+ifdef1:  IFDEF2 spnl1 idd1 spnl1
+        {
+        inf(0, "{ ifdef1 '%s' } ", $3->var);
+        if(lookup_symtab($3->var, DECL_DEFINE) != NULL)
+            {
+            inf(0, "{ ifdef1 defined '%s' } ", $3->var);
+            hasdefine = 1;
+            }
+         else
+            {
+            inf(0, "{ ifdef1 NOT defined '%s' } ", $3->var);
+            hasdefine = 0;
+            }
+        }
+;
+else1:  spnl1 ELSE2 spnl1
+        {
+        if(config.testpreyacc > 0)
+            { printf("{ else1 '%s'} ", $1->var); }
+        hasdefine = !hasdefine;
+        }
+;
+endif1: spnl1 ENDIF2 spnl1
+        {
+        inf(0, "{ endif1 '%s'} ", $1->var);
+        hasdefine = 1;
+        }
 ;
 decl1:  spnl1 ID2 spnl1 COL2 spnl1 assn1 semi1
         {
@@ -127,8 +207,7 @@ ret1:
         |  spnl1 RET2 spnl1 expr1 spnl1 semi1
 ;
 id3:    ID2
-
-        /* id2
+    /* id2
         | id3 spnl1 id2 */
 ;
 id2:      ID2
@@ -161,6 +240,11 @@ spnl1:
         | spnl1 nl1    {  inf(2, "{ nl1 } ");  }
         | spnl1 COMM3  {  inf(3, "{ comm3 } ");  }
 ;
+spnl2:   spnl1 sp1    {  inf(2, "{ sp1 } ");  }
+        | spnl1 nl1    {  inf(2, "{ nl1 } ");  }
+        | spnl1 COMM3  {  inf(3, "{ comm3 } ");  }
+;
+
 // -------------------------------------------------------------
 expr1:  expr2
         {

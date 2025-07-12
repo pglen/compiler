@@ -1,5 +1,7 @@
                                 SYNTAX
 
+    Please see pcomp_syntax.odt for more up to date info
+
   Syntax of the pcomp source file. This is not meant to be a spec, more like
   a spec draft or an idea starter.
 
@@ -446,3 +448,4 @@ Types:
         The next line has a carot to point to the reported location.
 
 # EOF
+
