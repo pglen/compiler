@@ -796,6 +796,7 @@ int  translate_type(int type, char **str)
         sprintf(op_str, "'%c'", type);
         *str = op_str;
         }
+
     else
         switch(type)
         {

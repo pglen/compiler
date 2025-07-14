@@ -50,7 +50,8 @@ int     getretcode();
 int     to_new_state(int state);
 int     to_prev_state();
 
-int  translate_type(int type, char **str);
+int     pretranslate_type(int type, char **str);
+int     translate_type(int type, char **str);
 
 typedef struct timespec Ts;
 

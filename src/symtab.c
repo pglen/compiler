@@ -116,7 +116,7 @@ void  dump_symitem(Symbol *sp)
     //printf("Dumping: %p\n", sp);
 
     char *opstr = "None";
-    translate_type(sp->type, &opstr);
+    pretranslate_type(sp->type, &opstr);
     //printf("'%s' '%s' %s(%d) -> '%s' %.2f\n", sp->name, sp->var,
     //               opstr, sp->type, sp->res, sp->u.dval);
     if(sp->type < ALL_ITEM_EXPR || sp->type > ALL_ITEM_DECL)

@@ -61,7 +61,7 @@ int hasdefine   = 1;
 /* laguage elements */
 %token <sym>    CH2 ID2 ID3 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
 %token <sym>    IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
-%token <sym>    FUNC2 LBRA2 RBRA2 RET2 ENL2 TYPE2
+%token <sym>    FUNC2 LBRA2 RBRA2 RET2 ENL2 TYPE2 EMPTY2
 
 %type   <sym>   all1
 %type   <sym>   all2
@@ -221,23 +221,29 @@ decl1:  spnl1 ID2 spnl1 COL2 spnl1 assn1 spnl1
         $$ = make_symstr($2->var, $6->var, $6->res, NUM2);
         }
 ;
-farg1:  {$$ = make_symstr("", "empty", "", ID2); }
-        | decl1 {$$=$1;}
-        | farg1 spnl1 decl1 {$$=$2;}
+farg1:  /* empty */
+                { $$ = make_symstr("", "empty", "", EMPTY2); }
+        | decl1
+                {
+                inf(0, " { farg1 decl1 '%s' : '%s' } ", $1->var);
+                $$ = make_symstr("", $1->var, "", ID2);}
+        | farg1 spnl1 decl1
+                { $$ = make_symstr("", $1->var, "", ID2); }
 ;
 func1:  spnl1 FUNC2 spnl1 ID2 spnl1 LPAREN2 spnl1 farg1 spnl1 RPAREN2
                     spnl1 LBRA2  spnl1 all1  spnl1 ret1  spnl1 RBRA2 spnl1
         {
-        inf(0, " { func1 '%s' arg: '%s'  } ",
-                            $4->var, $8->var);
-        //inf(0, " { func1 '%s' arg: '%s' body: '%s' } ",
-        //                    $4->var, $8->var, $14->name);
-        $$ = make_symstr(create_unique("name"), create_unique("arg"),
-                                         create_unique("body"), FUNC2);
+        inf(0, " { func1 '%s' arg: '%s' body: '%s' } ",
+                            $4->var, $8->var, $14->name);
+
+        //char *func = create_unique("func");
+        // Fill symtab
+        push_symtab($4->var, $8->var, $14->var, ID2, 0);
+        $$ = make_symstr($4->var, $8->var, $14->var, FUNC2);
         }
 ;
 ret1:
-        | spnl1 RET2 spnl1 semi1
+        |  spnl1 RET2 spnl1 semi1
         |  spnl1 RET2 spnl1 ID2 spnl1 semi1
         |  spnl1 RET2 spnl1 expr1 spnl1 semi1
 ;
@@ -393,5 +399,72 @@ expr5:  spnl1 NUM2 spnl1
 // -----------------------------------------------------------------------
 
 %%
+
+int  pretranslate_type(int type, char **str)
+
+{
+    if(type < 128)
+        {
+        sprintf(tmp_str, "'%c'", type);
+        *str = tmp_str;
+        }
+
+    else
+        switch(type)
+        {
+        case DECL_DEFINE:     *str = "DECL_DEFINE";     break;
+        case DECL_MACRO:      *str = "DECL_MACRO";      break;
+
+        case DECL_VARITEM:  *str = "DECL_VARITEM";      break;
+        case DECL_VARLIST:  *str = "DECL_VARLIST";      break;
+        case DECL_IF:      *str = "DECL_IF";            break;
+        case DECL_ELSE:    *str = "DECL_ELSE";          break;
+
+        case TERM_IF:      *str = "TERM_IF";            break;
+        case TERM_ELSE:    *str = "TERM_ELSE";          break;
+
+        case RET_EXPR:      *str = "RET_EXPR";          break;
+        case RET_VAL:       *str = "RET_VAL";           break;
+        case RET_NUM:       *str = "RET_NUM";           break;
+
+        case FUNC_DECL:     *str = "FUNC_DECL";         break;
+        case FUNC_ASSN:     *str = "FUNC_ASSN";         break;
+        case FUNC_DECL_ARG:    *str = "FUNC_DECL_ARG";  break;
+        case FUNC_DECL_NAME:    *str = "FUNC_DECL_NAME"; break;
+
+        case ALL_ITEM_FUNC:    *str = "ALL_ITEM_FUNC"; break;
+        case ALL_ITEM_EXPR:    *str = "ALL_ITEM_EXPR"; break;
+        case ALL_ITEM_ASSN:    *str = "ALL_ITEM_ASSN"; break;
+        case ALL_ITEM_IF:    *str = "ALL_ITEM_IF"; break;
+
+        case ID2:                *str = "ID2"; break;
+        case OR2:                *str = "OR2 || "; break;
+        case AND2:               *str = "AND2 && "; break;
+        case XOR2:               *str = "XOR2 ^^"; break;
+        case SP2:                *str = "SP2"; break;
+        case NL2:                *str = "NL2"; break;
+        case NUM2:               *str = "NUM2"; break;
+        case STR2:               *str = "STR2"; break;
+
+        // Translation for off parser defines
+        case    DECL_VAR:   *str =  "DECL_VAR"; break;
+        case    DECL_VAR2:  *str =  "DECL_VAR2"; break;
+        case    DECL_VAR3:  *str =  "DECL_VAR3"; break;
+
+        case    DECL_CALL:  *str =  "DECL_CALL"; break;
+        case    DECL_CALL2: *str =  "DECL_CALL2"; break;
+        case    DECL_CALL3: *str =  "DECL_CALL3"; break;
+
+        case    DECL_CAST: *str =  "DECL_CAST"; break;
+        case    DECL_DEREF: *str =  "DECL_DEREF"; break;
+        case    DECL_ADDOF: *str =  "DECL_ADDOF"; break;
+
+        default:
+            *str = "XX";
+        }
+
+    return 0;
+}
+
 
 // EOF
