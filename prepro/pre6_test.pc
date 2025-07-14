@@ -1,9 +1,5 @@
 // Macro definitions
-
-	#message ""
-	#macro mac "Macro_Here"
-	#macro int "u32"
-
-	int	: mac = 12 + 20
-
-
+#message ""
+#macro mac "Macro_Here"
+#macro int "u32"
+int	: mac = 12 + 20

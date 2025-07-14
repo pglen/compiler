@@ -82,11 +82,13 @@ int hasdefine   = 1;
 %type   <sym>   msg1
 %type   <sym>   enl1
 %type   <sym>   type1
+%type   <sym>   elifdef1
 
 %type   <sym>   define1
 %type   <sym>   ifdef1
 %type   <sym>   else1
 %type   <sym>   endif1
+%type   <sym>   undef1
 
 %type   <sym>   expr1
 %type   <sym>   expr2
@@ -116,8 +118,14 @@ all2:   comm1
             { DEBI(1, "all2 define1", $1); }
         | ifdef1
             { DEBI(1, "all2 ifdef1", $1); }
+        | elifdef1
+            { DEBI(1, "all2 elifdef1", $1); }
         | else1
             { DEBI(1, "all2 else1", $1); }
+        | endif1
+            { DEBI(1, "all2 endif1", $1); }
+        | undef1
+            { DEBI(1, "all2 undef1", $1); }
         | func1
             { DEBI(1, "all2 func1", $1); }
         | type1
@@ -182,32 +190,68 @@ define1:  spnl1 DEF2 spnl1 idd1 spnl1
             $$=$2;
             }
 ;
+elifdef1: spnl1 ELIFDEF2 spnl1 ID2 spnl1
+        {
+        //hasdefine = !hasdefine;
+        inf(0, " { elifdef1 '%s' } ", $4->var);
+        if(lookup_symtab($4, DECL_DEFINE) != NULL)
+            {
+            printf(" { elifdef found '%s' } ", $4->var);
+            //hasdefine = 1;
+            }
+        //else
+        //    {
+        //    hasdefine = 0;
+        //    }
+        }
+;
 ifdef1:   spnl1 IFDEF2 spnl1 idd1 spnl1
         {
         inf(0, "{ ifdef1 '%s' } ", $4->var);
         if(lookup_symtab($4->var, DECL_DEFINE) != NULL)
             {
-            inf(0, "{ ifdef1 defined '%s' } ", $4->var);
+            inf(1, "{ ifdef1 defined '%s' } ", $4->var);
             hasdefine = 1;
             }
          else
             {
-            inf(0, "{ ifdef1 NOT defined '%s' } ", $4->var);
+            inf(1, "{ ifdef1 NOT defined '%s' } ", $4->var);
             hasdefine = 0;
             }
         }
 ;
 else1:  spnl1 ELSE2 spnl1
         {
-        if(config.testpreyacc > 0)
-            { printf("{ else1 '%s'} ", $1->var); }
+        inf(0, " { else1 } ");
         hasdefine = !hasdefine;
         }
 ;
 endif1: spnl1 ENDIF2 spnl1
         {
-        inf(0, "{ endif1 '%s'} ", $1->var);
+        inf(0, " { endif1} ");
         hasdefine = 1;
+        }
+;
+undef1:  UNDEF2 spnl1 idd1 spnl1
+        {
+        inf(0, "{ undef1 '%s' } ", $3->var);
+        Symbol  *st2 = lookup_symtab($3->var, DECL_DEFINE);
+        if(st2)
+            {
+            inf(0, " { UNDEF removing %s } ", $3->var); fflush(stdout);
+            //dump_symtab();
+            delitem_symtab(st2);
+            //dump_symtab();
+            }
+        else
+            {
+            fprintf(stderr,
+                "Preprocess Warning: '%s' is not defined, cannot undefine.\n",
+                    $3->var); fflush(stdout);
+            }
+        }
+        |  spnl1 UNDEF2 spnl1
+        { // Ignore
         }
 ;
 decl1:  spnl1 ID2 spnl1 COL2 spnl1 assn1 spnl1

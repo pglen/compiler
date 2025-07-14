@@ -1,30 +1,25 @@
-// Preprocessing
-
-%define HELLO 	; // wwww
-%define HELLOX  ; #// eeee
-
-	int before = 0;
-
-%ifdef HELLO 	; // platform
- 	str = "here \" we go \\ \'again' \\\" #define at #ifdef";
+%define HELLO
+//%define HELLOY
+%msg "First part" %nl
+%ifdef HELLO 	 // platform
+    %msg "compiled HELLO" %nl
 %elifdef  HELLOY
-	str = "compiled #elifdef  ";
+    %msg "compiled HELLOY" %nl
 %else
- // else
-    str = "compiled at #else";
+    %msg "else HELLO" %nl
 %endif
-
+%msg "Second part" %nl
+%define HELLOX
 %ifdef HELLOX
-// compiled in at hello
-    u32 aaa; u16 bbb; u8 ccc;
+    // compiled in at hello
+    %msg "compiled HELLOX" %nl
+    u32 :aaa u16 : bbb u8 : ccc
     // comp at hello
 %elifdef  HELLOY
-    s32 ddd; s16 eee; s8 fff; // comp at helloy
+    %msg "compiled HELLOY" %nl
+    //s32 : ddd s16 : eee s8 : fff // comp at helloy
 %else
-    str = "compiled at #else";  // comp at else
+    %msg "else HELLOX" %nl
 %endif
-
-	//always in the mix
-    int after = 1;
-
+%msg "End" %nl
 // EOF

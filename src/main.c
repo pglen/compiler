@@ -90,7 +90,7 @@ int     main (int argc, char **argv)
            {0, 0, 0, 0}
         };
 
-        cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvykFDYXoC:d:u:",
+        cc = getopt_long (argc, argv, ":abc012fhilmnpqrstVvykFDYXoC:d:u:",
                         long_options, &option_index);
         if (cc == -1)
             break;
@@ -241,6 +241,9 @@ int     main (int argc, char **argv)
                    break;
 
                case '?':
+                   //printf ("?? getopt returned character code 0%o ??\n", cc);
+                   printf("pcomp: Invalid option: '-%c'. Use the -h option for more info.\n", optopt);
+                   exit(1);
                    break;
 
                default:

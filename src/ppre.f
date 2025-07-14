@@ -276,10 +276,10 @@ FNN  [\~_a-zA-Z0-9]
                 }
 <INITIAL,EXSTATE>%endif     {
                 inff(0, "%s", " [ %endif ] ");
-                inff(0, "emit: '%s'\n", emitline);
+                //inff(0, "emit: '%s'\n", emitline);
                 //hd(emitline, strlen(emitline) + 12);
-
                 BEGIN(INITIAL);
+                return ENDIF2;
                 }
 <INITIAL,EXSTATE>type     {
                 inff(0, "%s", " [TYPE2] ");

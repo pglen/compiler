@@ -1,5 +1,3 @@
 %define "DEFINE2" "hello"
 %define DEFINE3 "str2"
-%define DEFINE4 "str3" + "str4"
-DEFINE2 DEFINE3
 # EOF

@@ -1,1 +1,9 @@
-%define DEFINE3 'str3'
+%define DEFINE
+//%define DEFINE2
+%ifdef DEFINE
+    %msg "defined" %nl
+%elifdef DEFINE2
+    %msg "defined2" %nl
+%else
+    %msg "NOT defined"  %nl
+%endif
