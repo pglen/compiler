@@ -1,7 +1,7 @@
 #--------------------------------------------------------------------------
 # Makefile for pcomp
 
-.PHONY: tests clean
+.PHONY: examples clean
 
 all:
 	make -C src
@@ -14,12 +14,12 @@ git:
 clean:
 	#find . -type f -name "*.o" -exec rm {} \;
 	make -C src clean
-	rm -f tests/*.
-	rm -f tests/*.o
-	rm -f tests/*.bin
-	rm -f tests/*.asm
+	rm -f examples/*.run    rm -f examples/*.o
+	rm -f examples/*.bin 	rm -f examples/*.asm
+	rm -f prepro/*.run      rm -f prepro/*.o
+	rm -f prepro/*.bin     rm -f prepro/*.asm
 
-tests:
-	make -C src tests
+examples:
+	make -C src examples
 
 # EOF

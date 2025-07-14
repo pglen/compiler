@@ -60,6 +60,7 @@ int     help()
     printf("    -s show symtab               |   -a no assembly phase\n");
     printf("    -f show lex output           |   -y show yacc output \n");
     printf("    -F show preproc lex output   |   -Y show preproc yacc output \n");
+    printf("    -F show preproc lex output   |   -D show yacc debug output \n");
     printf("\n");
 
     exit(1);
@@ -89,7 +90,7 @@ int     main (int argc, char **argv)
            {0, 0, 0, 0}
         };
 
-        cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvykFYXoC:d:u:",
+        cc = getopt_long (argc, argv, "abc012fhilmnpqrstVvykFDYXoC:d:u:",
                         long_options, &option_index);
         if (cc == -1)
             break;
@@ -232,6 +233,11 @@ int     main (int argc, char **argv)
                case 'Y':
                    //printf ("Debug YACC option is on\n");
                    config.testpreyacc += 1;
+                   break;
+
+                case 'D':
+                   //printf ("Debug YACC option is on\n");
+                   config.debpreyacc += 1;
                    break;
 
                case '?':

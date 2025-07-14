@@ -24,7 +24,7 @@ void conferror(const char *str)
 
 {
     static int count = 0;
-    printf("%s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
+    printf("\nCompile phase: %s  Line: %d  Near '%s'\n", str, num_lines, yytext); count++;
 
     if(count > 5)
         exit(0);
@@ -503,7 +503,7 @@ int     compile(char *ptr)
     asmfp = fopen(asmfile2, "w");
 	if(!asmfp)
 		{
-		printf("Cannot create file '%s'.\n", asmfile);
+		printf("Cannot create asm file '%s'.\n", asmfile);
 		syslog(LOG_DEBUG, "pcomp: Cannot create asm file.\n");
 		return 0;
 		}

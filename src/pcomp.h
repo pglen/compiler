@@ -20,6 +20,7 @@ typedef struct _configx {
     int   	testyacc ;
     int   	testpreflex ;
     int   	testpreyacc ;
+    int   	debpreyacc ;
     int	  	showcomm ;
     int	  	dumpsymtab ;
     int 	errorcount ;

@@ -155,13 +155,13 @@ FNN  [\~_a-zA-Z0-9]
                 }
 <INITIAL,EXSTATE>\(  {
                 inff(0, " [PAREN12] '%s' ", yytext);
-                yylval.sym = make_symstr("", strdup(yytext), "", PAREN12);
-                return(PAREN12);
+                yylval.sym = make_symstr("", strdup(yytext), "", LPAREN2);
+                return(LPAREN2);
                 }
 <INITIAL,EXSTATE>\) {
-                inff(0, " [PAREN22] '%s' ", yytext);
-                yylval.sym = make_symstr("", strdup(yytext), "", PAREN22);
-                return(PAREN22);
+                inff(0, " [RPAREN2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", RPAREN2);
+                return(RPAREN2);
                 }
 <INITIAL,EXSTATE>[0-9]+ {
                 inff(0, "[NUM2] '%s' ", (char*)yytext);
@@ -281,6 +281,12 @@ FNN  [\~_a-zA-Z0-9]
 
                 BEGIN(INITIAL);
                 }
+<INITIAL,EXSTATE>type     {
+                inff(0, "%s", " [TYPE2] ");
+                //hd(emitline, strlen(emitline) + 12);
+                yylval.sym = make_symstr("", strdup(yytext), "", TYPE2);
+                return TYPE2;
+                }
 {FN}{FNN}*      {
                 inff(0, " [ID2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", ID2);
@@ -327,28 +333,25 @@ FNN  [\~_a-zA-Z0-9]
                 // Skipping ...
                 }
 <STRSTATE>\"    {
-                if( (backslash % 2) == 0) /* odd backslash */
+                if(!backslash)
                     {
-                    //BEGIN(INITIAL);
                     to_prev_state();
-
-                    //tmp_str2[prog++] = yytext[0];
                     tmp_str2[prog] = '\0';
                     yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
                     inff(0, "[STR2] '%s' ", yylval.sym->var);
                     return(STR2);
                     }
                   else
-                    {  /* add quote */
-                    //  tmp_str2[prog++] = yytext[0];
+                    {  /* add backslash char */
+                    tmp_str2[prog++] = '\\';
+                    tmp_str2[prog++] = yytext[0];
+                    backslash = 0;
                     }
                 }
 <XTRSTATE>\'    {
-                if( (backslash % 2) == 0) /* odd backslash */
+                if(!backslash)
                      {
-                     //BEGIN(INITIAL);
                      to_prev_state();
-
                      //tmp_str2[prog++] = yytext[0];
                      tmp_str2[prog] = '\0';
                      yylval.sym = make_symstr("", strdup(tmp_str2), "", STR2);
@@ -357,15 +360,25 @@ FNN  [\~_a-zA-Z0-9]
                      }
                   else
                       {  /* add quote */
-                      //  tmp_str2[prog++] = yytext[0];
+                      tmp_str2[prog++] = '\\';
+                      tmp_str2[prog++] = yytext[0];
+                      backslash = 0;
                       }
                 }
+<XTRSTATE,STRSTATE>\\ {
+                inff(0, "[BSL] '%s' ", yytext);
+                backslash++;
+                }
 <XTRSTATE,STRSTATE>. {   // default string charater
-                backslash  = 0;
                 inff(1, "'%s'", yytext);
+                if(backslash)
+                    {
+                    tmp_str2[prog++] = '\\';
+                    backslash = 0;
+                    }
                 tmp_str2[prog++] = yytext[0];
                 }
-<INITIAL,EXSTATE>.  {  // default character
+<INITIAL,EXSTATE>. {  // default character
                 inff(1, " [CH2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", CH2);
                 return CH2;
@@ -397,6 +410,9 @@ int     preprocess(char *ptr)
 {
     int ret_val = 1;
     struct stat buf;
+
+    if(config.debpreyacc)
+        predebug = 1;
 
     // re - initialize preprocessor
     num_lines = 1;
@@ -438,11 +454,10 @@ int     preprocess(char *ptr)
         outdir[0] = '.'; outdir[1] = '\0';
         }
     strcat(outdir, "/tmp/");
-
     //printf("outdir: '%s'\n", outdir);
-
     if(stat(outdir, &buf) < 0)
         {
+        printf("makeing '%s'\n", outdir);
         if(mkdir(outdir, 0777) < 0)
             {
             printf("Cannot create tmp dir: '%s'\n", outdir);
@@ -468,7 +483,11 @@ int     preprocess(char *ptr)
     ppfp2 = fopen(ppfile2, "w");
     if(!ppfp2)
         {
-        fprintf(stderr, "Cannot create file '%s'.\n", ppfile);
+        fprintf(stderr, "Cannot create file '%s'.\n", ppfile2);
+        if(config.verbose)
+            {
+            fprintf(stderr, "'%s' %s.\n", ppfile, strerror(errno));
+            }
         //syslog(LOG_DEBUG, "pcomp: Cannot create preprocessed file.\n");
         return 0;
         }
@@ -511,67 +530,59 @@ int     preprocess(char *ptr)
 void    preerror(const char *str)
 
 {
-    static int count = 0;
-    count++;
+    int pos = ftell(ppfp3);
+
+    // Is term?
+    char *errstr = "\nPreprocess Error:";
+    if(isatty(2) > 0)
+        {
+        fprintf(stderr, "\033[31;1m%s\033[0m ", errstr);
+        }
+    else
+        {
+        fprintf(stderr, "%s ", errstr);
+        }
     fprintf(stderr, "%s  Line: %d  Col: %d Near: '%s'\n",
                                 str, num_lines, currprog, yytext);
-    //fprintf(stderr, "Line at offset: %ld\n",
-    int pos = ftell(ppfp3);
+    //int cnt = strlen(errstr);
+    //while(cnt)
+    //        {
+    //        fprintf(stderr, "a");
+    //        cnt--;
+    //        }
+    // Get current line to line end
     int ppp = currprog;
     while(ppp < sizeof(currline))
         {
         char ccc = fgetc(ppfp3);
         if(ccc == '\n' || ccc == EOF)
+            {
+            currline[ppp] = '\0';
             break;
+            }
         currline[ppp] = ccc;
         ppp++;
         }
-    currline[ppp] = '\0';
-
-    // Is term?
-    if(isatty(2) > 0)
-        {
-        fprintf(stderr, "\033[31;1mERROR\033[0m ");
-        }
-    else
-        {
-        fprintf(stderr, "ERROR ");
-        }
-    if(currprog == 0)
-        {
-        if(strlen(prevline))
+    //fprintf(stderr, "Context:\n");
+    fprintf(stderr, "%s\n", prevline);
+    fprintf(stderr, "%s\n", currline);
+    int cnt = currprog;
+    while(cnt)
             {
-            fprintf(stderr, "%s\n      ", prevline);
-            for(int aa = currprog; aa < strlen(prevline)-1; aa++)
-                {
-                fprintf(stderr, "-");
-                }
-            fprintf(stderr, "^\n");
+            fprintf(stderr, "-");
+            cnt--;
             }
-        }
-     else
-        {
-        if(strlen(currline))
+    fprintf(stderr, "^");
+    int cnt2 = strlen(currline) - currprog - 2;
+    while(cnt2 >= 0)
             {
-            fprintf(stderr, "Line: '%s'\n             ", currline);
-            for(int aa = 0; aa < currprog; aa++)
-                {
-                fprintf(stderr, "-");
-                }
-            fprintf(stderr, "^");
-            for(int aa = currprog; aa < strlen(currline)-1; aa++)
-                {
-                fprintf(stderr, "-");
-                }
-            fprintf(stderr, "\n");
-
-            //hd(currline, 200);
+            fprintf(stderr, "-");
+            cnt2--;
             }
-        }
-    fprintf(stderr, "emitline: '%s'\n", emitline);
+    fprintf(stderr, "\n");
+
     fseek(ppfp3, pos, SEEK_SET);
-    //if(count > 5)
-        exit(0);
+    exit(2);
 }
 
 // EOF

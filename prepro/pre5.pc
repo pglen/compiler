@@ -1,11 +1,14 @@
+u32 : aa = bb
 #%msg 123
-%dekfine AA 1000
+%define AA 1000
 %ifdef AA
     %msg "aa "
     %define COUNT 4000
+    u32 : aa = bb
 %else
     %msg "bb "
     %define COUNT 5000
+    u32 : aa = bb
 %endif
 %msg "123"
 # EOF

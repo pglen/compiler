@@ -4,6 +4,6 @@
 	#macro mac "Macro_Here"
 	#macro int "u32"
 
-	int	mac = 12 + 20;
+	int	: mac = 12 + 20
 
 

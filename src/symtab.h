@@ -171,7 +171,7 @@ void    empty_ddef(outstr **root);
 
 ifstack *peek_ifstack(char *name, char *ifname, char *elname, int *val);
 
-int     create_unique(char *str, char *prefix);
+char    *create_unique(char *prefix);
 int     create_unique2(char *str, char *prefix, char *str1, char *str2);
 
 /* -------- Definitions: ------------------------------------------------- */

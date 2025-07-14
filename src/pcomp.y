@@ -91,7 +91,7 @@ all1:    {   /* empty */
                 printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
-            create_unique(tmp_str, "debug" );
+            create_unique("debug" );
             //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_DEBUG, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
             }
@@ -102,7 +102,7 @@ all1:    {   /* empty */
                 printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
-            create_unique(tmp_str, "comment" );
+            create_unique("comment" );
             $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
             //if(config.showcomm)
             //    {
@@ -116,7 +116,7 @@ all1:    {   /* empty */
                 printf("{all1}: %s\r\n", (char*)$1);
             #endif
 
-            create_unique(tmp_str, "decl" );
+            create_unique("decl" );
             //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_DECL, 0);
             $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
             }
@@ -128,7 +128,7 @@ all1:    {   /* empty */
             printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
-        create_unique(tmp_str, "func" );
+        create_unique("func" );
         //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_FUNC, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
@@ -140,7 +140,7 @@ all1:    {   /* empty */
             printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
-        create_unique(tmp_str, "expr" );
+        create_unique("expr" );
         //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_EXPR, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
@@ -152,7 +152,7 @@ all1:    {   /* empty */
             printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
-        create_unique(tmp_str, "if" );
+        create_unique("if" );
         //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_IF, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
@@ -163,7 +163,7 @@ all1:    {   /* empty */
             printf("{all1}: %s\r\n", (char*)$1);
         #endif
 
-        create_unique(tmp_str, "assn" );
+        create_unique("assn" );
         //Symbol  *st2 = push_symtab((char*)$2, tmp_str, "", ALL_ITEM_ASSN, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
@@ -177,7 +177,7 @@ comments:
           printf("{Comment}: %s\r\n", (char*)$1);
         #endif
 
-        //create_unique(tmp_str, "comment");
+        //create_unique("comment");
         //Symbol  *st2 = push_symtab(tmp_str, "tmp", COMMENT, 0);
         //Symbol  *st = push_symtab("Comment", (char*)$1, COMMENT, 0);
         //if(config.showcomm)
@@ -190,7 +190,7 @@ comments:
           printf("{Comment}: %s\r\n", (char*)$1);
         #endif
 
-        create_unique(tmp_str, "comment");
+        create_unique("comment");
         Symbol  *st2 = push_symtab(tmp_str, "tmp", "", COMMENT2, 0);
         Symbol  *st = push_symtab("Comment", (char*)$1, "", COMMENT2, 0);
         //if(config.showcomm)
@@ -206,7 +206,7 @@ debug1: DBG val1
         printf("{Debug level}: %s\r\n", (char*)$2);
     #endif
 
-    create_unique(tmp_str, "debug");
+    create_unique( "debug");
     Symbol  *st = push_symtab(tmp_str, (char*)$2, "", DBG, (double)atoi((char*)$2));
     //dump_symtab();
     $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
@@ -474,7 +474,7 @@ expr2:  expr2a
 
 expr2a:  expr3
         {
-        //create_unique(tmp_str, "var");
+        //create_unique("var");
         //Symbol  *st = push_symtab(tmp_str, "", 1002, 0);
         //Symbol  *st = push_symtab((char*)$1, "", 1002, 0);
         }
@@ -495,7 +495,7 @@ expr2a:  expr3
 expr3:  expr4
         {
         //Symbol  *st = push_symtab((char*)$1, "", ' ', 0);
-        //create_unique(tmp_str, "var");
+        //create_unique("var");
         //$$ = tmp_str;
         }
         | expr3 '*'  expr4
@@ -545,43 +545,43 @@ expr4:  val1
         }
         | '!' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, (char*)"", tmp_str, '!', 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         | LNOT expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, (char*)"", tmp_str, LNOT, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         |  '-' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, "", tmp_str, '-', 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         |  '^' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, "", tmp_str, '^', 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         |  '*' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, "", tmp_str, DECL_DEREF, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         |  '&' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique("tmp");
         Symbol  *st = push_symtab((char*)$2, "", tmp_str, DECL_ADDOF, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         }
         |  '(' ID ')' expr4
         {
-        create_unique(tmp_str, "tmp");
+        create_unique( "tmp");
         Symbol  *st = push_symtab((char*)$2, (char*)$4, tmp_str, DECL_CAST, 0);
         //$$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);
         $$ = (void*)estrdup2((char*)$4, __LINE__, __FILE__);
@@ -598,8 +598,8 @@ elsedecl1: ELSE
 
 ifdecl1: IF '(' condexpr ')'
         {
-        create_unique(if_str, "if");
-        create_unique(el_str, "else");
+        create_unique( "if");
+        create_unique( "else");
         Symbol  *st = push_symtab((char*)$3, if_str, el_str, DECL_IF, 0);
         push_ifstack( (char *)$3, if_str, el_str, 0);
         $$ = (void*)estrdup2(tmp_str, __LINE__, __FILE__);

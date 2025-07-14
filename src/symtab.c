@@ -762,12 +762,13 @@ void    empty_ddef(outstr **root)
 
 static int  curr_unique = 1000;
 
-int     create_unique(char *str, char *prefix)
+char    *create_unique(char *prefix)
 
 {
-    snprintf(str, MAX_VARLEN, "%s_%d", prefix, curr_unique);
+    char *ret = malloc(MAX_VARLEN);
+    snprintf(ret, MAX_VARLEN, "%s_%d", prefix, curr_unique);
     curr_unique++;
-    return 0;
+    return ret;
 }
 
 int     create_unique2(char *str, char *prefix, char *str1, char *str2)
