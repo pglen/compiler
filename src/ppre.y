@@ -192,17 +192,15 @@ define1:  spnl1 DEF2 spnl1 idd1 spnl1
 ;
 elifdef1: spnl1 ELIFDEF2 spnl1 ID2 spnl1
         {
-        //hasdefine = !hasdefine;
         inf(0, " { elifdef1 '%s' } ", $4->var);
-        if(lookup_symtab($4, DECL_DEFINE) != NULL)
+        if(!hasdefine)
             {
-            printf(" { elifdef found '%s' } ", $4->var);
-            //hasdefine = 1;
+            if(lookup_symtab($4->var, DECL_DEFINE) != NULL)
+                {
+                printf(" { elifdef found '%s' } ", $4->var);
+                hasdefine = 1;
+                }
             }
-        //else
-        //    {
-        //    hasdefine = 0;
-        //    }
         }
 ;
 ifdef1:   spnl1 IFDEF2 spnl1 idd1 spnl1
