@@ -1,0 +1,3 @@
+// Macro definitions
+%mac "Macro_Here"
+%mac "Macro" 1+2+3+4

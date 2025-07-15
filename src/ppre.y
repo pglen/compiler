@@ -84,6 +84,7 @@ int hasdefine   = 1;
 %type   <sym>   msg1
 %type   <sym>   err1
 %type   <sym>   enl1
+%type   <sym>   lab1
 %type   <sym>   type1
 %type   <sym>   elifdef1
 
@@ -141,6 +142,8 @@ all2:   comm1
             { DEBI(1, "all2 mac1", $1); }
         | enl1
             { DEBI(1, "all2 enl1", $1); }
+        | lab1
+            { DEBI(1, "all2 lab1", $1); }
         ;
 comm1:  spnl1 COMM2 spnl1
         {  $$=$2; }
@@ -177,6 +180,21 @@ enl1:   spnl1 ENL2 spnl1
             if(hasdefine)
                 fprintf(stderr, "\n");
             $$=$1;
+        }
+;
+lab1:   spnl1 COL2 spnl1 ID2 spnl1 COL2 spnl1
+        {
+           if(config.testpreyacc > 0)
+                { printf(" { lab1: lab1 '%s' } ", $4->var); }
+
+            if(lookup_symtab($4->var, DECL_LABEL))
+                {
+                fprintf(stderr, "Duplicate label at line %d: '%s'\n",
+                                    num_lines, $4->var);
+                exit(1);
+                }
+            push_symtab("", $4->var, "", DECL_LABEL, 0);
+            $$=$4;
         }
 ;
 err1:   spnl1 ERR2 spnl1 idd2 spnl1
@@ -503,16 +521,16 @@ int  pretranslate_type(int type, char **str)
     else
         switch(type)
         {
-        case DECL_DEFINE:     *str = "DECL_DEFINE";     break;
-        case DECL_MACRO:      *str = "DECL_MACRO";      break;
+        case DECL_DEFINE:   *str = "DECL_DEFINE";     break;
+        case DECL_MACRO:    *str = "DECL_MACRO";      break;
 
         case DECL_VARITEM:  *str = "DECL_VARITEM";      break;
         case DECL_VARLIST:  *str = "DECL_VARLIST";      break;
-        case DECL_IF:      *str = "DECL_IF";            break;
-        case DECL_ELSE:    *str = "DECL_ELSE";          break;
+        case DECL_IF:       *str = "DECL_IF";            break;
+        case DECL_ELSE:     *str = "DECL_ELSE";          break;
 
-        case TERM_IF:      *str = "TERM_IF";            break;
-        case TERM_ELSE:    *str = "TERM_ELSE";          break;
+        case TERM_IF:       *str = "TERM_IF";            break;
+        case TERM_ELSE:     *str = "TERM_ELSE";          break;
 
         case RET_EXPR:      *str = "RET_EXPR";          break;
         case RET_VAL:       *str = "RET_VAL";           break;
@@ -520,24 +538,25 @@ int  pretranslate_type(int type, char **str)
 
         case FUNC_DECL:     *str = "FUNC_DECL";         break;
         case FUNC_ASSN:     *str = "FUNC_ASSN";         break;
-        case FUNC_DECL_ARG:    *str = "FUNC_DECL_ARG";  break;
-        case FUNC_DECL_NAME:    *str = "FUNC_DECL_NAME"; break;
+        case FUNC_DECL_ARG: *str = "FUNC_DECL_ARG";  break;
+        case FUNC_DECL_NAME:*str = "FUNC_DECL_NAME"; break;
 
-        case ALL_ITEM_FUNC:    *str = "ALL_ITEM_FUNC"; break;
-        case ALL_ITEM_EXPR:    *str = "ALL_ITEM_EXPR"; break;
-        case ALL_ITEM_ASSN:    *str = "ALL_ITEM_ASSN"; break;
-        case ALL_ITEM_IF:    *str = "ALL_ITEM_IF"; break;
+        case ALL_ITEM_FUNC: *str = "ALL_ITEM_FUNC"; break;
+        case ALL_ITEM_EXPR: *str = "ALL_ITEM_EXPR"; break;
+        case ALL_ITEM_ASSN: *str = "ALL_ITEM_ASSN"; break;
+        case ALL_ITEM_IF:   *str = "ALL_ITEM_IF"; break;
 
-        case ID2:                *str = "ID2"; break;
-        case OR2:                *str = "OR2 || "; break;
-        case AND2:               *str = "AND2 && "; break;
-        case XOR2:               *str = "XOR2 ^^"; break;
-        case SP2:                *str = "SP2"; break;
-        case NL2:                *str = "NL2"; break;
-        case NUM2:               *str = "NUM2"; break;
-        case STR2:               *str = "STR2"; break;
+        case ID2:           *str = "ID2"; break;
+        case OR2:           *str = "OR2 || "; break;
+        case AND2:          *str = "AND2 && "; break;
+        case XOR2:          *str = "XOR2 ^^"; break;
+        case SP2:           *str = "SP2"; break;
+        case NL2:           *str = "NL2"; break;
+        case NUM2:          *str = "NUM2"; break;
+        case STR2:          *str = "STR2"; break;
 
         // Translation for off parser defines
+
         case    DECL_VAR:   *str =  "DECL_VAR"; break;
         case    DECL_VAR2:  *str =  "DECL_VAR2"; break;
         case    DECL_VAR3:  *str =  "DECL_VAR3"; break;
@@ -546,9 +565,10 @@ int  pretranslate_type(int type, char **str)
         case    DECL_CALL2: *str =  "DECL_CALL2"; break;
         case    DECL_CALL3: *str =  "DECL_CALL3"; break;
 
-        case    DECL_CAST: *str =  "DECL_CAST"; break;
+        case    DECL_CAST:  *str =  "DECL_CAST"; break;
         case    DECL_DEREF: *str =  "DECL_DEREF"; break;
         case    DECL_ADDOF: *str =  "DECL_ADDOF"; break;
+        case    DECL_LABEL: *str =  "DECL_LABEL"; break;
 
         default:
             *str = "XX";

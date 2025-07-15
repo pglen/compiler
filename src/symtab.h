@@ -22,52 +22,53 @@
 
 #define MAX_ARRAY 4
 
-#define     SYMTAB_MAGIC    0x2324567
-#define     IFSTACK_MAGIC    0x2323432
-#define     OUTSRIN_MAGIC    0x2332543
+#define     SYMTAB_MAGIC        0x2324567
+#define     IFSTACK_MAGIC       0x2323432
+#define     OUTSRIN_MAGIC       0x2332543
 
-#define     DECL_VAR        11003
-#define     DECL_VAR2       11004
-#define     DECL_VAR3       11005
-#define     DECL_VAR4          11006
-#define     DECL_VARLIST    11007
-#define     DECL_VARITEM    11008
-#define     DECL_MACITEM    11009
+#define     DECL_VAR            1003
+#define     DECL_VAR2           1004
+#define     DECL_VAR3           1005
+#define     DECL_VAR4           1006
+#define     DECL_VARLIST        1007
+#define     DECL_VARITEM        1008
+#define     DECL_MACITEM        1009
 
-#define     DECL_CALL       11012
-#define     DECL_CALL2      11013
-#define     DECL_CALL3      11014
+#define     DECL_CALL           1012
+#define     DECL_CALL2          1013
+#define     DECL_CALL3          1014
 
-#define     DECL_IF          11020
-#define     DECL_ELSE       11021
-#define     TERM_IF          11022
-#define     TERM_ELSE       11023
+#define     DECL_IF             1020
+#define     DECL_ELSE           1021
+#define     TERM_IF             1022
+#define     TERM_ELSE           1023
 
-#define     ALL_ITEM_EXPR    1060
-#define     ALL_ITEM_ASSN    1061
-#define     ALL_ITEM_DEBUG    1062
-#define     ALL_ITEM_FUNC    1063
-#define     ALL_ITEM_DECL    1064
-#define     ALL_ITEM_COMM    1065
-#define     ALL_ITEM_IF        1066
+#define     ALL_ITEM_EXPR       1060
+#define     ALL_ITEM_ASSN       1061
+#define     ALL_ITEM_DEBUG      1062
+#define     ALL_ITEM_FUNC       1063
+#define     ALL_ITEM_DECL       1064
+#define     ALL_ITEM_COMM       1065
+#define     ALL_ITEM_IF         1066
 
-#define     FUNC_ASSN        1100
-#define     FUNC_DECL        1101
-#define     FUNC_DECL_ARG    1102
-#define     FUNC_DECL_NAME     1103
+#define     FUNC_ASSN           1100
+#define     FUNC_DECL           1101
+#define     FUNC_DECL_ARG       1102
+#define     FUNC_DECL_NAME      1103
 
 #define     RET_EXPR            1200
 #define     RET_VAL             1201
 #define     RET_NUM             1202
 
-#define     CALL_FUNC        1300
+#define     CALL_FUNC           1300
 
-#define     DECL_CAST        1400
-#define     DECL_DEREF        1401
-#define     DECL_ADDOF        1402
+#define     DECL_CAST           1400
+#define     DECL_DEREF          1401
+#define     DECL_ADDOF          1402
 
-#define     DECL_DEFINE        1500
-#define     DECL_MACRO        1501
+#define     DECL_DEFINE         1500
+#define     DECL_MACRO          1501
+#define     DECL_LABEL          1502
 
 int print_emalloc();
 
@@ -79,6 +80,7 @@ typedef struct _Symbol {    /* symbol table entry */
          char       *name ;
          char       *var;
          char       *res;
+         int        line, col;
          int        con_name, con_var, con_res;
          union {
                int        len;                  /* if str */

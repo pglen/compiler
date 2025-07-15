@@ -188,6 +188,7 @@ FNN  [\~_a-zA-Z0-9]
 <INITIAL,EXSTATE>:   {
                 inff(0, " [COL2] '%s' ", yytext);
                 yylval.sym = make_symstr("name", strdup(yytext), "", COL2);
+                yylval.sym->line = num_lines; yylval.sym->col = currprog;
                 return(COL2);
                 }
 <INITIAL,EXSTATE>[ \t]  {
@@ -401,18 +402,18 @@ FNN  [\~_a-zA-Z0-9]
                     tmp_str2[prog++] = yytext[0];
                     }
                 }
-<UNISTATE>[0-9a-fA-F][0-9a-fA-F]?[0-9a-fA-F]?[0-9a-fA-F]? {
+<UNISTATE>[0-9a-fA-F]{1,4} {
                 //printf(" uni hex '%s' ", yytext);
                 char *sum = addstrs("0x", yytext);
                 int val = str2int(sum);
+                free(sum);
                 //printf(" uni hex %d %d ", val / 0xff, val % 0xff);
                 tmp_str2[prog++] =  val % 0xff;
                 tmp_str2[prog++] =  val / 0xff;
-                free(sum);
                 to_prev_state();
                 }
 <UNISTATE>.     {
-                printf("invalid uni hex char %c ", yytext[0]);
+                //printf("invalid uni hex char %c ", yytext[0]);
                 //ungetc(yytext[0], ppfp3);
                 tmp_str2[prog++] = '\\';
                 tmp_str2[prog++] = 'u';
@@ -420,14 +421,14 @@ FNN  [\~_a-zA-Z0-9]
                 to_prev_state();
                 }
 
-<HEXSTATE>[0-9a-fA-F][0-9a-fA-F]? {
+<HEXSTATE>[0-9a-fA-F]{1,2} {
                 char *sum = addstrs("0x", yytext);
                 tmp_str2[prog++] = str2int(sum) & 0xff;
                 free(sum);
                 to_prev_state();
                 }
 <HEXSTATE>.     {
-                printf("invalid hex char %c ", yytext[0]);
+                //printf("invalid hex char %c ", yytext[0]);
                 //ungetc(yytext[0], ppfp3);
                 tmp_str2[prog++] = '\\';
                 tmp_str2[prog++] = 'x';
