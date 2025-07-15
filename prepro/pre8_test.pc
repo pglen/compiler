@@ -1,0 +1,2 @@
+#char : str = '"here  \" we \' go \n \'ag\tain\' \n no esc "'
+char : str = "hello \x44 world"

@@ -77,9 +77,12 @@ int hasdefine   = 1;
 %type   <sym>   ret1
 %type   <sym>   idd1
 %type   <sym>   idd2
+%type   <sym>   idd3
 %type   <sym>   id2
 %type   <sym>   id3
+%type   <sym>   mac1
 %type   <sym>   msg1
+%type   <sym>   err1
 %type   <sym>   enl1
 %type   <sym>   type1
 %type   <sym>   elifdef1
@@ -132,6 +135,10 @@ all2:   comm1
             { DEBI(1, "all2 type1", $1); }
         | msg1
             { DEBI(1, "all2 msg1", $1); }
+        | err1
+            { DEBI(1, "all2 err1", $1); }
+        | mac1
+            { DEBI(1, "all2 mac1", $1); }
         | enl1
             { DEBI(1, "all2 enl1", $1); }
         ;
@@ -148,6 +155,10 @@ idd2:  expr1
        | STR2
        | ID2
 ;
+idd3:     idd2            {}
+        | idd2 spnl1 idd3 {}
+;
+
 decl2:  decl1
             { inf(1, " { decl2 '%s'} ", $1->var); }
         | decl2 decl1
@@ -168,6 +179,18 @@ enl1:   spnl1 ENL2 spnl1
             $$=$1;
         }
 ;
+err1:   spnl1 ERR2 spnl1 idd2 spnl1
+            {
+            if(config.testpreyacc > 0)
+                { printf(" { err1: expr1 '%s' } ", $4->var); }
+            if(hasdefine)
+                {
+                fprintf(stderr, "%s\n", $4->var);
+                exit(3);
+                }
+            $$=$4;
+            }
+;
 msg1:   spnl1 MSG2 spnl1 idd2 spnl1
             {
             if(config.testpreyacc > 0)
@@ -187,6 +210,32 @@ define1:  spnl1 DEF2 spnl1 idd1 spnl1
             {
             inf(0, "{ define1 '%s' arg: %s } ", $4->var, $6->var);
             push_symtab("", $4->var, $6->var, DECL_DEFINE, 0);
+            $$=$2;
+            }
+;
+mac1:  spnl1 MAC2 spnl1 idd1 spnl1
+            {
+            inf(0, "{ mac1 '%s' } ", $4->var);
+            push_symtab("", $4->var, "", DECL_MACRO, 0);
+            $$=$2;
+            }
+      | spnl1 MAC2 spnl1 idd1 spnl1 idd2 spnl1
+            {
+            inf(0, "{ mac1 '%s' arg: '%s' } ", $4->var, $6->var);
+            push_symtab("", $4->var, $6->var, DECL_MACRO, 0);
+            $$=$2;
+            }
+       | spnl1 MAC2 spnl1 idd1 spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+            {
+            inf(0, "{ mac1 '%s' arg: '%s' } ", $4->var, $6->var);
+            push_symtab("", $4->var, $8->var, DECL_MACRO, 0);
+            $$=$2;
+            }
+      | spnl1 MAC2 spnl1 idd1 spnl1 LPAREN2 spnl1 farg1 spnl1 RPAREN2
+                    spnl1 LBRA2  spnl1 all1  spnl1 ret1  spnl1 RBRA2 spnl1
+             {
+            inf(0, "{ mac1 '%s' arg: '%s' } ", $4->var, $6->var);
+            push_symtab("", $4->var, $8->var, DECL_MACRO, 0);
             $$=$2;
             }
 ;
@@ -300,19 +349,19 @@ id2:      ID2
 dval1:  spnl1 COL2 spnl1 assn1 spnl1
 
 assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1
-        {
-        inf(0, " { assn1 '%s' = '%s' } ", $2->var, $6->var);
-        //if(hasdefine)
-        //    addemitstr($6->var);
-        $$ = make_symstr("", $2->var, $6->var, NUM2);
-        }
+            {
+            inf(0, " { assn1 '%s' = '%s' } ", $2->var, $6->var);
+            //if(hasdefine)
+            //    addemitstr($6->var);
+            $$ = make_symstr("", $2->var, $6->var, NUM2);
+            }
         | spnl1 ID2 spnl1 EQ2 spnl1 STR2 spnl1
-        {
-        inf(0, " { assn1 '%s' = '%s' } ", $2->var, $6->var);
-        //if(hasdefine)
-        //    addemitstr($6->var);
-        $$ = make_symstr("", $2->var, $6->var, NUM2);
-        }
+            {
+            inf(0, " { assn1 str2 '%s' = '%s' } ", $2->var, $6->var);
+            //if(hasdefine)
+            //    addemitstr($6->var);
+            $$ = make_symstr("", $2->var, $6->var, NUM2);
+            }
 ;
 semi1:
         | SEMI2

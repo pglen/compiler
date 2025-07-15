@@ -1,8 +1,10 @@
 %define DEFINE
+%msg pre %nl
 %ifdef DEFINE
-    %msg "pre1234 " ;%nl
+    u32: aa = bb
     %error "DEFINE is defined"
 %else
-    %msg "pre3456 " ; %nl
+    u32: aa = cc
     %error "DEFINE is not defined"
 %endif
+%msg post

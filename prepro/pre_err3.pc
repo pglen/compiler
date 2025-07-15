@@ -1,4 +1,4 @@
-%define DEFINE
+%define DEFINE2
 %ifdef DEFINE
     %error "DEFINE is defined"
 %else

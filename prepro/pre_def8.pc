@@ -1,5 +1,5 @@
 //%define DEFINE
-%define DEFINE2
+//%define DEFINE2
 %ifdef DEFINE
     %msg "defined" %nl
 %elifdef DEFINE2

@@ -36,6 +36,8 @@ int     prelex();
 
 %}
 
+%x UNISTATE
+%x HEXSTATE
 %x STRSTATE
 %x XTRSTATE
 %x EXSTATE
@@ -64,11 +66,11 @@ FNN  [\~_a-zA-Z0-9]
                 yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
                 return COMM2;
                 }
-<INITIAL,EXSTATE>var {
+ /*<INITIAL,EXSTATE>var {
                 inff(0, "[VAR2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", VAR2);
                 return VAR2;
-                }
+                } */
 <INITIAL,EXSTATE>func {
                 inff(0, "[FUNC2] '%s", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", FUNC2);
@@ -342,7 +344,7 @@ FNN  [\~_a-zA-Z0-9]
                     return(STR2);
                     }
                   else
-                    {  /* add backslash char */
+                    {  /* add backslash quote */
                     tmp_str2[prog++] = '\\';
                     tmp_str2[prog++] = yytext[0];
                     backslash = 0;
@@ -373,10 +375,64 @@ FNN  [\~_a-zA-Z0-9]
                 inff(1, "'%s'", yytext);
                 if(backslash)
                     {
-                    tmp_str2[prog++] = '\\';
+                    // Escape character
+                    switch(yytext[0])
+                        {
+                        case 'n': tmp_str2[prog++] = '\n'; break;
+                        case 't': tmp_str2[prog++] = '\t'; break;
+                        case 'r': tmp_str2[prog++] = '\r'; break;
+                        case 'a': tmp_str2[prog++] = '\a'; break;
+                        case 'b': tmp_str2[prog++] = '\b'; break;
+                        case 'v': tmp_str2[prog++] = '\v'; break;
+                        case 'f': tmp_str2[prog++] = '\f'; break;
+                        case 'e': tmp_str2[prog++] = '\e'; break;
+                        case '?': tmp_str2[prog++] = '?'; break;
+                        case 'x': to_new_state(HEXSTATE);  break;
+                        case 'u': to_new_state(UNISTATE);  break;
+                        default:
+                            tmp_str2[prog++] = '\\';
+                            tmp_str2[prog++] = yytext[0];
+                            break;
+                        }
                     backslash = 0;
                     }
+                else
+                    {
+                    tmp_str2[prog++] = yytext[0];
+                    }
+                }
+<UNISTATE>[0-9a-fA-F][0-9a-fA-F]?[0-9a-fA-F]?[0-9a-fA-F]? {
+                //printf(" uni hex '%s' ", yytext);
+                char *sum = addstrs("0x", yytext);
+                int val = str2int(sum);
+                //printf(" uni hex %d %d ", val / 0xff, val % 0xff);
+                tmp_str2[prog++] =  val % 0xff;
+                tmp_str2[prog++] =  val / 0xff;
+                free(sum);
+                to_prev_state();
+                }
+<UNISTATE>.     {
+                printf("invalid uni hex char %c ", yytext[0]);
+                //ungetc(yytext[0], ppfp3);
+                tmp_str2[prog++] = '\\';
+                tmp_str2[prog++] = 'u';
                 tmp_str2[prog++] = yytext[0];
+                to_prev_state();
+                }
+
+<HEXSTATE>[0-9a-fA-F][0-9a-fA-F]? {
+                char *sum = addstrs("0x", yytext);
+                tmp_str2[prog++] = str2int(sum) & 0xff;
+                free(sum);
+                to_prev_state();
+                }
+<HEXSTATE>.     {
+                printf("invalid hex char %c ", yytext[0]);
+                //ungetc(yytext[0], ppfp3);
+                tmp_str2[prog++] = '\\';
+                tmp_str2[prog++] = 'x';
+                tmp_str2[prog++] = yytext[0];
+                to_prev_state();
                 }
 <INITIAL,EXSTATE>. {  // default character
                 inff(1, " [CH2] '%s' ", yytext);
