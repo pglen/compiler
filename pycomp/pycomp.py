@@ -185,7 +185,12 @@ def showfile(strx):
         cnt = 0; xlen = len(xstack._store)
         while cnt < xlen:
             tt = xstack._store[cnt];
-            print(tt[5], ":", tt[6], " -- ", tt[0],  lexdef.rtok[tt[0]], pp(tt[2]))
+            #print(" [", tt[6], ":", tt[6], " -- ",
+            #print(" [", lexdef.rtok[tt[0]], pp(tt[1]), end = "] ")
+            #"'" + tt[2] +"'",
+            #print(" [", pp(tt[2]), "] ")
+            #mstr = tt[6].string[tt[6].start():tt[6].end()]
+            print(" [", tt[1], pp(tt[5]), end = "] ")
             cnt += 1
 
     if lx.state == lexdef.STR_STATE:
@@ -208,13 +213,9 @@ def showfile(strx):
 
 def help():
     myname = os.path.basename(sys.argv[0])
-    print()
-    print (myname + ":", "Version 0.1 - Utility for compiling a pcomp file.")
-    print ()
+    print ("Utility for compiling a pycomp file.")
     print ("Usage: " + myname + " [options] filename")
-    print ()
-    print ("Options are:")
-    print ("            -d level  - Debug level (1-10)")
+    print ("Options:    -d level  - Debug level (1-10)")
     print ("            -o file   - Outfile name")
     print ("            -e        - Emit parse string")
     print ("            -V        - Version")
@@ -223,8 +224,7 @@ def help():
     print ("            -t        - Show timing")
     print ("            -x        - Show lexer output")
     print ("            -p        - Show parser messages")
-    print ("            -h        - Help")
-    print ()
+    print ("            -h        - Help (this screen)")
 
 # ------------------------------------------------------------------------
 

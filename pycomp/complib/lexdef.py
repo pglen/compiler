@@ -26,6 +26,7 @@ from complib.utils import *
 '''
 
 tok2 = {}
+tok3 = {}
 
 # ------------------------------------------------------------------------
 # Token definitions:
@@ -49,12 +50,17 @@ tok2 = {}
 # Create token on the fly, if there is one already, return it.
 
 def tok(name):
-    if name in tok2:
+    #print("adding:", name)
+    if name in tok2.keys():
         #print("Warn: dup token", name)
         pass
     else:
-        tok2[name] = punique()
-    return tok2[name]
+        pass
+        uni = punique()
+        tok2[name] = uni
+        tok3[uni] = name
+    return name
+    #return tok2[name]
 
 INI_STATE, STR_STATE, ESC_STATE     = range(3)
 STATE_NOCH, STATE_CHG, STATE_DOWN, STATE_ESCD   = range(4)
@@ -72,11 +78,12 @@ STATE_NOCH, STATE_CHG, STATE_DOWN, STATE_ESCD   = range(4)
 try:
     tokens =  [
 
+    # State     Token              # Regex                # Compiled
     [INI_STATE, tok("eolnl"),     "\\\\\n"             ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("bsl"),        "\\\\"               ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("bsl"),        "\\\\"              ,  None, STATE_NOCH, ],
     [INI_STATE, tok("ifdef"),     "#ifdef"             ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("define"),    "#define"             ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("else2"),     "#else"             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("define"),    "#define"            ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("else2"),     "#else"              ,  None, STATE_NOCH, ],
     [INI_STATE, tok("endif2"),    "#endif"             ,  None, STATE_NOCH, ],
 
     [INI_STATE, tok("#"),         "#"                  ,  None, STATE_NOCH, ],
@@ -103,62 +110,63 @@ try:
     [INI_STATE, tok("U64"   ),     "U64"               ,  None, STATE_NOCH, ],
     [INI_STATE, tok("U128"  ),     "U128"              ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("str4"),      "\#[0-9a-zA-Z]"     ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("str3"),      "(\\\\[0-7]+)+"      ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("str4"),      "\#[0-9a-zA-Z]"       ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("str3"),      "(\\\\[0-7]+)+"       ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("hex"),       "0x[0-9a-fA-F]+"     ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("oct"),       "0o[0-17]+"          ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("bin"),       "0b[0-1]+"           ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("oct2"),       "0y[0-17]+"          ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("bin2"),       "0z[0-1]+"           ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("hex"),       "0x[0-9a-fA-F]+"      ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("oct"),       "0o[0-17]+"           ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("bin"),       "0b[0-1]+"            ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("oct2"),      "0y[0-17]+"           ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("bin2"),      "0z[0-1]+"            ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("num"),       "[0-9]+"             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("num"),       "[0-9]+"              ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("quote"),     "\""                 ,  None, STATE_CHG,  ],
-    [INI_STATE, tok("str"),       "\".*?\""            ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("str2"),      "\'.*?\'"            ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("ident"),     "[A-Za-z0-9_\-\./]+" ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("bs"),        "\b"                  ,  None, STATE_CHG,  ],
+    [INI_STATE, tok("quote"),     "\""                  ,  None, STR_STATE,  ],
+    [INI_STATE, tok("str"),       "\".*?\""             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("strx"),      "\".*?\""             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("str2"),      "\'.*?\'"             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("ident"),     "[A-Za-z0-9_\-\./]+"  ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("comm"),      "\n##.*"             ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("comm"),      "\n##.*"              ,  None, STATE_NOCH, ],
 
     [INI_STATE, tok("peq"),       "\+="                 ,  None, STATE_NOCH, ],
     [INI_STATE, tok("meq"),       "\-="                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("deq"),       "=="                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("put"),       "=>"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("dref"),      "->"                 ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("deq"),       "=="                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("put"),       "=>"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("dref"),      "->"                  ,  None, STATE_NOCH, ],
 
-    [INI_STATE, tok("at"),        "@"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("exc"),       "!"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("tilde"),     "~"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("paren"),     "\("                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("paren2"),    "\)"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("under"),     "_"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("eq"),        "="                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("lt"),        "<"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("gt"),        ">"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("and"),       "&"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("star"),      "\*"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("caret"),     "^"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("perc"),      "%"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("div"),       "/"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("sp"),        " +"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("nl"),        r"\n"                ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("lbrack"),    "\["                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("rbrack"),    "\]"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("lbrace"),    "\("                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("rbrace"),    "\)"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("lcurl"),     "\{"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("rcurl"),     "\}"                 ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("comma"),     ","                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("colon"),     ";"                  ,  None, STATE_NOCH, ],
-    [INI_STATE, tok("scolon"),    ":"                  ,  None, STATE_NOCH, ],
-
-    [INI_STATE, tok("any"),       "."                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("at"),        "@"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("exc"),       "!"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("tilde"),     "~"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("paren"),     "\("                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("paren2"),    "\)"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("under"),     "_"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("eq"),        "="                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("lt"),        "<"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("gt"),        ">"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("and"),       "&"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("star"),      "\*"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("caret"),     "\^"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("perc"),      "%"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("div"),       "/"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("sp"),        " "                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("nl"),        "\n"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("lbrack"),    "\["                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("rbrack"),    "\]"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("lbrace"),    "\("                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("rbrace"),    "\)"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("lcurl"),     "\{"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("rcurl"),     "\}"                  ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("comma"),     ","                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("colon"),     ";"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("scolon"),    ":"                   ,  None, STATE_NOCH, ],
+    [INI_STATE, tok("any"),       "."                   ,  None, STATE_NOCH, ],
 
     # String states
-    [STR_STATE, tok("bsl"),       "\\\\"               ,  None, STATE_CHG, ],
-    [STR_STATE, tok("quote"),     "\""                 ,  None, STATE_DOWN, ],
-    [STR_STATE, tok("any"),       "."                  ,  None, STATE_NOCH, ],
+    [STR_STATE, tok("sbsl"),      "\\\\"                ,  None, STATE_CHG, ],
+    [STR_STATE, tok("squote"),     "\""                 ,  None, STATE_DOWN, ],
+    [STR_STATE, tok("sany"),       "."                  ,  None, STATE_NOCH, ],
 
     # Escape states
     [ESC_STATE, tok("shex"),      "[0-9A-Za-z]+"       ,  None, STATE_ESCD, ],

@@ -81,7 +81,8 @@ class Parse():
             if not tt:
                 break
             #print(tt[0], pp(tt[2]))
-            self.parse_item2(buf, tt)
+            #print(tt)
+            #self.parse_item2(buf, tt)
 
     def add_class(self, dd, pt):
         for aa in pt[3]:
