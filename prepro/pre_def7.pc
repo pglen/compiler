@@ -1,3 +1,2 @@
 %define "DEFINE2" "hello"
 %define DEFINE3 "str2"
-# EOF

@@ -1,0 +1,3 @@
+// Test declare
+aa:bb=cc
+dd:ee=12

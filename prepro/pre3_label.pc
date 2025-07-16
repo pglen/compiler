@@ -1,5 +1,6 @@
  : label2 :
  	u32 :    cc1 = 2000
- : label :
+ : label3 :
  	u32 :    cc2 = 10 * 200
+
  : label :

@@ -1,1 +1,4 @@
-%define DEFINE AA
+%define DEFINE1
+%define DEFINE2 qq
+%define DEFINE3 qq+rr
+%define DEFINE4 12+34

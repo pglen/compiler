@@ -1,8 +1,4 @@
-qq : qq = 0
-func hello ( qq : www = 1234 aa : ff=1111)
+func hello (aa=2 aa:bb=2 cc:dd)
     {
-    tt : ee=0
-    ee=12
     }
-
 # EOF

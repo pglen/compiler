@@ -23,10 +23,10 @@ char : str = '"here  \" we \' go \n \'again\' no esc "'
     u8 : ccc =2
     // comp at hello
 #%elifdef  HELLOY
-    s32 : ddd = 1
-    s16 : eee  = 2
-    s8 : fff
-    // comp at helloy
+#    s32 : ddd = 1
+#    s16 : eee  = 2
+#    s8 : fff
+#    // comp at helloy
 %else
     str = "compiled at %else"  // comp at else
 %endif

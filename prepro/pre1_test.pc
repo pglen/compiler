@@ -1,10 +1,7 @@
-// Preprocessing test
-# Hash comment
-
-%define HELLO2 // %define hello
- 	u32 : bb = 0
-	//%undef HELLO2
- 	// hello
+u32 : bb = 0
+//%define HELLO2 // %define hello
+//%undef HELLO2
+// hello
 %ifdef HELLO2
 	// compiled hello2
  	u32 : bb = 0

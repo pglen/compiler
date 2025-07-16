@@ -1,0 +1,8 @@
+loop {
+    enter { }
+    leave  { }
+    break
+    goto end
+}
+:end:
+# EOF

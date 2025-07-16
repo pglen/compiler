@@ -54,14 +54,17 @@ int hasdefine   = 1;
 // %debug
 
 /* operators */
-%token <sym>   PLUS2 MINUS2 MULT2 DIV2 MOD2 EQ2
-%token <sym>   OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
-%token <sym>   VAR2 LPAREN2 RPAREN2 SEMI2 COL2
+%token <sym>    PLUS2 MINUS2 MULT2 DIV2 MOD2 EQ2
+%token <sym>    OR2 AND2 XOR2 NOT2 LSHIFT2 RSHIFT2
+%token <sym>    LPAREN2 RPAREN2 SEMI2 COL2
+%token <sym>    EQ3 NEQ3 LT3 GT3 LTE3 GTE3 EQEQ3
 
 /* laguage elements */
-%token <sym>    CH2 ID2 ID3 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
+%token <sym>    CH2 ID2 SP2 NL2 STR2 COMM2 COMM3 NUM2 MAC2
 %token <sym>    IFDEF2 ENDIF2 ELSE2 ELIFDEF2 DEF2 UNDEF2 ERR2 MSG2
+%token <sym>    ENTER2 LEAVE2
 %token <sym>    FUNC2 LBRA2 RBRA2 RET2 ENL2 TYPE2 EMPTY2
+%token <sym>    LOOP2 BREAK2 GOTO2 IF3 ELIF3 ELSE3 ENDIF3
 
 %type   <sym>   all1
 %type   <sym>   all2
@@ -74,22 +77,31 @@ int hasdefine   = 1;
 %type   <sym>   decl2
 %type   <sym>   func1
 %type   <sym>   farg1
+%type   <sym>   farg2
 %type   <sym>   ret1
 %type   <sym>   idd1
 %type   <sym>   idd2
-%type   <sym>   idd3
 %type   <sym>   id2
-%type   <sym>   id3
 %type   <sym>   mac1
 %type   <sym>   msg1
 %type   <sym>   err1
 %type   <sym>   enl1
 %type   <sym>   lab1
 %type   <sym>   type1
-%type   <sym>   elifdef1
+%type   <sym>   loop1
+%type   <sym>   goto1
+%type   <sym>   break1
+
+%type   <sym>   enter2
+%type   <sym>   leave2
+%type   <sym>   if2
+%type   <sym>   elif2
+%type   <sym>   else2
+%type   <sym>   cond2
 
 %type   <sym>   define1
 %type   <sym>   ifdef1
+%type   <sym>   elifdef1
 %type   <sym>   else1
 %type   <sym>   endif1
 %type   <sym>   undef1
@@ -144,6 +156,24 @@ all2:   comm1
             { DEBI(1, "all2 enl1", $1); }
         | lab1
             { DEBI(1, "all2 lab1", $1); }
+        | loop1
+            { DEBI(1, "all2 loop1", $1); }
+        | goto1
+            { DEBI(1, "all2 goto1", $1); }
+        | break1
+            { DEBI(1, "all2 break1", $1); }
+        | if2
+            { DEBI(1, "all2 if2", $1); }
+        | enter2
+            { DEBI(1, "all2 enter2", $1); }
+        | leave2
+            { DEBI(1, "all2 leave2", $1); }
+        | elif2
+            { DEBI(1, "all2 elif2", $1); }
+        | else2
+            { DEBI(1, "all2 else3", $1); }
+        | cond2
+            { DEBI(1, "all2 eq3", $1); }
         ;
 comm1:  spnl1 COMM2 spnl1
         {  $$=$2; }
@@ -151,17 +181,13 @@ comm1:  spnl1 COMM2 spnl1
 comm3:  spnl1 COMM3 spnl1
         {  $$=$2;   }
 ;
-idd1:  ID2
-       | STR2
+idd1:    ID2
+        | STR2
 ;
-idd2:  expr1
-       | STR2
-       | ID2
+idd2:    ID2
+        | STR2
+        | expr1
 ;
-idd3:     idd2            {}
-        | idd2 spnl1 idd3 {}
-;
-
 decl2:  decl1
             { inf(1, " { decl2 '%s'} ", $1->var); }
         | decl2 decl1
@@ -171,6 +197,56 @@ type1:   spnl1 TYPE2 spnl1 ID2 spnl1 LBRA2 spnl1 decl2 spnl1 RBRA2 spnl1
         {
         inf(0, "{ type1 '%s' decl '%s'} ", $4->var, $8->var);
         $$=$4;
+        }
+;
+loop1:   spnl1 LOOP2 spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ loop1 '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+if2:   spnl1 IF3 spnl1 LPAREN2 spnl1 cond2 spnl1 RPAREN2
+                    spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ if2 '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+enter2:   spnl1 ENTER2 spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ enter2 '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+leave2:   spnl1 LEAVE2 spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ leave '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+elif2:   spnl1 ELIF3 spnl1 LPAREN2 spnl1 cond2 spnl1 RPAREN2
+                    spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ elif2 '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+else2:   spnl1 ELSE3 spnl1 LBRA2 spnl1 all1 spnl1 RBRA2 spnl1
+        {
+        inf(0, "{ elif2 '%s' } ", $6->var);
+        $$=$6;
+        }
+;
+goto1:   spnl1 GOTO2 spnl1 ID2 spnl1
+        {
+        inf(0, " { loop1 '%s' } ", $4->var);
+        $$=$4;
+        }
+;
+break1:   spnl1 BREAK2 spnl1
+        {
+        inf(0, " { break } ");
+        $$=$2;
         }
 ;
 enl1:   spnl1 ENL2 spnl1
@@ -218,17 +294,23 @@ msg1:   spnl1 MSG2 spnl1 idd2 spnl1
             $$=$4;
             }
 ;
-define1:  spnl1 DEF2 spnl1 idd1 spnl1
+define1: /* spnl1 DEF2 spnl1 idd1 spnl1
             {
             inf(0, "{ define1 '%s' } ", $4->var);
-            push_symtab("", $4->var, "", DECL_DEFINE, 0);
-            $$=$2;
-            }
-         |  spnl1 DEF2 spnl1 idd1 spnl1 idd2 spnl1
+            //push_symtab("", $4->var, "", DECL_DEFINE, 0);
+            //$$=$4;
+            }  */
+        spnl1 DEF2 spnl1 idd1 spnl1 expr1 spnl1
             {
-            inf(0, "{ define1 '%s' arg: %s } ", $4->var, $6->var);
-            push_symtab("", $4->var, $6->var, DECL_DEFINE, 0);
-            $$=$2;
+            inf(0, "{ define1 '%s' arg: %s } ", $4->var, "");
+            //push_symtab("", $4->var, "", DECL_DEFINE, 0);
+            $$=$6;
+            }
+        | spnl1 DEF2 spnl1 idd1 spnl1 STR2 spnl1
+            {
+            inf(0, "{ define1 '%s' arg: %s } ", $4->var, "");
+            //push_symtab("", $4->var, "", DECL_DEFINE, 0);
+            $$=$6;
             }
 ;
 mac1:  spnl1 MAC2 spnl1 idd1 spnl1
@@ -270,7 +352,7 @@ elifdef1: spnl1 ELIFDEF2 spnl1 ID2 spnl1
             }
         }
 ;
-ifdef1:   spnl1 IFDEF2 spnl1 idd1 spnl1
+ifdef1:   spnl1 IFDEF2 spnl1 expr1 spnl1
         {
         inf(0, "{ ifdef1 '%s' } ", $4->var);
         if(lookup_symtab($4->var, DECL_DEFINE) != NULL)
@@ -319,6 +401,22 @@ undef1:  UNDEF2 spnl1 idd1 spnl1
         { // Ignore
         }
 ;
+assn1:   spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1
+            {
+            inf(0, " { assn1 '%s' = '%s' } ", $2->var, $6->var);
+            //if(hasdefine)
+            //    addemitstr($6->var);
+            $$ = make_symstr("", $2->var, $6->var, NUM2);
+            }
+         | spnl1 ID2 spnl1 EQ2 spnl1 STR2 spnl1
+            {
+            inf(0, " { assn1 str2 '%s' = '%s' } ", $2->var, $6->var);
+            //if(hasdefine)
+            //    addemitstr($6->var);
+            $$ = make_symstr("", $2->var, $6->var, NUM2);
+            }
+;
+
 decl1:  spnl1 ID2 spnl1 COL2 spnl1 assn1 spnl1
         {
         inf(0, " { decl '%s' : '%s' = '%s'} ", $2->var, $6->var, $6->res);
@@ -330,25 +428,61 @@ decl1:  spnl1 ID2 spnl1 COL2 spnl1 assn1 spnl1
         $$ = make_symstr($2->var, $6->var, $6->res, NUM2);
         }
 ;
-farg1:  /* empty */
-                { $$ = make_symstr("", "empty", "", EMPTY2); }
-        | decl1
+cond3:    EQ3
+        | NEQ3
+        | LT3
+        | GT3
+        | LTE3
+        | GTE3
+        | EQEQ3
+
+cond2:  spnl1 id2 spnl1 cond3 spnl1 id2 spnl1
+        {
+        inf(0, " { cond2 '%s' : '%s' } ", $2->var, $6->var);
+        $$ = $6;
+        }
+;
+farg2:   /* ID2    {
+                inf(0, " { farg2 ID2  '%s'  } ", $1->var);
+                $$ = make_symstr("", $1->var, "", ID2);
+                }
+        | */
+         assn1  {
+                inf(0, " { farg2 assn '%s'  } ", $1->var);
+                $$ = make_symstr("", $1->var, "", ID2);
+                }
+        |  decl1
                 {
-                inf(0, " { farg1 decl1 '%s' : '%s' } ", $1->var);
-                $$ = make_symstr("", $1->var, "", ID2);}
-        | farg1 spnl1 decl1
-                { $$ = make_symstr("", $1->var, "", ID2); }
+                inf(0, " { farg2 decl '%s' } ", $1->var);
+                $$ = make_symstr("", $1->var, "", ID2);
+                }
+;
+farg1:   /* empty */
+                {
+                inf(0, " { farg1 empty } ");
+                //$$ = make_symstr("", "empty", "", EMPTY2);
+                }
+          | farg2
+                {
+                inf(0, " { farg1 null} ");
+                $$ = make_symstr("", "empty", "", EMPTY2);
+                }
+          | farg2 spnl1 farg1
+                {
+                inf(0, " { farg1 farg2 } ");
+                $$ = make_symstr("", "empty", "", EMPTY2);
+                }
 ;
 func1:  spnl1 FUNC2 spnl1 ID2 spnl1 LPAREN2 spnl1 farg1 spnl1 RPAREN2
-                    spnl1 LBRA2  spnl1 all1  spnl1 ret1  spnl1 RBRA2 spnl1
+                    spnl1 LBRA2 spnl1 all1  spnl1 ret1  spnl1 RBRA2 spnl1
         {
         inf(0, " { func1 '%s' arg: '%s' body: '%s' } ",
                             $4->var, $8->var, $14->name);
 
         //char *func = create_unique("func");
         // Fill symtab
-        push_symtab($4->var, $8->var, $14->var, ID2, 0);
-        $$ = make_symstr($4->var, $8->var, $14->var, FUNC2);
+        push_symtab($4->var, $8->var, $14->var, DECL_FUNC, 0);
+        $$ = make_symstr($4->var, $8->var, $14->var, DECL_FUNC);
         }
 ;
 ret1:
@@ -356,50 +490,31 @@ ret1:
         |  spnl1 RET2 spnl1 ID2 spnl1 semi1
         |  spnl1 RET2 spnl1 expr1 spnl1 semi1
 ;
-id3:    ID2
-    /* id2
-        | id3 spnl1 id2 */
-;
 id2:      ID2
         | NUM2
 ;
-
 dval1:  spnl1 COL2 spnl1 assn1 spnl1
 
-assn1:  spnl1 ID2 spnl1 EQ2 spnl1 expr1 spnl1
-            {
-            inf(0, " { assn1 '%s' = '%s' } ", $2->var, $6->var);
-            //if(hasdefine)
-            //    addemitstr($6->var);
-            $$ = make_symstr("", $2->var, $6->var, NUM2);
-            }
-        | spnl1 ID2 spnl1 EQ2 spnl1 STR2 spnl1
-            {
-            inf(0, " { assn1 str2 '%s' = '%s' } ", $2->var, $6->var);
-            //if(hasdefine)
-            //    addemitstr($6->var);
-            $$ = make_symstr("", $2->var, $6->var, NUM2);
-            }
-;
 semi1:
         | SEMI2
         | semi1 spnl1 SEMI2
         | semi1 spnl1 nl1
 ;
 sp1: SP2          {  inf(2, "{ SP2 } ");  }
-     | sp1 SP2    {  inf(2, "{ SP2 sp1 } ");  }
+     | SP2 sp1    {  inf(2, "{ SP2 sp1 } ");  }
 ;
 nl1: NL2        {  inf(2, "{ NL2 } ");  }
      | nl1 NL2  {  inf(2, "{ NL2 nl1 } ");  }
 ;
-spnl1:
-        | spnl1 sp1    {  inf(2, "{ spnl1  sp1 } ");  $$=$1;}
-        | spnl1 nl1    {  inf(2, "{ spnl1 nl1 } ");  $$=$1;}
-        | spnl1 COMM3  {  inf(3, "{  spnl1 comm3 } "); $$=$1; }
+spnl1:                  {  inf(2, " { spnl1  null } "); }
+        | sp1 spnl1     {  inf(2, " { spnl1  sp1 } ");  }
+        | nl1 spnl1     {  inf(2, " { spnl1  nl1 } ");  }
+        | COMM3 spnl1   {  inf(3, " { spnl1 comm3 } "); }
+        | COMM2 spnl1   {  inf(3, " { spnl1 comm3 } "); }
 ;
-
 // -------------------------------------------------------------
-expr1:  expr2
+expr1:  {}
+   |    expr2
         {
         inf(2, " { expr1: '%s' } ", $1->var);
         }
@@ -555,20 +670,21 @@ int  pretranslate_type(int type, char **str)
         case NUM2:          *str = "NUM2"; break;
         case STR2:          *str = "STR2"; break;
 
-        // Translation for off parser defines
+        // Translation for declaration defines
 
-        case    DECL_VAR:   *str =  "DECL_VAR"; break;
-        case    DECL_VAR2:  *str =  "DECL_VAR2"; break;
-        case    DECL_VAR3:  *str =  "DECL_VAR3"; break;
+        case    DECL_VAR:   *str =  "DECL_VAR";     break;
+        case    DECL_VAR2:  *str =  "DECL_VAR2";    break;
+        case    DECL_VAR3:  *str =  "DECL_VAR3";    break;
 
-        case    DECL_CALL:  *str =  "DECL_CALL"; break;
-        case    DECL_CALL2: *str =  "DECL_CALL2"; break;
-        case    DECL_CALL3: *str =  "DECL_CALL3"; break;
+        case    DECL_CALL:  *str =  "DECL_CALL";    break;
+        case    DECL_CALL2: *str =  "DECL_CALL2";   break;
+        case    DECL_CALL3: *str =  "DECL_CALL3";   break;
 
-        case    DECL_CAST:  *str =  "DECL_CAST"; break;
-        case    DECL_DEREF: *str =  "DECL_DEREF"; break;
-        case    DECL_ADDOF: *str =  "DECL_ADDOF"; break;
-        case    DECL_LABEL: *str =  "DECL_LABEL"; break;
+        case    DECL_CAST:  *str =  "DECL_CAST";    break;
+        case    DECL_DEREF: *str =  "DECL_DEREF";   break;
+        case    DECL_ADDOF: *str =  "DECL_ADDOF";   break;
+        case    DECL_LABEL: *str =  "DECL_LABEL";   break;
+        case    DECL_FUNC:  *str =  "DECL_FUNC";    break;
 
         default:
             *str = "XX";

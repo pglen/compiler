@@ -1,3 +1,2 @@
-func hello (aa:bb=1)
-    {
-    }
+func hello_world(aa)
+    {}

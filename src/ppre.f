@@ -51,43 +51,83 @@ FNN  [\~_a-zA-Z0-9]
 %%
 
 \\\n            {
-                inff(0, "[BS EOL] '%s", yytext);
+                inff(0, "[BS EOL] '%s' ", yytext);
                 // no ret, ignore
                 }
 <INITIAL,EXSTATE>\/\/.*$  {
                 num_lines++;
-                inff(1, "[//COMM2] '%s", yytext);
+                inff(1, "[//COMM2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", STR2);
                 return COMM2;
                 }
 <INITIAL,EXSTATE>#.*$ {
                 num_lines++;
-                inff(1, "[#COMM2] '%s", yytext);
+                inff(1, "[#COMM2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", COMM2);
                 return COMM2;
                 }
- /*<INITIAL,EXSTATE>var {
-                inff(0, "[VAR2] '%s", yytext);
-                yylval.sym = make_symstr("", strdup(yytext), "", VAR2);
-                return VAR2;
-                } */
+<INITIAL,EXSTATE>loop|forever {
+                inff(0, "[LOOP2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", LOOP2);
+                return LOOP2;
+                }
+<INITIAL,EXSTATE>goto {
+                inff(0, "[GOTO2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", GOTO2);
+                return GOTO2;
+                }
+<INITIAL,EXSTATE>break {
+                inff(0, "[GOTO2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", BREAK2);
+                return BREAK2;
+                }
 <INITIAL,EXSTATE>func {
-                inff(0, "[FUNC2] '%s", yytext);
+                inff(0, "[FUNC2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", FUNC2);
                 return FUNC2;
                 }
+<INITIAL,EXSTATE>enter {
+                inff(0, "[ENTER2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", FUNC2);
+                return ENTER2;
+                }
+<INITIAL,EXSTATE>leave {
+                inff(0, "[LEAVE2] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", LEAVE2);
+                return LEAVE2;
+                }
+<INITIAL,EXSTATE>if {
+                inff(0, "[IF3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", IF3);
+                return IF3;
+                }
+<INITIAL,EXSTATE>elif {
+                inff(0, "[ELIF3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELIF3);
+                return ELIF3;
+                }
+<INITIAL,EXSTATE>endif {
+                inff(0, "[ENDIF3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ENDIF3);
+                return ENDIF3;
+                }
+<INITIAL,EXSTATE>else {
+                inff(0, "[ELSE3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", ELSE3);
+                return ELSE3;
+                }
 <INITIAL,EXSTATE>return {
-                inff(0, "[RET2] '%s", yytext);
+                inff(0, "[RET2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", RET2);
                 return RET2;
                 }
 <INITIAL,EXSTATE>\{ {
-                inff(0, "[LBRA2] '%s", yytext);
+                inff(0, "[LBRA2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", LBRA2);
                 return LBRA2;
                 }
 <INITIAL,EXSTATE>\} {
-                inff(0, "[RBRA2] '%s", yytext);
+                inff(0, "[RBRA2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", RBRA2);
                 return RBRA2;
                 }
@@ -105,6 +145,41 @@ FNN  [\~_a-zA-Z0-9]
                 inff(0, "[zNUM2] '%s' ", yytext);
                 yylval.sym = make_symstr("name", strdup(yytext), "", NUM2);
                 return(NUM2);
+                }
+<INITIAL,EXSTATE>\=\=\= {
+                inff(0, " [EQEQ3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", EQEQ3);
+                return(EQEQ3);
+                }
+<INITIAL,EXSTATE>\=\= {
+                inff(0, " [EQ3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", EQ3);
+                return(EQ3);
+                }
+<INITIAL,EXSTATE>\!\= {
+                inff(0, " [NEQ3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", NEQ3);
+                return(NEQ3);
+                }
+<INITIAL,EXSTATE>\< {
+                inff(0, " [LT3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", LT3);
+                return(LT3);
+                }
+<INITIAL,EXSTATE>\> {
+                inff(0, " [LT3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", GT3);
+                return(GT3);
+                }
+<INITIAL,EXSTATE>\<\= {
+                inff(0, " [LTE3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", LTE3);
+                return(LTE3);
+                }
+<INITIAL,EXSTATE>\>\= {
+                inff(0, " [GTE3] '%s' ", yytext);
+                yylval.sym = make_symstr("", strdup(yytext), "", GTE3);
+                return(GTE3);
                 }
 <INITIAL,EXSTATE>\= {
                 inff(0, " [EQ2] '%s' ", yytext);
@@ -156,7 +231,7 @@ FNN  [\~_a-zA-Z0-9]
                 return(XOR2);
                 }
 <INITIAL,EXSTATE>\(  {
-                inff(0, " [PAREN12] '%s' ", yytext);
+                inff(0, " [LPAREN2] '%s' ", yytext);
                 yylval.sym = make_symstr("", strdup(yytext), "", LPAREN2);
                 return(LPAREN2);
                 }
@@ -318,7 +393,7 @@ FNN  [\~_a-zA-Z0-9]
                 }
 <INITIAL,EXSTATE>{FN}{FNN}*   {
                 inff(0, " [ID2] '%s' ", yytext);
-                yylval.sym = make_symstr("", strdup(yytext), "", ID3);
+                yylval.sym = make_symstr("", strdup(yytext), "", ID2);
                 return ID2;
                 }
 <EXSTATE>.      {
@@ -332,7 +407,7 @@ FNN  [\~_a-zA-Z0-9]
                     }
                 }
 <XTRSTATE,STRSTATE>\\$  {
-                inff(0, "[STRSTATE BSL EOL] '%s", yytext);
+                inff(0, "[STRSTATE BSL EOL] '%s' ", yytext);
                 // Skipping ...
                 }
 <STRSTATE>\"    {
@@ -373,7 +448,7 @@ FNN  [\~_a-zA-Z0-9]
                 backslash++;
                 }
 <XTRSTATE,STRSTATE>. {   // default string charater
-                inff(1, "'%s'", yytext);
+                inff(1, "'%s' ", yytext);
                 if(backslash)
                     {
                     // Escape character
@@ -552,7 +627,9 @@ int     preprocess(char *ptr)
     int    olderrcnt = config.errorcount;
 
     if(config.verbose > 0)
-        printf ("Pre processing: '%s' ", ptr);
+        {
+        printf ("Pre processing: '%s' ", ptr); fflush(stdout);
+        }
 
     struct timespec ts;
     clock_gettime(CLOCK_REALTIME, &ts);
@@ -591,22 +668,6 @@ void    preerror(const char *str)
 
     // Is term?
     char *errstr = "\nPreprocess Error:";
-    if(isatty(2) > 0)
-        {
-        fprintf(stderr, "\033[31;1m%s\033[0m ", errstr);
-        }
-    else
-        {
-        fprintf(stderr, "%s ", errstr);
-        }
-    fprintf(stderr, "%s  Line: %d  Col: %d Near: '%s'\n",
-                                str, num_lines, currprog, yytext);
-    //int cnt = strlen(errstr);
-    //while(cnt)
-    //        {
-    //        fprintf(stderr, "a");
-    //        cnt--;
-    //        }
     // Get current line to line end
     int ppp = currprog;
     while(ppp < sizeof(currline))
@@ -621,7 +682,19 @@ void    preerror(const char *str)
         ppp++;
         }
     //fprintf(stderr, "Context:\n");
+    if(isatty(2) > 0)
+        {
+        fprintf(stderr, "\033[31;1m%s\033[0m ", errstr);
+        }
+    else
+        {
+        fprintf(stderr, "%s ", errstr);
+        }
+    fprintf(stderr, "%s  Line: %d  Col: %d Near: '%s'\n",
+                                str, num_lines, currprog, yytext);
     fprintf(stderr, "%s\n", prevline);
+
+
     fprintf(stderr, "%s\n", currline);
     int cnt = currprog;
     while(cnt)

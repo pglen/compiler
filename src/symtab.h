@@ -69,6 +69,7 @@
 #define     DECL_DEFINE         1500
 #define     DECL_MACRO          1501
 #define     DECL_LABEL          1502
+#define     DECL_FUNC           1503
 
 int print_emalloc();
 

@@ -1,10 +1,10 @@
 // Macro definitions
 %message "Macro here" %nl
-%mac "Macro_Here"
-%mac "Macro" 1+2+3+4
-%mac fullmacro( aa:bb=cc )
-    {   aaa=1  int	: var = 12 + 20
-        q:w=12
-        bbb=2
-    }
-%macro int "u32"
+#%mac "Macro_Here"
+#%mac "Macro" 1+2+3+4
+#%mac fullmacro( aa:bb=cc )
+#    {   aaa=1  int	: var = 12 + 20
+#        q:w=12
+#        bbb=2
+#    }
+#%macro int "u32"

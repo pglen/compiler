@@ -12,8 +12,10 @@
 %define HELLOX
 %ifdef HELLOX
     // compiled in at hello
-    %msg "compiled HELLOX" %nl
-    u32 :aaa u16 : bbb u8 : ccc
+    #%msg "compiled HELLOX" %nl
+    u32 :aaa = 0
+    u16 : bbb = 0
+    u8 : ccc = 0
     // comp at hello
 %elifdef  HELLOY
     %msg "compiled HELLOY" %nl

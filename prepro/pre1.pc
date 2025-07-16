@@ -1,8 +1,11 @@
-%define AA BB
+%define AA 1
 aa:bb=cc
 %ifdef AA
-    cc : cc = 2000
+    %msg 1 %nl
+    dd:aa = 1
 %else
-    vv : dd = 2000
+    %msg 2 %nl
+    vv : ee = 2000
 %endif
+cc:dd=2000
 # end
