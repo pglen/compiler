@@ -168,9 +168,10 @@ class ParseState():
 
 # This token class is for generic text.
 TXTCLASS = lexdef.tok2["ident"], lexdef.tok2["eq"], lexdef.tok2["lt"], \
-            lexdef.tok2["str"], lexdef.tok2["str2"],                     \
-             lexdef.tok2["str3"], lexdef.tok2["gt"], lexdef.tok2["nl"],\
-                 lexdef.tok2["sp"], lexdef.tok2["any"],
+            #lexdef.tok2["str"], lexdef.tok2["str2"],                     \
+            # lexdef.tok2["str3"],
+            # lexdef.tok2["gt"], lexdef.tok2["nl"],\
+            #     lexdef.tok2["sp"], lexdef.tok2["any"],
 
 ts = ParseState()
 

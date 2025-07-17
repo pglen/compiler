@@ -10,7 +10,7 @@ class Stack():
         try:
             self._store.append(item)
         except Exception as xxx:
-            print (xxx)
+            print ("exception:", xxx, sys.exc_info())
         self.cnt = self.cnt+1
 
     def last(self):
