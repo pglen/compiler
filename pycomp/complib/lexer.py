@@ -49,7 +49,7 @@ class Lexer():
                 #print (mmm.end() - mmm.start(), strx[mmm.start():mmm.end()])
                 mstr = mmm.string[mmm.start():mmm.end()]
                 # Add empty at end for state information
-                tt = ( ttt, mstr, mmm.start(), mmm.end(), [] )
+                tt = ( ttt, mstr, mmm.start(), mmm.end(), [0,0,] )
                 return tt
         return None;
 

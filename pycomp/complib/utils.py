@@ -5,6 +5,13 @@ import sys, os, re, time, stat
 # ------------------------------------------------------------------------
 # Pretty Print
 
+def prarr(xarr, pre = ""):
+    if pre:
+        print(pre, end = "")
+    for aa in xarr:
+        print( " [" + pp(aa[0][1]) + pp(aa[1]), end = "]")
+    print()
+
 def pp(strx):
     if strx == "\n":
         strx="\\n"
@@ -12,7 +19,7 @@ def pp(strx):
         strx="\\r"
     if strx == "\t":
         strx="tab"
-    return "'" + strx + "'"
+    return "'" + str(strx) + "'"
 
 # ------------------------------------------------------------------------
 # Give a new integer value with every iteration

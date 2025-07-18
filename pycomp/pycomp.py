@@ -49,13 +49,12 @@ def show_emit():
 # Parser functions that are called on parser events. Note the 'e' prefix
 # for the 'end' function -> bold() -> ebold()  (end bold)
 # The trivial functions are extracted to pungfunc.py
-#showfile(strx)
 
 # ------------------------------------------------------------------------
 
-def showfile(strx):
+def parsefile(strx):
 
-    global buf, xxstack, pvg
+    global buf, pvg
 
     got_clock =  time.clock()
 
@@ -84,28 +83,22 @@ def showfile(strx):
 
     if pvg.pgdebug > 5: print (buf)
     lstack.push(strx)
-
     lx = lexer.Lexer(lexdef.xtokens, pvg)
-    xstack = stack.Stack()
     res = []
     lx.feed(buf, res)
+    if pvg.pgdebug > 5:
+        prarr(res, "lex res: ")
 
     if pvg.show_timing:
         print  ("lexer:", time.clock() - got_clock)
-
     if pvg.show_lexer:  # To show what the lexer did
         for aa in res:
             print(aa)
-
     if lx.state != lexdef.INI_STATE:
         print("Warning on lexer state: unterminated string")
-
     par = linparse.LinParse(pvg)
     par.feed(res, buf)
-
-    if pvg.show_timing:
-        print  ("parser:", time.clock() - got_clock)
-
+    if pvg.show_timing: print  ("parser:", time.clock() - got_clock)
     # Output results
     if pvg.emit:
         show_emit()
@@ -166,6 +159,6 @@ if __name__ == "__main__":
     lstack = stack.Stack()
     fullpath = os.path.abspath(strx);
     pvg.docroot = os.path.dirname(fullpath)
-    showfile(strx)
+    parsefile(strx)
 
 # EOF
