@@ -9,7 +9,7 @@ def prarr(xarr, pre = ""):
     if pre:
         print(pre, end = "")
     for aa in xarr:
-        print( " [" + pp(aa[0][1]) + pp(aa[1]), end = "]")
+        print( " [" + pp(aa[0][1]) + " " + pp(aa[1]), aa[4][0], end = "]")
     print()
 
 def pp(strx):

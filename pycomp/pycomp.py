@@ -9,7 +9,7 @@ import signal, pickle
 # Our modules
 
 import  complib.linparse as linparse
-#from complib.parsedef import *
+from    complib.lindef import stamps as stamps
 
 import  complib.stack as stack
 import  complib.lexer as lexer
@@ -96,7 +96,7 @@ def parsefile(strx):
             print(aa)
     if lx.state != lexdef.INI_STATE:
         print("Warning on lexer state: unterminated string")
-    par = linparse.LinParse(pvg)
+    par = linparse.LinParse(stamps, pvg)
     par.feed(res, buf)
     if pvg.show_timing: print  ("parser:", time.clock() - got_clock)
     # Output results

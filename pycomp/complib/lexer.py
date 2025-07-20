@@ -18,7 +18,7 @@ class Lexer():
             try:
                  ccc = re.compile(xtokens[idx][2])
             except:
-                print("Cannot precomp regex at: ", idx,
+                print("Error: cannot precomp regex at: ", idx,
                             "'", xtokens[idx][2], "'", sys.exc_info())
                 raise
             self.tokens.append((xtokens[idx], ccc))
