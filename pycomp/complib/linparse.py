@@ -76,18 +76,16 @@ class LinParse():
                     pass
                 else:
                     istamp += 1
-
-            elif currstamp[istamp][1] & M:
+            if currstamp[istamp][1] & M:
                 # Walk optional multi
                 while 1:
                     if currstamp[istamp][0] != self.arrx[tprog + iprog][0][1]:
                         break
-                    print("mark", "idx =", self.arrx[tprog + iprog],
-                                    tprog + iprog)
+                    #print("mark", "idx =", self.arrx[tprog + iprog],
+                    #                tprog + iprog)
                     self.arrx[tprog + iprog][4][0] = 1
                     iprog += 1
                 istamp += 1
-                #break
             #if currstamp[istamp][1] & A:
             #    istamp += 2    # End of this expression
             #    ebound = currstamp[istamp][0]
@@ -109,20 +107,19 @@ class LinParse():
                 #iprog += 1
                 print("miss", )
                 break
-            istamp += 1;
-            #iprog += 1
             # Complete?
             #print("istamp =", istamp, "iprog", iprog, "skiplen =", skiplen,
             #                    "len =", len(currstamp))
+            istamp += 1;
+            iprog += 1    # step forward
             if istamp >= skiplen:
                 if not miss:
                     if self.pvg.pgdebug > 3:
                         print("stamp match:", "tprog =", tprog,
                                  "istamp=", istamp, "currstamp =", currstamp);
-                    call(self, tprog, iprog + 1)
+                    call(self, tprog, iprog )
                     self.restart = True
                 break
-            iprog += 1    # step forward
 
         time.sleep(0.3)
         return iprog
