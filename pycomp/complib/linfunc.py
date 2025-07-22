@@ -13,7 +13,7 @@ def funcpvg(xpvg):
 # Functions to call on stamp match
 
 def func_dummy(self2, idx, tprog, iprog):
-    if pvg.verbose:
+    if pvg.pgdebug > 0:
         print("match dummy idx =", idx, "tprog =", tprog, "iprog=", iprog, "slen =", len(stamps[idx][0]))
 
 def func_str(self2, idx, tprog, iprog):
@@ -24,20 +24,26 @@ def func_str(self2, idx, tprog, iprog):
 
 def func_paren(self2, tprog, iprog):
 
-    if pvg.verbose:
+    if pvg.pgdebug > 0:
         print("match paren tprog =", tprog, "iprog=", iprog)
     if pvg.pgdebug > 2:
-        prarr(self2.arrx[tprog:tprog+iprog], "arrx paren pre: ")
+        prarr(self2.arrx[tprog:tprog+iprog+1], "arrx paren pre: ")
 
-    #self2._feed(tprog + 1, tprog+iprog - 1)
+    self2.arrx[tprog][4][0] = 1
+    self2.arrx[tprog+iprog][4][0] = 1
 
-    for ss in range(tprog+1, tprog+iprog):
+    self2._feed(tprog + 1, tprog+iprog )
+
+    if pvg.pgdebug > 2:
+        prarr(self2.arrx[tprog:tprog+iprog+1], "arrx parent feed:")
+
+    for ss in range(tprog, tprog+iprog+1):
         if self2.arrx[ss][4][0]:  continue
         #prarr(self2.arrx[ss:ss+1], "delx")
         self2.arrx[ss][4][0] = 1
 
     if pvg.pgdebug > 2:
-        prarr(self2.arrx[tprog:tprog+iprog], "arrx paren post: ")
+        prarr(self2.arrx[tprog:tprog+iprog+1], "arrx paren post:")
 
 def _func_arith(self2, opstr, tprog, iprog):
 
@@ -72,7 +78,7 @@ def _func_arith(self2, opstr, tprog, iprog):
         self2.arrx[ss][4][0] = 1
 
 def func_mul(self2, tprog, iprog):
-    if pvg.verbose:
+    if pvg.pgdebug > 0:
         print("match mul tprog =", tprog, "iprog=", iprog)
     if pvg.pgdebug > 2:
         prarr(self2.arrx[tprog:tprog+iprog], "arrx mul pre: ")
@@ -81,7 +87,7 @@ def func_mul(self2, tprog, iprog):
         prarr(self2.arrx[tprog:tprog+iprog], "arrx mul post: ")
 
 def func_add(self2, tprog, iprog):
-    if pvg.verbose:
+    if pvg.pgdebug > 0:
         print("match add tprog =", tprog, "iprog=", iprog)
     if pvg.pgdebug > 2:
         prarr(self2.arrx[tprog:tprog+iprog], "arrx add pre: ")

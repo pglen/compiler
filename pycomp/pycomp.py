@@ -126,6 +126,8 @@ if __name__ == "__main__":
 
     import getopt
 
+    sys.setrecursionlimit(25)
+
     opts = []; args = []
     try:
         opts, args = getopt.getopt(sys.argv[1:], "thvVfpesxd:o:")
