@@ -8,35 +8,29 @@
 #
 
 all:
-	@echo "Type 'make help' for a list of targets"
-
-help:
-	@echo
-	@echo "Targets:"
-	@echo "	 make install    -- Install PyEdPro "
-	@echo "	 make pack       -- package PyEdPro "
-	@echo
-
-install:
-	@python3 ./install.py
-
-pack:
-	@./pack.sh
+	@echo "Targetes: clean check"
 
 clean:
 	rm -f *.pyc
 	rm -rf __pycache__
 
-git:
-	git add .
-	git commit -m autocheck
-	git push
+check:
+	@echo -n "Checking parser "
+	@./pycomp.py -d 4 examples/add.pc    | grep "'num' '3' 0" >err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/add2.pc   | grep "'num' '10' 0" >err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/mul.pc    | grep "'num' '6' 0" >>err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/expr.pc   | grep "'num' '7' 0" >>err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/paren.pc  | grep "'num' '15' 0" >>err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/paren2.pc | grep "'num' '25' 0" >>err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/expr.pc   | grep "'num' '7' 0" >>err
+	@echo -n "."
+	@./pycomp.py -d 4 examples/expr2.pc  | grep "'num' '11' 0" >>err
+	@echo " OK"
 
 # End of Makefile
-
-
-
-
-
-
-

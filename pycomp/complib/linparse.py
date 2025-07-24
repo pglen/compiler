@@ -126,7 +126,6 @@ class LinParse():
                     self.restart = True
                     match = True
                 break
-
         #time.sleep(0.1) # this was runaway protection
         return match, iprog
 
