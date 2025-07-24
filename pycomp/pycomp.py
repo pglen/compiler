@@ -93,7 +93,9 @@ def parsefile(strx):
         print  ("lexer:", time.clock() - got_clock)
     if pvg.show_lexer:  # To show what the lexer did
         for aa in res:
-            print(aa)
+            print(aa, end = " ")
+        print()
+
     if lx.state != lexdef.INI_STATE:
         print("Warning on lexer state: unterminated string")
     par = linparse.LinParse(stamps, pvg)

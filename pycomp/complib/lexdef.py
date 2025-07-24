@@ -64,7 +64,7 @@ def tok(name):
 
 INI_STATE, STR_STATE, ESC_STATE     = range(3)
 STATE_NOCH, STATE_CHG, STATE_DOWN, STATE_ESCD   = range(4)
-
+STATEX, TOKENX, REGEX, STATEX = range(4)
 
 IDEN2 = "[A-Za-z0-9_\-\./]+"
 HEX2  = "0x[0-9a-fA-F]+"
@@ -73,6 +73,7 @@ HEX2  = "0x[0-9a-fA-F]+"
 # Lexer tokens. The lexer will search for the next token match.
 #
 # The order of the definitions matter. First token match is returned.
+# List high prioty items first. List longer items befors short ones.
 #
 # Elements:
 #  ---| parsertate | tok | token regex | compiled regex | state change |---
@@ -150,20 +151,20 @@ try:
     (INI_STATE, "<",        "<"             , STATE_NOCH, ),
     (INI_STATE, ">",        ">"             , STATE_NOCH, ),
     (INI_STATE, "&",        "&"             , STATE_NOCH, ),
-    (INI_STATE, "*",        "\*"            ,  STATE_NOCH, ),
-    (INI_STATE, "+",        "\+"            ,  STATE_NOCH, ),
+    (INI_STATE, "*",        "\*"            , STATE_NOCH, ),
+    (INI_STATE, "+",        "\+"            , STATE_NOCH, ),
     (INI_STATE, "/",        "/"             , STATE_NOCH, ),
-    (INI_STATE, "caret",    "\^"            ,  STATE_NOCH, ),
-    (INI_STATE, "%",        "%"             ,  STATE_NOCH, ),
+    (INI_STATE, "caret",    "\^"            , STATE_NOCH, ),
+    (INI_STATE, "%",        "%"             , STATE_NOCH, ),
     (INI_STATE, "sp",       " "             , STATE_NOCH, ),
 
     (INI_STATE, "nl",       "\n"            , STATE_NOCH, ),
     (INI_STATE, "[",        "\["            , STATE_NOCH, ),
     (INI_STATE, "]",        "\]"            , STATE_NOCH, ),
-    (INI_STATE, "{",        "\{"            ,  STATE_NOCH, ),
-    (INI_STATE, "}",        "\}"            ,  STATE_NOCH, ),
-    (INI_STATE, "comma",    ","             ,  STATE_NOCH, ),
-    (INI_STATE, ":",        ";"             ,  STATE_NOCH, ),
+    (INI_STATE, "{",        "\{"            , STATE_NOCH, ),
+    (INI_STATE, "}",        "\}"            , STATE_NOCH, ),
+    (INI_STATE, "comma",    ","             , STATE_NOCH, ),
+    (INI_STATE, ":",        ";"             , STATE_NOCH, ),
     (INI_STATE, ";",        ":"             , STATE_NOCH, ),
     # Fallback here
     (INI_STATE, "any",      "."             , STATE_NOCH, ),

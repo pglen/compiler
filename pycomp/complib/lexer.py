@@ -4,6 +4,22 @@ import re, sys
 
 from . import lexdef, stack
 
+class Lex():
+
+    def __init__(self, stampx, mstr, startx, endx):
+        self.state = 0
+        self.stamp = stampx
+        self.mstr = mstr
+        self.start = startx
+        self.end = endx
+        self.flag = 0
+        self.val = 0.0
+        self.ival = 0
+
+    def __repr__(self):
+        return  "[ '" + str(self.stamp[1]) + "' = '" +  \
+                        self.mstr + "' " + str(self.flag) + " ]"
+
 # ------------------------------------------------------------------------
 # Construct lexer, precompile regex, fill into array
 
@@ -49,7 +65,7 @@ class Lexer():
                 #print (mmm.end() - mmm.start(), strx[mmm.start():mmm.end()])
                 mstr = mmm.string[mmm.start():mmm.end()]
                 # Add empty at end for state information
-                tt = ( ttt, mstr, mmm.start(), mmm.end(), [0,0,] )
+                tt = Lex(ttt, mstr, mmm.start(), mmm.end())
                 return tt
         return None;
 
@@ -62,13 +78,15 @@ class Lexer():
             #print(tt)
             if tt == None:
                 break
-            if tt[3]:
+            if tt.end:
                 # skip to token end
-                beg = pos; pos = tt[3]
+                beg = pos; pos = tt.end
                 #print("tt", tt)
-                if  tt[1] == "nl":
+                #if  tt[1] == "sp":
+                #    continue
+                if  tt.mstr == "nl":
                     self.linenum += 1
-                    print("Newline at ", tt[1], pos)
+                    print("Newline at ", tt.mstr, pos)
                     self.lastline = beg
 
                 #tt.append(self.linenum)
@@ -76,34 +94,34 @@ class Lexer():
                 #print(tt)
 
                 # Change state if needed
-                if tt[0][3] != lexdef.STATE_NOCH:
-                    #if tt[0][1] ==  "quote":
-                    if tt[0][3] == lexdef.STR_STATE:
+                if tt.stamp[3] != lexdef.STATE_NOCH:
+                    #if tt.stamp[1] ==  "quote":
+                    if tt.stamp[3] == lexdef.STR_STATE:
                         #print("Change str state with", tt[2])
                         self.straccum = ""
                         self.start_tt = tt
                         self.statstack.push(self.state)
                         self.state = lexdef.STR_STATE
 
-                    elif tt[0][1] ==  "bsl":
+                    elif tt.stamp[1] ==  "bsl":
                         #print("Change bs state up")
                         self.statstack.push(self.state)
                         self.state = lexdef.ESC_STATE
 
-                if tt[0][3] == lexdef.STATE_DOWN:
+                if tt.stamp[3] == lexdef.STATE_DOWN:
                     if self.state == lexdef.STR_STATE:
                         #print("Change str state down:", self.straccum)
                         self.straccum += '"';
 
                         # This converts the read only list
                         ttt = list(tt)
-                        ttt[0] = list(ttt[0])
-                        ttt[0][1] = 'strx';
+                        ttt.stamp = list(ttt.stamp)
+                        ttt.stamp[1] = 'strx';
                         ttt[1] = self.straccum
                         ttt[2] = self.start_tt[2]
                         #print("ttt", ttt)
                         # BAck to read only list
-                        ttt[0] = tuple(ttt[0])
+                        ttt.stamp = tuple(ttt.stamp)
                         ttt = tuple(ttt)
                         #stack.push(ttt)
                         res.append(ttt)
@@ -112,7 +130,7 @@ class Lexer():
                     self.straccum = ""
                     self.state = self.statstack.pop()
 
-                elif tt[0][3] == lexdef.STATE_ESCD:
+                elif tt.stamp[3] == lexdef.STATE_ESCD:
                     #print("Change bs state down:", _p(self.escaccum))
                     self.straccum += self.escaccum
                     self.escaccum = ""
@@ -130,7 +148,7 @@ class Lexer():
                 if  self.state == lexdef.ESC_STATE:
                     self.escaccum += tt[2]
 
-                #print(self.state, tt[0], lexdef.rtok[tt[0]], "\t", tt[2])
+                #print(self.state, tt.stamp, lexdef.rtok[tt.stamp], "\t", tt[2])
             else:
                 pos += 1  # step to next char
 
